@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理者ダッシュボード | Shonandai Kitchen Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { font-family: 'Noto Sans JP', sans-serif; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f8fafc; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-neutral-50 text-neutral-900 antialiased min-h-screen">
+
+  <!-- ================= AUTH MODAL (パスコード認証) ================= -->
+  <div id="auth-modal" class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-sm w-full p-6 shadow-2xl border border-neutral-300 text-center">
+      <div class="w-12 h-12 bg-black text-white rounded flex items-center justify-center mx-auto mb-3 font-black text-xl">
+        S
+      </div>
+      <h2 class="text-base font-bold text-neutral-900 mb-1">管理者ログイン</h2>
+      <p class="text-xs text-neutral-500 mb-5">Shonandai Kitchen Studio 管理ダッシュボード</p>
+      
+      <form onsubmit="handleLogin(event)" class="space-y-3">
+        <div>
+          <label class="block text-left text-[11px] font-semibold text-neutral-700 mb-1">管理パスコード</label>
+          <input type="password" id="auth-code" required placeholder="パスコードを入力" class="w-full text-center tracking-widest text-sm border border-neutral-300 rounded p-2.5 focus:outline-none focus:border-black font-mono">
+        </div>
+        <div id="auth-error" class="hidden text-xs text-neutral-900 font-semibold bg-neutral-100 p-2 rounded border border-neutral-300">
+          パスコードが正しくありません。
+        </div>
+        <button type="submit" class="w-full py-2.5 bg-black hover:bg-neutral-800 text-white font-bold text-xs rounded transition shadow">
+          認証して入室
+        </button>
+      </form>
+      <div class="mt-4 pt-3 border-t border-neutral-100 text-[10px] text-neutral-400">
+        初期パスコード: <code class="bg-neutral-100 px-1 py-0.5 rounded text-neutral-700 font-mono">shonandai2026</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= DASHBOARD MAIN WRAPPER ================= -->
+  <div id="dashboard-app" class="hidden min-h-screen flex flex-col">
+
+    <!-- TOP HEADER -->
+    <header class="bg-white border-b border-neutral-200 sticky top-0 z-30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded bg-black text-white font-black text-base flex items-center justify-center">S</div>
+          <div>
+            <div class="font-bold text-sm sm:text-base text-neutral-900 flex items-center gap-2">
+              Shonandai Kitchen Studio
+              <span class="text-[10px] font-semibold bg-neutral-100 text-neutral-700 border border-neutral-300 px-1.5 py-0.5 rounded">管理ポータル</span>
+            </div>
+            <div class="text-[10px] text-neutral-500">株式会社APRECIO ｜ 湘南台スタジオ管理</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="index.html" target="_blank" class="hidden sm:inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-black font-medium border border-neutral-200 px-3 py-1.5 rounded hover:bg-neutral-50 transition">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Webサイトを表示
+          </a>
+          <button onclick="handleLogout()" class="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-black font-medium px-2.5 py-1.5 rounded hover:bg-neutral-100 transition">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i> ログアウト
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+
+      <!-- 1. KPI SUMMARY CARDS -->
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-500">2026年9月 運営サマリー</h2>
+          <span class="text-[11px] text-neutral-400">データ最終更新: <span id="last-updated-time">本日</span></span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1: 予約受付総数 -->
+          <div class="bg-white p-5 rounded-lg border border-neutral-200 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-neutral-500">
+              <span class="text-xs font-semibold">予約リクエスト総数</span>
+              <i data-lucide="calendar" class="w-4 h-4 text-black"></i>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-neutral-900" id="kpi-bookings-count">0</span>
+              <span class="text-xs text-neutral-500">件</span>
+            </div>
+            <div class="mt-2 text-[11px] text-neutral-600 flex items-center gap-1">
+              <span id="kpi-pending-badge" class="font-bold text-black bg-neutral-100 px-1.5 py-0.5 rounded border border-neutral-300">0件 未対応</span>
+            </div>
+          </div>
+
+          <!-- Card 2: 問い合わせ数 -->
+          <div class="bg-white p-5 rounded-lg border border-neutral-200 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-neutral-500">
+              <span class="text-xs font-semibold">問い合わせ・内見相談</span>
+              <i data-lucide="mail" class="w-4 h-4 text-black"></i>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-neutral-900" id="kpi-inquiries-count">0</span>
+              <span class="text-xs text-neutral-500">件</span>
+            </div>
+            <div class="mt-2 text-[11px] text-neutral-600">
+              24時間以内返答率: <span class="font-bold text-neutral-900">100%</span>
+            </div>
+          </div>
+
+          <!-- Card 3: 月間アクセス数 (PV) -->
+          <div class="bg-white p-5 rounded-lg border border-neutral-200 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-neutral-500">
+              <span class="text-xs font-semibold">Webページ訪問数 (PV)</span>
+              <i data-lucide="trending-up" class="w-4 h-4 text-black"></i>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-3xl font-black text-neutral-900">1,480</span>
+              <span class="text-xs text-neutral-500">PV</span>
+            </div>
+            <div class="mt-2 text-[11px] text-neutral-600">
+              前週比 <span class="font-bold text-neutral-900">+24%</span>（直近公開に伴う増加）
+            </div>
+          </div>
+
+          <!-- Card 4: 今月概算確定売上 -->
+          <div class="bg-white p-5 rounded-lg border border-neutral-200 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-neutral-500">
+              <span class="text-xs font-semibold">今月想定稼働売上</span>
+              <i data-lucide="credit-card" class="w-4 h-4 text-black"></i>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-2xl font-black text-neutral-900" id="kpi-revenue">¥68,200</span>
+              <span class="text-xs text-neutral-500">税込</span>
+            </div>
+            <div class="mt-2 text-[11px] text-neutral-600">
+              定期仕込み＋単発貸切合計
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. RESERVATION & INQUIRY TABLE -->
+      <section class="bg-white rounded-lg border border-neutral-200 shadow-sm overflow-hidden">
+        <!-- Table Control Header -->
+        <div class="p-5 border-b border-neutral-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="font-bold text-neutral-900 text-sm sm:text-base flex items-center gap-2">
+              <i data-lucide="inbox" class="w-4 h-4 text-black"></i>
+              予約リクエスト ＆ お問い合わせ一覧
+            </h3>
+            <p class="text-xs text-neutral-500 mt-0.5">Webサイトのフォームから送信されたデータがリアルタイムに表示されます。</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Filter -->
+            <select id="status-filter" onchange="renderRequestsTable()" class="text-xs bg-neutral-50 border border-neutral-300 rounded px-2.5 py-1.5 text-neutral-800 focus:outline-none focus:border-black">
+              <option value="all">すべてのステータス</option>
+              <option value="新規受付">新規受付（未対応）</option>
+              <option value="承認済み">承認済み</option>
+              <option value="完了">利用完了</option>
+              <option value="キャンセル">キャンセル</option>
+            </select>
+
+            <!-- Export CSV -->
+            <button onclick="exportCSV()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-white border border-neutral-300 text-neutral-800 rounded hover:bg-neutral-50 transition shadow-sm">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-neutral-600"></i> CSVダウンロード
+            </button>
+
+            <!-- Add Mock Data (検証用) -->
+            <button onclick="resetToSampleData()" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs text-neutral-500 hover:text-black hover:bg-neutral-100 rounded transition" title="初期サンプルデータを復元">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-neutral-100 text-neutral-700 font-bold border-b border-neutral-200">
+              <tr>
+                <th class="p-3.5">管理ID / 受信日時</th>
+                <th class="p-3.5">お名前 / 貴社名</th>
+                <th class="p-3.5">プラン</th>
+                <th class="p-3.5">利用希望日</th>
+                <th class="p-3.5">用途</th>
+                <th class="p-3.5">連絡先</th>
+                <th class="p-3.5">ステータス</th>
+                <th class="p-3.5 text-right">操作</th>
+              </tr>
+            </thead>
+            <tbody id="requests-tbody" class="divide-y divide-neutral-100 text-neutral-700">
+              <!-- Populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden p-12 text-center text-neutral-400">
+          <i data-lucide="folder-open" class="w-8 h-8 mx-auto mb-2 text-neutral-300"></i>
+          <p class="text-xs">表示できるデータがありません。</p>
+        </div>
+      </section>
+
+      <!-- 3. EMAIL & NOTIFICATION SETTINGS -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Email Setting Card -->
+        <div class="bg-white rounded-lg border border-neutral-200 p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between pb-2 border-b border-neutral-100">
+            <h3 class="font-bold text-sm text-neutral-900 flex items-center gap-1.5">
+              <i data-lucide="mail-check" class="w-4 h-4 text-black"></i>
+              メール受信・転送設定
+            </h3>
+            <span class="text-[10px] bg-neutral-100 text-neutral-700 px-2 py-0.5 rounded font-semibold border border-neutral-300">即時稼働中</span>
+          </div>
+          <p class="text-xs text-neutral-600 leading-relaxed">
+            Webサイトから予約・問い合わせが入ると、以下の管理アドレス宛てに送信内容が整形されたメールとして即座に自動送信されます。
+          </p>
+          <div class="bg-neutral-50 p-3 rounded border border-neutral-200 text-xs">
+            <div class="text-neutral-500 font-medium">通知先メールアドレス:</div>
+            <div class="font-mono font-bold text-neutral-900 mt-0.5">o.naoki0503@intakingresources.com</div>
+            <div class="text-[10px] text-neutral-400 mt-1">※変更時は `index.html` の `adminEmail` を修正することでいつでも変更可能です。</div>
+          </div>
+        </div>
+
+        <!-- Google Apps Script (GAS)連携案内 -->
+        <div class="bg-white rounded-lg border border-neutral-200 p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between pb-2 border-b border-neutral-100">
+            <h3 class="font-bold text-sm text-neutral-900 flex items-center gap-1.5">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 text-black"></i>
+              Googleスプレッドシート連携（拡張オプション）
+            </h3>
+            <span class="text-[10px] text-neutral-500">任意</span>
+          </div>
+          <p class="text-xs text-neutral-600 leading-relaxed">
+            Googleスプレッドシートに1行ずつ自動蓄積し、複数人で管理したい場合、同梱されている <code class="bg-neutral-100 px-1 py-0.5 rounded text-neutral-800 font-mono">gas_form_handler.js</code> をGoogleスプレッドシートのApps Scriptに貼り付けるだけで簡単に完全無料連携が可能です。
+          </p>
+          <div class="text-right">
+            <a href="gas_form_handler.js" target="_blank" class="text-xs text-neutral-900 font-semibold hover:underline inline-flex items-center gap-1">
+              GASスクリプトコードを見る <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-neutral-200 py-6 text-center text-xs text-neutral-400 mt-8">
+      &copy; 2026 Shonandai Kitchen Studio 管理ダッシュボード ｜ 株式会社APRECIO
+    </footer>
+
+  </div>
+
+  <!-- ================= DETAIL MODAL ================= -->
+  <div id="detail-modal" class="fixed inset-0 z-50 bg-black/60 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl border border-neutral-300 relative">
+      <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1 rounded hover:bg-neutral-100 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-4 pb-3 border-b border-neutral-100">
+        <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block" id="detail-id">REQ-000000</span>
+        <h3 class="text-base font-bold text-neutral-900" id="detail-name">お名前</h3>
+        <p class="text-xs text-neutral-500 mt-0.5" id="detail-time">受信日時</p>
+      </div>
+
+      <div class="space-y-3 text-xs text-neutral-700">
+        <div class="grid grid-cols-2 gap-2 bg-neutral-50 p-3 rounded border border-neutral-200">
+          <div><span class="text-neutral-400 block text-[10px]">希望プラン</span><strong id="detail-plan" class="text-neutral-900"></strong></div>
+          <div><span class="text-neutral-400 block text-[10px]">利用希望日</span><strong id="detail-date" class="text-neutral-900"></strong></div>
+          <div><span class="text-neutral-400 block text-[10px]">メールアドレス</span><a id="detail-email" href="#" class="text-black underline font-mono"></a></div>
+          <div><span class="text-neutral-400 block text-[10px]">電話番号</span><a id="detail-tel" href="#" class="text-black underline font-mono"></a></div>
+        </div>
+
+        <div>
+          <span class="text-neutral-500 font-semibold block mb-1">ご利用用途:</span>
+          <div id="detail-usage" class="bg-neutral-50 p-2 rounded border border-neutral-200 text-neutral-900 font-medium"></div>
+        </div>
+
+        <div>
+          <span class="text-neutral-500 font-semibold block mb-1">お問い合わせ・ご要望内容:</span>
+          <div id="detail-message" class="bg-neutral-50 p-3 rounded border border-neutral-200 text-neutral-800 whitespace-pre-wrap leading-relaxed max-h-40 overflow-y-auto"></div>
+        </div>
+
+        <div class="pt-3 border-t border-neutral-100 flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <span class="text-neutral-500">ステータス変更:</span>
+            <select id="modal-status-select" onchange="updateSelectedStatus()" class="text-xs bg-white border border-neutral-300 rounded px-2 py-1 text-neutral-900 font-semibold focus:outline-none focus:border-black">
+              <option value="新規受付">新規受付</option>
+              <option value="承認済み">承認済み</option>
+              <option value="完了">利用完了</option>
+              <option value="キャンセル">キャンセル</option>
+            </select>
+          </div>
+          <a id="detail-mail-btn" href="#" class="px-3 py-1.5 bg-black hover:bg-neutral-800 text-white font-bold rounded text-xs transition inline-flex items-center gap-1">
+            <i data-lucide="mail" class="w-3.5 h-3.5"></i> 返信メール作成
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    lucide.createIcons();
+
+    const AUTH_PASSCODE = "shonandai2026";
+    let requestsData = [];
+    let currentDetailItem = null;
+
+    // 1. 認証チェック
+    function checkAuth() {
+      if (sessionStorage.getItem("shonandai_admin_auth") === "true") {
+        document.getElementById("auth-modal").classList.add("hidden");
+        document.getElementById("dashboard-app").classList.remove("hidden");
+        initDashboard();
+      } else {
+        document.getElementById("auth-modal").classList.remove("hidden");
+        document.getElementById("dashboard-app").classList.add("hidden");
+      }
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const input = document.getElementById("auth-code").value.trim();
+      if (input === AUTH_PASSCODE) {
+        sessionStorage.setItem("shonandai_admin_auth", "true");
+        document.getElementById("auth-modal").classList.add("hidden");
+        document.getElementById("dashboard-app").classList.remove("hidden");
+        initDashboard();
+      } else {
+        document.getElementById("auth-error").classList.remove("hidden");
+      }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem("shonandai_admin_auth");
+      window.location.reload();
+    }
+
+    // 2. 初期サンプルデータ投入（初回のみ）
+    function loadData() {
+      const stored = localStorage.getItem("shonandai_requests");
+      if (stored) {
+        requestsData = JSON.parse(stored);
+      } else {
+        resetToSampleData();
+      }
+    }
+
+    function resetToSampleData() {
+      requestsData = [
+        {
+          id: "REQ-901124",
+          name: "岡本 直樹（摂取資源株式会社）",
+          email: "o.naoki0503@intakingresources.com",
+          tel: "090-1234-5678",
+          plan: "Kitchen（製造・仕込み特化）",
+          date: "2026-09-25",
+          usage: "菓子製造・販売仕込み",
+          message: "巨大塩プリンの定期製造検証として4.5時間利用希望です。スチームオーブンおよび真空包装機の使用動線を確認させていただきます。",
+          createdAt: "2026/09/24 08:10",
+          status: "承認済み"
+        },
+        {
+          id: "REQ-890412",
+          name: "佐藤 美咲（洋菓子教室シュクレ）",
+          email: "sato.sucre@example.com",
+          tel: "080-9876-5432",
+          plan: "Kitchen & Lounge（全体貸切）",
+          date: "2026-10-04",
+          usage: "料理教室・ワークショップ",
+          message: "生徒8名での秋の焼き菓子ワークショップを検討しています。テーブルレイアウトとオーブン台数について事前に下見可能でしょうか？",
+          createdAt: "2026/09/23 15:42",
+          status: "新規受付"
+        },
+        {
+          id: "REQ-875620",
+          name: "株式会社フードメディア 制作部",
+          email: "info@foodmedia-sample.jp",
+          tel: "03-5555-0199",
+          plan: "Kitchen & Lounge（全体貸切）",
+          date: "2026-09-28",
+          usage: "料理・商品撮影/SNS",
+          message: "YouTubeおよびSNS用の新調理器具のプロモーション動画撮影で6時間貸切を希望します。テラスの自然光が入る時間帯での撮影を予定しています。",
+          createdAt: "2026/09/22 11:20",
+          status: "承認済み"
+        },
+        {
+          id: "REQ-861005",
+          name: "田中 健一（湘南カフェプロジェクト）",
+          email: "k.tanaka@example.com",
+          tel: "090-4444-2222",
+          plan: "定期利用・継続枠のご相談",
+          date: "2026-10-10",
+          usage: "菓子製造・販売仕込み",
+          message: "週1回の焼き菓子定期仕込み枠を相談したいです。食品衛生責任者証は取得済みです。",
+          createdAt: "2026/09/20 09:30",
+          status: "完了"
+        }
+      ];
+      saveData();
+      renderRequestsTable();
+    }
+
+    function saveData() {
+      localStorage.setItem("shonandai_requests", JSON.stringify(requestsData));
+      updateKPISummary();
+    }
+
+    // 3. KPIサマリー更新
+    function updateKPISummary() {
+      document.getElementById("kpi-bookings-count").innerText = requestsData.length;
+      const pendingCount = requestsData.filter(r => r.status === "新規受付").length;
+      document.getElementById("kpi-pending-badge").innerText = `${pendingCount}件 未対応`;
+      document.getElementById("kpi-inquiries-count").innerText = requestsData.length;
+      document.getElementById("last-updated-time").innerText = new Date().toLocaleTimeString("ja-JP", { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // 4. テーブル描画
+    function renderRequestsTable() {
+      const filter = document.getElementById("status-filter").value;
+      const tbody = document.getElementById("requests-tbody");
+      const emptyState = document.getElementById("empty-state");
+      tbody.innerHTML = "";
+
+      const filtered = requestsData.filter(r => filter === "all" || r.status === filter);
+
+      if (filtered.length === 0) {
+        emptyState.classList.remove("hidden");
+      } else {
+        emptyState.classList.add("hidden");
+      }
+
+      filtered.forEach((r, idx) => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-neutral-50 transition border-b border-neutral-100";
+
+        let statusBadge = "";
+        if (r.status === "新規受付") {
+          statusBadge = `<span class="bg-black text-white px-2 py-0.5 rounded text-[10px] font-bold">新規受付</span>`;
+        } else if (r.status === "承認済み") {
+          statusBadge = `<span class="bg-neutral-200 text-neutral-900 border border-neutral-300 px-2 py-0.5 rounded text-[10px] font-bold">承認済み</span>`;
+        } else if (r.status === "完了") {
+          statusBadge = `<span class="text-neutral-500 border border-neutral-200 px-2 py-0.5 rounded text-[10px]">完了</span>`;
+        } else {
+          statusBadge = `<span class="text-neutral-400 text-[10px]">キャンセル</span>`;
+        }
+
+        tr.innerHTML = `
+          <td class="p-3.5">
+            <span class="font-mono font-bold text-neutral-900 block">${r.id}</span>
+            <span class="text-[10px] text-neutral-400">${r.createdAt}</span>
+          </td>
+          <td class="p-3.5 font-bold text-neutral-900">${escapeHtml(r.name)}</td>
+          <td class="p-3.5 font-medium">${escapeHtml(r.plan)}</td>
+          <td class="p-3.5 font-mono">${r.date}</td>
+          <td class="p-3.5"><span class="bg-neutral-100 text-neutral-800 px-1.5 py-0.5 rounded text-[10px]">${escapeHtml(r.usage)}</span></td>
+          <td class="p-3.5 text-neutral-600">
+            <div>${escapeHtml(r.tel)}</div>
+            <div class="text-[10px] text-neutral-400 font-mono">${escapeHtml(r.email)}</div>
+          </td>
+          <td class="p-3.5">${statusBadge}</td>
+          <td class="p-3.5 text-right">
+            <button onclick="openDetailModal('${r.id}')" class="px-2.5 py-1 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300 rounded font-semibold text-[11px] transition shadow-sm">
+              詳細
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updateKPISummary();
+      lucide.createIcons();
+    }
+
+    // 5. 詳細モーダル
+    function openDetailModal(id) {
+      const item = requestsData.find(r => r.id === id);
+      if (!item) return;
+      currentDetailItem = item;
+
+      document.getElementById("detail-id").innerText = item.id;
+      document.getElementById("detail-name").innerText = item.name;
+      document.getElementById("detail-time").innerText = "受信日時: " + item.createdAt;
+      document.getElementById("detail-plan").innerText = item.plan;
+      document.getElementById("detail-date").innerText = item.date;
+      
+      const emailEl = document.getElementById("detail-email");
+      emailEl.innerText = item.email;
+      emailEl.href = "mailto:" + item.email;
+
+      const telEl = document.getElementById("detail-tel");
+      telEl.innerText = item.tel;
+      telEl.href = "tel:" + item.tel;
+
+      document.getElementById("detail-usage").innerText = item.usage;
+      document.getElementById("detail-message").innerText = item.message;
+
+      document.getElementById("modal-status-select").value = item.status;
+
+      const mailBtn = document.getElementById("detail-mail-btn");
+      const sub = encodeURIComponent(`【湘南台キッチンスタジオ】お問い合わせ・ご予約について (${item.name}様)`);
+      const body = encodeURIComponent(`${item.name} 様\n\nShonandai Kitchen Studio 管理担当でございます。\nこの度はお問い合わせいただき誠にありがとうございます。\n\nご希望内容：\nプラン：${item.plan}\n希望日：${item.date}\n\n以下のとおりご案内申し上げます。\n`);
+      mailBtn.href = `mailto:${item.email}?subject=${sub}&body=${body}`;
+
+      document.getElementById("detail-modal").classList.remove("hidden");
+      document.getElementById("detail-modal").classList.add("flex");
+    }
+
+    function closeDetailModal() {
+      document.getElementById("detail-modal").classList.remove("flex");
+      document.getElementById("detail-modal").classList.add("hidden");
+    }
+
+    function updateSelectedStatus() {
+      if (!currentDetailItem) return;
+      const newStatus = document.getElementById("modal-status-select").value;
+      currentDetailItem.status = newStatus;
+      saveData();
+      renderRequestsTable();
+    }
+
+    // 6. CSVエクスポート
+    function exportCSV() {
+      const header = ["管理ID", "受信日時", "お名前/貴社名", "希望プラン", "利用希望日", "用途", "メールアドレス", "電話番号", "ご要望メッセージ", "ステータス"];
+      const rows = requestsData.map(r => [
+        r.id,
+        r.createdAt,
+        `"${(r.name || "").replace(/"/g, '""')}"`,
+        `"${(r.plan || "").replace(/"/g, '""')}"`,
+        r.date,
+        `"${(r.usage || "").replace(/"/g, '""')}"`,
+        r.email,
+        r.tel,
+        `"${(r.message || "").replace(/"/g, '""').replace(/\n/g, ' ')}"`,
+        r.status
+      ]);
+
+      const csvContent = "\uFEFF" + [header.join(","), ...rows.map(e => e.join(","))].join("\r\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `shonandai_kitchen_requests_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return str.replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+      });
+    }
+
+    function initDashboard() {
+      loadData();
+      renderRequestsTable();
+    }
+
+    // 起動時チェック
+    window.addEventListener("DOMContentLoaded", () => {
+      checkAuth();
+    });
+  </script>
+</body>
+</html>
