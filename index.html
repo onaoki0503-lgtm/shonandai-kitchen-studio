@@ -22,10 +22,10 @@
           },
           colors: {
             brand: {
-              50: '#f8fafc',
-              100: '#f1f5f9',
-              800: '#1e293b',
-              900: '#0f172a',
+              DEFAULT: '#2892d8',
+              hover: '#207cb9',
+              light: '#f0f7fc',
+              border: '#bce0f6',
             }
           }
         }
@@ -45,8 +45,8 @@
       background: rgba(255, 255, 255, 0.98);
       backdrop-filter: blur(8px);
     }
-    .badge-mono-solid {
-      background-color: #000000;
+    .badge-primary-solid {
+      background-color: #2892d8;
       color: #ffffff;
       padding: 3px 8px;
       font-size: 11px;
@@ -58,8 +58,8 @@
       letter-spacing: 0.02em;
     }
     .badge-mono-outline {
-      border: 1px solid #18181b;
-      color: #18181b;
+      border: 1px solid #d4d4d8;
+      color: #27272a;
       background-color: #ffffff;
       padding: 3px 8px;
       font-size: 11px;
@@ -93,9 +93,9 @@
       transition: all 0.15s ease;
     }
     .tag-chip:hover {
-      background-color: #000000;
-      color: #ffffff;
-      border-color: #000000;
+      background-color: #f0f7fc;
+      color: #2892d8;
+      border-color: #bce0f6;
     }
   </style>
 </head>
@@ -106,7 +106,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <a href="#" class="flex items-center gap-3 text-decoration-none">
-          <div class="w-9 h-9 rounded bg-black flex items-center justify-center text-white font-bold text-lg tracking-wider">
+          <div class="w-9 h-9 rounded bg-[#2892d8] flex items-center justify-center text-white font-bold text-lg tracking-wider shadow-sm">
             S
           </div>
           <div>
@@ -118,19 +118,19 @@
 
       <div class="flex items-center gap-2.5">
         <div class="hidden md:flex items-center gap-1.5 text-xs font-semibold text-neutral-800 bg-neutral-100 px-3 py-1.5 rounded border border-neutral-300">
-          <i data-lucide="check" class="w-3.5 h-3.5 text-black"></i>
+          <i data-lucide="check" class="w-3.5 h-3.5 text-[#2892d8]"></i>
           菓子製造・飲食店営業許可 完備
         </div>
         <button onclick="openModal('inquiry')" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-neutral-800 bg-white border border-neutral-300 rounded hover:bg-neutral-100 transition">
           <i data-lucide="mail" class="w-3.5 h-3.5 text-neutral-600"></i>
           内見・ご相談
         </button>
-        <a href="#calendar-section" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-black hover:bg-neutral-800 rounded transition">
+        <a href="#calendar-section" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#2892d8] hover:bg-[#207cb9] rounded transition shadow-sm">
           <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
           空室確認・予約
         </a>
-        <!-- 管理者ポータルリンク（控えめに配置） -->
-        <a href="admin.html" class="p-2 text-neutral-400 hover:text-black hover:bg-neutral-100 rounded transition" title="管理者ポータル">
+        <!-- 管理者ポータルリンク -->
+        <a href="admin.html" class="p-2 text-neutral-400 hover:text-[#2892d8] hover:bg-neutral-100 rounded transition" title="管理者ポータル">
           <i data-lucide="shield-check" class="w-4 h-4"></i>
         </a>
       </div>
@@ -140,17 +140,17 @@
   <!-- ================= MAIN CONTAINER ================= -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-    <!-- 1. BADGES & TITLE (白黒モノトーン統一) -->
+    <!-- 1. BADGES & TITLE -->
     <div class="mb-5">
       <div class="flex flex-wrap items-center gap-1.5 mb-3">
-        <span class="badge-mono-solid">
+        <span class="badge-primary-solid">
           <i data-lucide="zap" class="w-3 h-3 text-white"></i> 今すぐ予約可能
         </span>
         <span class="badge-mono-outline">
-          <i data-lucide="check" class="w-3 h-3"></i> 菓子製造業許可
+          <i data-lucide="check" class="w-3 h-3 text-[#2892d8]"></i> 菓子製造業許可
         </span>
         <span class="badge-mono-outline">
-          <i data-lucide="check" class="w-3 h-3"></i> 飲食店営業許可
+          <i data-lucide="check" class="w-3 h-3 text-[#2892d8]"></i> 飲食店営業許可
         </span>
         <span class="badge-mono-subtle">インボイス対応</span>
         <span class="badge-mono-subtle">直前割</span>
@@ -162,14 +162,14 @@
         <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-neutral-900 leading-snug tracking-tight">
           Shonandai Kitchen Studio 湘南台駅徒歩5分・菓子製造＆飲食店営業許可完備。自然光と里山テラスが彩る、仕込み・料理教室・撮影のための完全貸切スタジオ
         </h1>
-        <button id="favorite-btn" onclick="toggleFavorite()" class="flex-shrink-0 p-2.5 rounded border border-neutral-300 bg-white hover:bg-neutral-100 text-neutral-400 hover:text-black transition" title="お気に入りに追加">
+        <button id="favorite-btn" onclick="toggleFavorite()" class="flex-shrink-0 p-2.5 rounded border border-neutral-300 bg-white hover:bg-neutral-100 text-neutral-400 hover:text-[#2892d8] transition" title="お気に入りに追加">
           <i data-lucide="heart" id="favorite-icon" class="w-5 h-5"></i>
         </button>
       </div>
 
       <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2.5 text-xs sm:text-sm text-neutral-600">
         <div class="flex items-center gap-1 font-bold text-neutral-900">
-          <i data-lucide="star" class="w-4 h-4 fill-black text-black"></i>
+          <i data-lucide="star" class="w-4 h-4 fill-amber-400 text-amber-400"></i>
           <span>4.9</span>
           <span class="text-neutral-500 font-normal underline cursor-pointer ml-1" onclick="document.getElementById('reviews-section').scrollIntoView()">24件のレビュー</span>
         </div>
@@ -177,7 +177,7 @@
           <i data-lucide="map-pin" class="w-4 h-4 text-neutral-400"></i>
           <span>神奈川県藤沢市湘南台4-15-5（小田急・相鉄・横浜市営地下鉄「湘南台駅」東口徒歩5分）</span>
         </div>
-        <button onclick="openModal('inquiry')" class="text-neutral-900 hover:underline font-semibold">
+        <button onclick="openModal('inquiry')" class="text-[#2892d8] hover:underline font-semibold">
           無料見学・内見を相談
         </button>
       </div>
@@ -210,7 +210,7 @@
             自然光が入る里山風テラスガーデン
           </div>
           <!-- 写真全件ボタン（右下） -->
-          <button onclick="event.stopPropagation(); openLightbox(0)" class="absolute bottom-3 right-3 bg-white text-black hover:bg-neutral-100 text-xs font-bold px-3 py-1.5 rounded shadow flex items-center gap-1.5 transition">
+          <button onclick="event.stopPropagation(); openLightbox(0)" class="absolute bottom-3 right-3 bg-white text-neutral-800 hover:text-[#2892d8] text-xs font-bold px-3 py-1.5 rounded shadow flex items-center gap-1.5 transition">
             <i data-lucide="grid" class="w-3.5 h-3.5"></i>
             <span>写真 5枚</span>
           </button>
@@ -218,17 +218,17 @@
       </div>
     </div>
 
-    <!-- 3. STICKY NAV TABS (モノトーン) -->
+    <!-- 3. STICKY NAV TABS -->
     <div class="sticky-nav border-b border-neutral-200 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 mb-8">
       <div class="max-w-7xl mx-auto flex items-center gap-6 overflow-x-auto no-scrollbar py-3 text-xs sm:text-sm font-semibold text-neutral-500">
-        <a href="#overview" class="text-black border-b-2 border-black pb-2.5 -mb-3 whitespace-nowrap">概要</a>
-        <a href="#gallery" class="hover:text-black pb-2.5 -mb-3 whitespace-nowrap">写真</a>
-        <a href="#calendar-section" class="hover:text-black pb-2.5 -mb-3 whitespace-nowrap">空室・料金</a>
-        <a href="#amenities" class="hover:text-black pb-2.5 -mb-3 whitespace-nowrap">設備・備品</a>
-        <a href="#access" class="hover:text-black pb-2.5 -mb-3 whitespace-nowrap">アクセス</a>
-        <a href="#flow" class="hover:text-black pb-2.5 -mb-3 whitespace-nowrap">ご利用の流れ</a>
-        <a href="#rules" class="hover:text-black pb-2.5 -mb-3 whitespace-nowrap">禁止・注意事項</a>
-        <a href="#inquiry" class="hover:text-black pb-2.5 -mb-3 whitespace-nowrap">お問い合わせ</a>
+        <a href="#overview" class="text-[#2892d8] border-b-2 border-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">概要</a>
+        <a href="#gallery" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">写真</a>
+        <a href="#calendar-section" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">空室・料金</a>
+        <a href="#amenities" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">設備・備品</a>
+        <a href="#access" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">アクセス</a>
+        <a href="#flow" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">ご利用の流れ</a>
+        <a href="#rules" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">禁止・注意事項</a>
+        <a href="#inquiry" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">お問い合わせ</a>
       </div>
     </div>
 
@@ -242,7 +242,7 @@
         <section id="overview" class="bg-white rounded-lg p-6 border border-neutral-200">
           <div class="flex items-center justify-between pb-5 border-b border-neutral-100">
             <div class="flex items-center gap-3.5">
-              <div class="w-12 h-12 rounded bg-neutral-900 text-white font-black text-xl flex items-center justify-center">
+              <div class="w-12 h-12 rounded bg-[#2892d8] text-white font-black text-xl flex items-center justify-center shadow-sm">
                 AP
               </div>
               <div>
@@ -250,10 +250,10 @@
                 <h2 class="text-base font-bold text-neutral-900">株式会社APRECIO</h2>
                 <div class="flex items-center gap-3 mt-0.5 text-xs text-neutral-600">
                   <span class="flex items-center gap-1 font-semibold text-neutral-900">
-                    <i data-lucide="star" class="w-3.5 h-3.5 fill-black text-black"></i> 5.0 (24)
+                    <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400 text-amber-400"></i> 5.0 (24)
                   </span>
-                  <span class="flex items-center gap-1">
-                    <i data-lucide="check" class="w-3.5 h-3.5 text-black"></i> 承認率 100%
+                  <span class="flex items-center gap-1 text-[#2892d8]">
+                    <i data-lucide="check" class="w-3.5 h-3.5"></i> 承認率 100%
                   </span>
                   <span class="flex items-center gap-1 text-neutral-500">
                     <i data-lucide="clock" class="w-3.5 h-3.5"></i> 即時回答
@@ -261,14 +261,14 @@
                 </div>
               </div>
             </div>
-            <button onclick="openModal('inquiry')" class="text-xs font-semibold text-neutral-900 bg-neutral-100 hover:bg-neutral-200 px-3.5 py-2 rounded transition border border-neutral-300">
+            <button onclick="openModal('inquiry')" class="text-xs font-semibold text-[#2892d8] bg-[#f0f7fc] hover:bg-[#e0f0fa] px-3.5 py-2 rounded transition border border-[#bce0f6]">
               ホストに相談
             </button>
           </div>
 
           <!-- DESCRIPTION TEXT -->
           <div class="pt-5 space-y-4 text-sm leading-relaxed text-neutral-700">
-            <p class="font-medium text-neutral-900 bg-neutral-100 border-l-2 border-black p-3.5 rounded-r">
+            <p class="font-medium text-neutral-900 bg-[#f0f7fc] border-l-2 border-[#2892d8] p-3.5 rounded-r">
               「地域貢献」そして「一歩を踏み出したいチャレンジャーが挑戦できる場所」を。<br>
               湘南台駅から徒歩5分。菓子製造業許可・飲食店営業許可を取得した本格レンタルキッチンスタジオです。
             </p>
@@ -281,7 +281,7 @@
             
             <div class="bg-neutral-50 p-4 rounded border border-neutral-200 text-xs text-neutral-600 space-y-1">
               <div class="font-bold text-neutral-900 flex items-center gap-1.5 text-xs">
-                <i data-lucide="info" class="w-3.5 h-3.5 text-black"></i>
+                <i data-lucide="info" class="w-3.5 h-3.5 text-[#2892d8]"></i>
                 安心のスペース貸切料金制（人数課金なし）
               </div>
               <p>
@@ -294,7 +294,7 @@
         <!-- BASIC SPECS TABLE -->
         <section class="bg-white rounded-lg p-6 border border-neutral-200">
           <h2 class="text-base font-bold text-neutral-900 mb-4 pb-2 border-b border-neutral-100 flex items-center gap-2">
-            <i data-lucide="clipboard-list" class="w-4 h-4 text-black"></i>
+            <i data-lucide="clipboard-list" class="w-4 h-4 text-[#2892d8]"></i>
             基本スペック・利用条件
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3.5 text-xs sm:text-sm">
@@ -345,8 +345,8 @@
             <h3 class="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">会場タイプ</h3>
             <div class="flex flex-wrap gap-1.5">
               <span class="tag-chip font-bold bg-neutral-100">レンタルキッチン</span>
-              <span class="tag-chip font-bold bg-neutral-900 text-white">菓子製造許可施設</span>
-              <span class="tag-chip font-bold bg-neutral-900 text-white">飲食店営業許可施設</span>
+              <span class="tag-chip font-bold bg-[#2892d8] text-white border-transparent">菓子製造許可施設</span>
+              <span class="tag-chip font-bold bg-[#2892d8] text-white border-transparent">飲食店営業許可施設</span>
               <span class="tag-chip">料理教室</span>
               <span class="tag-chip">撮影スタジオ</span>
               <span class="tag-chip">パーティールーム</span>
@@ -387,7 +387,7 @@
         <section id="gallery" class="bg-white rounded-lg p-6 border border-neutral-200">
           <div class="flex items-center justify-between mb-4 pb-2 border-b border-neutral-100">
             <h2 class="text-base font-bold text-neutral-900 flex items-center gap-2">
-              <i data-lucide="image" class="w-4 h-4 text-black"></i>
+              <i data-lucide="image" class="w-4 h-4 text-[#2892d8]"></i>
               写真ギャラリー
             </h2>
             <span class="text-xs text-neutral-500">クリックすると拡大表示します</span>
@@ -419,29 +419,29 @@
               <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition"></div>
               <div class="absolute bottom-1.5 left-2 text-[11px] text-white font-medium drop-shadow">正確な所在地地図</div>
             </div>
-            <div class="group relative rounded overflow-hidden cursor-pointer aspect-video bg-neutral-100 border border-dashed border-neutral-300 flex flex-col items-center justify-center text-neutral-800 hover:bg-neutral-200 transition" onclick="openLightbox(0)">
-              <i data-lucide="maximize-2" class="w-5 h-5 mb-1 text-black"></i>
+            <div class="group relative rounded overflow-hidden cursor-pointer aspect-video bg-[#f0f7fc] border border-dashed border-[#bce0f6] flex flex-col items-center justify-center text-[#2892d8] hover:bg-[#e0f0fa] transition" onclick="openLightbox(0)">
+              <i data-lucide="maximize-2" class="w-5 h-5 mb-1 text-[#2892d8]"></i>
               <span class="text-xs font-bold">全 5枚を見る</span>
             </div>
           </div>
         </section>
 
-        <!-- CALENDAR & PRICING (モノトーン) -->
+        <!-- CALENDAR & PRICING -->
         <section id="calendar-section" class="bg-white rounded-lg p-6 border border-neutral-200 scroll-mt-24">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-neutral-100 gap-2">
             <div>
               <h2 class="text-base font-bold text-neutral-900 flex items-center gap-2">
-                <i data-lucide="calendar-check" class="w-4 h-4 text-black"></i>
+                <i data-lucide="calendar-check" class="w-4 h-4 text-[#2892d8]"></i>
                 料金プラン ＆ 空室カレンダー
               </h2>
               <p class="text-xs text-neutral-500 mt-0.5">空き状況の確認や、用途に合わせたお得なパックプランをご用意しております。</p>
             </div>
             <!-- モード切り替えタブ -->
             <div class="flex bg-neutral-100 p-1 rounded text-xs font-semibold self-start sm:self-auto border border-neutral-200">
-              <button id="tab-hourly" onclick="switchPriceTab('hourly')" class="px-3.5 py-1.5 rounded bg-black text-white transition">
+              <button id="tab-hourly" onclick="switchPriceTab('hourly')" class="px-3.5 py-1.5 rounded bg-[#2892d8] text-white transition shadow-sm">
                 時間単位で利用
               </button>
-              <button id="tab-pack" onclick="switchPriceTab('pack')" class="px-3.5 py-1.5 rounded text-neutral-600 hover:text-black transition">
+              <button id="tab-pack" onclick="switchPriceTab('pack')" class="px-3.5 py-1.5 rounded text-neutral-600 hover:text-[#2892d8] transition">
                 パック・1日貸切
               </button>
             </div>
@@ -450,7 +450,7 @@
           <!-- PRICING CARDS -->
           <div id="pricing-hourly-view" class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Plan 1 -->
-            <div class="rounded border border-neutral-200 p-4 hover:border-black transition bg-white flex flex-col justify-between">
+            <div class="rounded border border-neutral-200 p-4 hover:border-[#2892d8] transition bg-white flex flex-col justify-between">
               <div>
                 <div class="badge-mono-subtle mb-2">製造・仕込み向け</div>
                 <h3 class="font-bold text-neutral-900 text-sm">Kitchen（キッチン）</h3>
@@ -469,7 +469,7 @@
             </div>
 
             <!-- Plan 2 -->
-            <div class="rounded border border-neutral-200 p-4 hover:border-black transition bg-white flex flex-col justify-between">
+            <div class="rounded border border-neutral-200 p-4 hover:border-[#2892d8] transition bg-white flex flex-col justify-between">
               <div>
                 <div class="badge-mono-subtle mb-2">会議・教室・作業向け</div>
                 <h3 class="font-bold text-neutral-900 text-sm">Lounge（ラウンジ）</h3>
@@ -488,22 +488,22 @@
             </div>
 
             <!-- Plan 3 (Recommended) -->
-            <div class="rounded border-2 border-black p-4 bg-neutral-50 transition flex flex-col justify-between relative">
-              <div class="absolute -top-2.5 right-3 bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded">
+            <div class="rounded border-2 border-[#2892d8] p-4 bg-[#f0f7fc]/40 transition flex flex-col justify-between relative shadow-sm">
+              <div class="absolute -top-2.5 right-3 bg-[#2892d8] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">
                 全体完全貸切
               </div>
               <div>
-                <div class="badge-mono-solid mb-2">一番人気</div>
+                <div class="badge-primary-solid mb-2">一番人気</div>
                 <h3 class="font-bold text-neutral-900 text-sm">Kitchen & Lounge</h3>
                 <p class="text-xs text-neutral-500 mt-1">調理から試食、撮影、パーティーまで施設全体（36.5㎡）を完全貸切。</p>
               </div>
-              <div class="mt-4 pt-3 border-t border-neutral-200">
+              <div class="mt-4 pt-3 border-t border-[#bce0f6]">
                 <div class="text-[11px] text-neutral-500">1時間あたり</div>
                 <div class="flex items-baseline gap-1">
-                  <span class="text-2xl font-black text-neutral-900">¥2,500</span>
+                  <span class="text-2xl font-black text-[#2892d8]">¥2,500</span>
                   <span class="text-xs text-neutral-500">(税込 ¥2,750)</span>
                 </div>
-                <div class="mt-2 text-[11px] text-neutral-800 bg-white px-2 py-1 rounded font-medium border border-neutral-300">
+                <div class="mt-2 text-[11px] text-[#2892d8] bg-white px-2 py-1 rounded font-medium border border-[#bce0f6]">
                   長時間ほど割引率UP（1Dayあり）
                 </div>
               </div>
@@ -514,7 +514,7 @@
           <div id="pricing-pack-view" class="mt-6 hidden space-y-3">
             <div class="bg-neutral-50 rounded p-4 border border-neutral-200">
               <h4 class="font-bold text-neutral-900 text-xs sm:text-sm mb-3 flex items-center gap-1.5">
-                <i data-lucide="tag" class="w-3.5 h-3.5 text-black"></i>
+                <i data-lucide="tag" class="w-3.5 h-3.5 text-[#2892d8]"></i>
                 Kitchen & Lounge（全館貸切）お得な長時間パッケージ
               </h4>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
@@ -526,31 +526,31 @@
                 <div class="bg-white p-3 rounded border border-neutral-200">
                   <div class="text-xs text-neutral-500 font-medium">6時間パック</div>
                   <div class="text-base font-bold text-neutral-900 mt-1">¥15,400</div>
-                  <div class="text-[10px] text-neutral-700 font-semibold">1時間分割安</div>
+                  <div class="text-[10px] text-[#2892d8] font-semibold">1時間分割安</div>
                 </div>
                 <div class="bg-white p-3 rounded border border-neutral-200">
                   <div class="text-xs text-neutral-500 font-medium">8時間パック</div>
                   <div class="text-base font-bold text-neutral-900 mt-1">¥19,800</div>
-                  <div class="text-[10px] text-neutral-700 font-semibold">集中仕込みに最適</div>
+                  <div class="text-[10px] text-[#2892d8] font-semibold">集中仕込みに最適</div>
                 </div>
-                <div class="bg-neutral-900 text-white p-3 rounded border border-black">
-                  <div class="text-xs text-neutral-300 font-bold">12時間 (1Day)</div>
+                <div class="bg-[#2892d8] text-white p-3 rounded border border-[#207cb9] shadow-sm">
+                  <div class="text-xs text-white/90 font-bold">12時間 (1Day)</div>
                   <div class="text-base font-black text-white mt-1">¥22,000</div>
-                  <div class="text-[10px] text-neutral-300 font-medium">最安 ¥1,833/h</div>
+                  <div class="text-[10px] text-white/90 font-medium">最安 ¥1,833/h</div>
                 </div>
               </div>
             </div>
 
             <!-- 定期利用プランの案内 -->
-            <div class="bg-white rounded p-4 border border-neutral-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="bg-white rounded p-4 border border-[#bce0f6] bg-[#f0f7fc]/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <div class="badge-mono-solid mb-1">
+                <div class="badge-primary-solid mb-1">
                   <i data-lucide="repeat" class="w-3 h-3"></i> 継続・定期仕込み割引
                 </div>
                 <h4 class="font-bold text-neutral-900 text-xs sm:text-sm mt-1">週1回・月数回の定期的な製造・教室利用をご検討の方へ</h4>
                 <p class="text-xs text-neutral-600 mt-0.5">継続利用枠（格割プラン）をご相談可能です。定期製造枠の確保や材料保管をサポートします。</p>
               </div>
-              <button onclick="openModal('inquiry', '定期利用・仕込み枠の相談')" class="whitespace-nowrap px-4 py-2 bg-black hover:bg-neutral-800 text-white font-semibold text-xs rounded transition self-start sm:self-auto">
+              <button onclick="openModal('inquiry', '定期利用・仕込み枠の相談')" class="whitespace-nowrap px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white font-semibold text-xs rounded transition shadow-sm self-start sm:self-auto">
                 定期利用を相談する
               </button>
             </div>
@@ -592,7 +592,7 @@
               <!-- Legend -->
               <div class="mt-4 pt-3 border-t border-neutral-200 flex flex-wrap items-center justify-between gap-y-2 text-xs text-neutral-600">
                 <div class="flex items-center gap-3">
-                  <span class="flex items-center gap-1 font-bold text-neutral-900">● 80%以上空きあり</span>
+                  <span class="flex items-center gap-1 font-bold text-[#2892d8]">● 80%以上空きあり</span>
                   <span class="flex items-center gap-1 text-neutral-600">○ 40%以上空きあり</span>
                   <span class="flex items-center gap-1 text-neutral-500">△ 残りわずか</span>
                   <span class="flex items-center gap-1 text-neutral-300">ー 受付終了</span>
@@ -609,7 +609,7 @@
         <!-- AMENITIES & EQUIPMENT -->
         <section id="amenities" class="bg-white rounded-lg p-6 border border-neutral-200">
           <h2 class="text-base font-bold text-neutral-900 mb-2 flex items-center gap-2">
-            <i data-lucide="utensils" class="w-4 h-4 text-black"></i>
+            <i data-lucide="utensils" class="w-4 h-4 text-[#2892d8]"></i>
             設備・備品一覧
           </h2>
           <p class="text-xs text-neutral-500 mb-6">基本設備・調理機器・食器類はすべて利用料金に含まれており、追加料金なしでご利用いただけます。</p>
@@ -618,46 +618,46 @@
             <!-- 調理機器 -->
             <div>
               <h3 class="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                <i data-lucide="flame" class="w-3.5 h-3.5 text-black"></i> 調理機器・プロ仕様設備
+                <i data-lucide="flame" class="w-3.5 h-3.5 text-[#2892d8]"></i> 調理機器・プロ仕様設備
               </h3>
               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 text-xs">
                 <div class="p-3 rounded border border-neutral-200 bg-neutral-50 flex items-start gap-2.5">
-                  <i data-lucide="microwave" class="w-4 h-4 text-black flex-shrink-0 mt-0.5"></i>
+                  <i data-lucide="microwave" class="w-4 h-4 text-[#2892d8] flex-shrink-0 mt-0.5"></i>
                   <div>
                     <div class="font-bold text-neutral-900">スチームオーブン</div>
                     <div class="text-neutral-500">1台（高火力製菓・製パン対応）</div>
                   </div>
                 </div>
                 <div class="p-3 rounded border border-neutral-200 bg-neutral-50 flex items-start gap-2.5">
-                  <i data-lucide="package" class="w-4 h-4 text-black flex-shrink-0 mt-0.5"></i>
+                  <i data-lucide="package" class="w-4 h-4 text-[#2892d8] flex-shrink-0 mt-0.5"></i>
                   <div>
                     <div class="font-bold text-neutral-900">業務用真空包装機</div>
                     <div class="text-neutral-500">仕込み食品・長期保存・通販パックに</div>
                   </div>
                 </div>
                 <div class="p-3 rounded border border-neutral-200 bg-neutral-50 flex items-start gap-2.5">
-                  <i data-lucide="shrink" class="w-4 h-4 text-black flex-shrink-0 mt-0.5"></i>
+                  <i data-lucide="shrink" class="w-4 h-4 text-[#2892d8] flex-shrink-0 mt-0.5"></i>
                   <div>
                     <div class="font-bold text-neutral-900">お菓子用シーラー</div>
                     <div class="text-neutral-500">焼き菓子・個包装の密封用</div>
                   </div>
                 </div>
                 <div class="p-3 rounded border border-neutral-200 bg-neutral-50 flex items-start gap-2.5">
-                  <i data-lucide="refrigerator" class="w-4 h-4 text-black flex-shrink-0 mt-0.5"></i>
+                  <i data-lucide="refrigerator" class="w-4 h-4 text-[#2892d8] flex-shrink-0 mt-0.5"></i>
                   <div>
                     <div class="font-bold text-neutral-900">大型冷凍冷蔵庫</div>
                     <div class="text-neutral-500">1台（材料・仕込み品の冷却可能）</div>
                   </div>
                 </div>
                 <div class="p-3 rounded border border-neutral-200 bg-neutral-50 flex items-start gap-2.5">
-                  <i data-lucide="cooking-pot" class="w-4 h-4 text-black flex-shrink-0 mt-0.5"></i>
+                  <i data-lucide="cooking-pot" class="w-4 h-4 text-[#2892d8] flex-shrink-0 mt-0.5"></i>
                   <div>
                     <div class="font-bold text-neutral-900">システムキッチン・コンロ</div>
                     <div class="text-neutral-500">強火調理・複数人調理スペース</div>
                   </div>
                 </div>
                 <div class="p-3 rounded border border-neutral-200 bg-neutral-50 flex items-start gap-2.5">
-                  <i data-lucide="coffee" class="w-4 h-4 text-black flex-shrink-0 mt-0.5"></i>
+                  <i data-lucide="coffee" class="w-4 h-4 text-[#2892d8] flex-shrink-0 mt-0.5"></i>
                   <div>
                     <div class="font-bold text-neutral-900">電子レンジ・湯沸かしポット</div>
                     <div class="text-neutral-500">下準備・温め用</div>
@@ -669,7 +669,7 @@
             <!-- 家具・什器 -->
             <div>
               <h3 class="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                <i data-lucide="armchair" class="w-3.5 h-3.5 text-black"></i> 家具・什器・インテリア
+                <i data-lucide="armchair" class="w-3.5 h-3.5 text-[#2892d8]"></i> 家具・什器・インテリア
               </h3>
               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 text-xs">
                 <div class="p-3 rounded border border-neutral-200 bg-neutral-50">
@@ -702,26 +702,26 @@
             <!-- 通信・衛生設備 -->
             <div>
               <h3 class="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                <i data-lucide="wifi" class="w-3.5 h-3.5 text-black"></i> 通信・衛生設備
+                <i data-lucide="wifi" class="w-3.5 h-3.5 text-[#2892d8]"></i> 通信・衛生設備
               </h3>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs text-center">
                 <div class="p-3 rounded border border-neutral-200 bg-white">
-                  <i data-lucide="wifi" class="w-4 h-4 mx-auto text-black mb-1"></i>
+                  <i data-lucide="wifi" class="w-4 h-4 mx-auto text-[#2892d8] mb-1"></i>
                   <span class="font-bold block text-neutral-900">高速Wi-Fi</span>
                   <span class="text-[10px] text-neutral-500">無料接続可</span>
                 </div>
                 <div class="p-3 rounded border border-neutral-200 bg-white">
-                  <i data-lucide="sparkles" class="w-4 h-4 mx-auto text-black mb-1"></i>
+                  <i data-lucide="sparkles" class="w-4 h-4 mx-auto text-[#2892d8] mb-1"></i>
                   <span class="font-bold block text-neutral-900">消毒液・ペーパー</span>
                   <span class="text-[10px] text-neutral-500">各所に完備</span>
                 </div>
                 <div class="p-3 rounded border border-neutral-200 bg-white">
-                  <i data-lucide="bath" class="w-4 h-4 mx-auto text-black mb-1"></i>
+                  <i data-lucide="bath" class="w-4 h-4 mx-auto text-[#2892d8] mb-1"></i>
                   <span class="font-bold block text-neutral-900">専用トイレ</span>
                   <span class="text-[10px] text-neutral-500">清潔な個室</span>
                 </div>
                 <div class="p-3 rounded border border-neutral-200 bg-white">
-                  <i data-lucide="car" class="w-4 h-4 mx-auto text-black mb-1"></i>
+                  <i data-lucide="car" class="w-4 h-4 mx-auto text-[#2892d8] mb-1"></i>
                   <span class="font-bold block text-neutral-900">駐車場</span>
                   <span class="text-[10px] text-neutral-500">事前相談可</span>
                 </div>
@@ -730,10 +730,10 @@
           </div>
         </section>
 
-        <!-- ACCESS SECTION (正しい地図画像差し込み済み) -->
+        <!-- ACCESS SECTION -->
         <section id="access" class="bg-white rounded-lg p-6 border border-neutral-200">
           <h2 class="text-base font-bold text-neutral-900 mb-4 pb-2 border-b border-neutral-100 flex items-center gap-2">
-            <i data-lucide="map" class="w-4 h-4 text-black"></i>
+            <i data-lucide="map" class="w-4 h-4 text-[#2892d8]"></i>
             アクセス・周辺案内
           </h2>
 
@@ -761,7 +761,7 @@
             <div class="rounded overflow-hidden border border-neutral-200 bg-neutral-100 cursor-pointer shadow-sm" onclick="openLightbox(4)">
               <img src="assets/images/map.png" alt="湘南台キッチンスタジオ 正確な所在地マップ" class="w-full h-auto object-cover hover:opacity-95 transition">
               <div class="p-2 text-center text-[11px] text-neutral-500 bg-white border-t border-neutral-100 flex items-center justify-center gap-1 font-medium">
-                <i data-lucide="zoom-in" class="w-3.5 h-3.5"></i> タップして地図を拡大
+                <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-[#2892d8]"></i> タップして地図を拡大
               </div>
             </div>
           </div>
@@ -770,28 +770,28 @@
         <!-- USAGE FLOW -->
         <section id="flow" class="bg-white rounded-lg p-6 border border-neutral-200">
           <h2 class="text-base font-bold text-neutral-900 mb-6 pb-2 border-b border-neutral-100 flex items-center gap-2">
-            <i data-lucide="route" class="w-4 h-4 text-black"></i>
+            <i data-lucide="route" class="w-4 h-4 text-[#2892d8]"></i>
             ご利用の流れ
           </h2>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
             <div class="bg-neutral-50 p-4 rounded border border-neutral-200 text-center">
-              <div class="w-7 h-7 rounded-full bg-black text-white font-bold text-xs flex items-center justify-center mx-auto mb-2">1</div>
+              <div class="w-7 h-7 rounded-full bg-[#2892d8] text-white font-bold text-xs flex items-center justify-center mx-auto mb-2 shadow-sm">1</div>
               <h3 class="font-bold text-neutral-900 mb-1">お問い合わせ・内見</h3>
               <p class="text-neutral-600 text-[11px]">まずはWebまたはフォームよりご希望日時と用途をお知らせください。無料内見も可能です。</p>
             </div>
             <div class="bg-neutral-50 p-4 rounded border border-neutral-200 text-center">
-              <div class="w-7 h-7 rounded-full bg-black text-white font-bold text-xs flex items-center justify-center mx-auto mb-2">2</div>
+              <div class="w-7 h-7 rounded-full bg-[#2892d8] text-white font-bold text-xs flex items-center justify-center mx-auto mb-2 shadow-sm">2</div>
               <h3 class="font-bold text-neutral-900 mb-1">ご予約確定・お支払い</h3>
               <p class="text-neutral-600 text-[11px]">空き日程と利用規約をご確認いただきご予約確定。請求書振込または事前決済にて承ります。</p>
             </div>
             <div class="bg-neutral-50 p-4 rounded border border-neutral-200 text-center">
-              <div class="w-7 h-7 rounded-full bg-black text-white font-bold text-xs flex items-center justify-center mx-auto mb-2">3</div>
+              <div class="w-7 h-7 rounded-full bg-[#2892d8] text-white font-bold text-xs flex items-center justify-center mx-auto mb-2 shadow-sm">3</div>
               <h3 class="font-bold text-neutral-900 mb-1">ご利用当日</h3>
               <p class="text-neutral-600 text-[11px]">開始15分前より入室可能。スチームオーブンや真空パック機などをご活用ください。</p>
             </div>
             <div class="bg-neutral-50 p-4 rounded border border-neutral-200 text-center">
-              <div class="w-7 h-7 rounded-full bg-black text-white font-bold text-xs flex items-center justify-center mx-auto mb-2">4</div>
+              <div class="w-7 h-7 rounded-full bg-[#2892d8] text-white font-bold text-xs flex items-center justify-center mx-auto mb-2 shadow-sm">4</div>
               <h3 class="font-bold text-neutral-900 mb-1">清掃・原状復帰</h3>
               <p class="text-neutral-600 text-[11px]">器具の洗浄と簡単な清掃を行い、時間内に退出をお願いいたします。</p>
             </div>
@@ -801,15 +801,15 @@
         <!-- RULES & POLICIES -->
         <section id="rules" class="bg-white rounded-lg p-6 border border-neutral-200">
           <h2 class="text-base font-bold text-neutral-900 mb-4 pb-2 border-b border-neutral-100 flex items-center gap-2">
-            <i data-lucide="shield-alert" class="w-4 h-4 text-black"></i>
+            <i data-lucide="shield-alert" class="w-4 h-4 text-[#2892d8]"></i>
             利用規約・衛生管理・注意事項
           </h2>
 
           <div class="space-y-4 text-xs text-neutral-700 leading-relaxed">
             <!-- 食品衛生責任者 -->
-            <div class="border-l-2 border-black bg-neutral-50 p-3.5 rounded-r">
+            <div class="border-l-2 border-[#2892d8] bg-[#f0f7fc] p-3.5 rounded-r">
               <h3 class="font-bold text-neutral-900 flex items-center gap-1.5 text-xs mb-1">
-                <i data-lucide="award" class="w-3.5 h-3.5 text-black"></i> 食品衛生責任者の常駐について
+                <i data-lucide="award" class="w-3.5 h-3.5 text-[#2892d8]"></i> 食品衛生責任者の常駐について
               </h3>
               <p class="text-neutral-600 text-[11px]">
                 菓子製造業、飲食店営業、食のイベント、料理教室など、食品の製造・調理・販売を伴うご利用の場合は、<strong>食品衛生責任者の資格をお持ちの方が1名以上常駐</strong>していただくことを原則としております。ご利用前に受講証明証等のご提示をお願いしております。
@@ -834,7 +834,7 @@
                 </div>
                 <div class="grid grid-cols-2 p-2 bg-neutral-100/60">
                   <span class="font-semibold text-neutral-900">ご利用の 3日前 〜 当日</span>
-                  <span class="text-right font-bold text-neutral-900">利用料金の 100%</span>
+                  <span class="text-right font-bold text-rose-600">利用料金の 100%</span>
                 </div>
               </div>
             </div>
@@ -856,11 +856,11 @@
         <section id="reviews-section" class="bg-white rounded-lg p-6 border border-neutral-200">
           <div class="flex items-center justify-between mb-4 pb-2 border-b border-neutral-100">
             <h2 class="text-base font-bold text-neutral-900 flex items-center gap-2">
-              <i data-lucide="message-square" class="w-4 h-4 text-black"></i>
+              <i data-lucide="message-square" class="w-4 h-4 text-[#2892d8]"></i>
               ご利用者様のレビュー・口コミ
             </h2>
             <div class="flex items-center gap-1 font-bold text-neutral-900 text-xs">
-              <i data-lucide="star" class="w-3.5 h-3.5 fill-black text-black"></i>
+              <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400 text-amber-400"></i>
               <span>4.9 / 5.0</span>
               <span class="text-neutral-400 font-normal ml-1">(24件)</span>
             </div>
@@ -872,7 +872,7 @@
                 <span class="font-bold text-neutral-900">製菓ブランド・ポップアップ出店者様</span>
                 <span class="text-neutral-400 text-[10px]">2026年9月利用</span>
               </div>
-              <div class="flex text-neutral-900 mb-1 text-[11px]">★★★★★</div>
+              <div class="flex text-amber-400 mb-1 text-[11px]">★★★★★</div>
               <p class="text-neutral-600 text-[11px] leading-relaxed">
                 プリンの量産仕込みで利用させていただきました。スチームオーブンや真空パック機が揃っており、作業効率が格段に良かったです。自然光が入るのでSNS用の仕込み写真も綺麗に撮れました。
               </p>
@@ -883,7 +883,7 @@
                 <span class="font-bold text-neutral-900">料理教室講師様</span>
                 <span class="text-neutral-400 text-[10px]">2026年8月利用</span>
               </div>
-              <div class="flex text-neutral-900 mb-1 text-[11px]">★★★★★</div>
+              <div class="flex text-amber-400 mb-1 text-[11px]">★★★★★</div>
               <p class="text-neutral-600 text-[11px] leading-relaxed">
                 生徒さん8名をお招きしてのレッスンでした。テーブルが広く、テラスの緑が見えて生徒さんからも大好評でした。湘南台駅から近くて分かりやすいのも安心です。
               </p>
@@ -898,8 +898,8 @@
         
         <div class="bg-white rounded-lg border border-neutral-300 shadow-sm p-5 space-y-4">
           
-          <!-- BANNER HEADER (モノトーン) -->
-          <div class="bg-black text-white text-[11px] font-bold py-1.5 px-3 rounded text-center tracking-wider">
+          <!-- BANNER HEADER (スカイブルー) -->
+          <div class="bg-[#2892d8] text-white text-[11px] font-bold py-1.5 px-3 rounded text-center tracking-wider shadow-sm">
             定期仕込み・教室利用の無料相談受付中
           </div>
 
@@ -914,31 +914,31 @@
             <div class="flex items-center gap-1.5 mt-2">
               <span class="badge-mono-subtle">直前割</span>
               <span class="badge-mono-subtle">早割</span>
-              <button onclick="toggleSidebarDiscountDetails()" class="text-xs text-neutral-500 hover:text-black flex items-center gap-0.5 ml-auto font-medium">
+              <button onclick="toggleSidebarDiscountDetails()" class="text-xs text-[#2892d8] hover:underline flex items-center gap-0.5 ml-auto font-medium">
                 割引詳細 <i data-lucide="chevron-down" id="sidebar-discount-arrow" class="w-3.5 h-3.5"></i>
               </button>
             </div>
             <!-- 折りたたみ割引詳細 -->
             <div id="sidebar-discount-details" class="hidden mt-2 p-2.5 bg-neutral-50 rounded text-xs text-neutral-600 space-y-1 border border-neutral-200">
-              <div class="flex justify-between"><span>直前予約（0〜7日前）:</span><span class="font-bold text-neutral-900">20% OFF</span></div>
-              <div class="flex justify-between"><span>早期予約（60〜90日前）:</span><span class="font-bold text-neutral-900">10% OFF</span></div>
-              <div class="flex justify-between"><span>長時間パック（4h〜12h）:</span><span class="font-bold text-neutral-900">最大割引適用</span></div>
+              <div class="flex justify-between"><span>直前予約（0〜7日前）:</span><span class="font-bold text-[#2892d8]">20% OFF</span></div>
+              <div class="flex justify-between"><span>早期予約（60〜90日前）:</span><span class="font-bold text-[#2892d8]">10% OFF</span></div>
+              <div class="flex justify-between"><span>長時間パック（4h〜12h）:</span><span class="font-bold text-[#2892d8]">最大割引適用</span></div>
             </div>
           </div>
 
           <div class="border-t border-neutral-200 pt-4 space-y-4">
             
-            <!-- REALTIME CALCULATOR (モノトーン) -->
-            <div class="space-y-3 bg-neutral-50 p-3.5 rounded border border-neutral-200">
+            <!-- REALTIME CALCULATOR -->
+            <div class="space-y-3 bg-[#f0f7fc]/50 p-3.5 rounded border border-[#bce0f6]">
               <div class="text-xs font-bold text-neutral-900 flex items-center justify-between">
                 <span>料金見積もりシミュレーター</span>
-                <span class="text-[10px] text-neutral-500">自動算出</span>
+                <span class="text-[10px] text-[#2892d8] font-bold">自動算出</span>
               </div>
 
               <!-- Plan Select -->
               <div>
                 <label class="block text-[11px] font-medium text-neutral-600 mb-1">利用プラン</label>
-                <select id="calc-plan" onchange="calculateEstimate()" class="w-full text-xs bg-white border border-neutral-300 rounded p-2 text-neutral-900 focus:outline-none focus:border-black">
+                <select id="calc-plan" onchange="calculateEstimate()" class="w-full text-xs bg-white border border-neutral-300 rounded p-2 text-neutral-900 focus:outline-none focus:border-[#2892d8]">
                   <option value="kitchen_lounge" selected>Kitchen & Lounge（全体貸切 ¥2,500/h）</option>
                   <option value="kitchen">Kitchen（製造・仕込み特化 ¥2,000/h）</option>
                   <option value="lounge">Lounge（ワーク・教室特化 ¥1,500/h）</option>
@@ -949,11 +949,11 @@
               <div class="grid grid-cols-2 gap-2">
                 <div>
                   <label class="block text-[11px] font-medium text-neutral-600 mb-1">利用日</label>
-                  <input type="date" id="calc-date" onchange="calculateEstimate()" class="w-full text-xs bg-white border border-neutral-300 rounded p-1.5 text-neutral-900 focus:outline-none focus:border-black">
+                  <input type="date" id="calc-date" onchange="calculateEstimate()" class="w-full text-xs bg-white border border-neutral-300 rounded p-1.5 text-neutral-900 focus:outline-none focus:border-[#2892d8]">
                 </div>
                 <div>
                   <label class="block text-[11px] font-medium text-neutral-600 mb-1">利用時間数</label>
-                  <select id="calc-hours" onchange="calculateEstimate()" class="w-full text-xs bg-white border border-neutral-300 rounded p-1.5 text-neutral-900 focus:outline-none focus:border-black">
+                  <select id="calc-hours" onchange="calculateEstimate()" class="w-full text-xs bg-white border border-neutral-300 rounded p-1.5 text-neutral-900 focus:outline-none focus:border-[#2892d8]">
                     <option value="1">1時間</option>
                     <option value="2">2時間</option>
                     <option value="3">3時間</option>
@@ -966,27 +966,27 @@
               </div>
 
               <!-- Calculated Result -->
-              <div class="pt-2 border-t border-neutral-200 flex items-baseline justify-between">
+              <div class="pt-2 border-t border-[#bce0f6] flex items-baseline justify-between">
                 <span class="text-xs text-neutral-600">概算料金（税込）:</span>
-                <span class="text-xl font-black text-neutral-900" id="calc-result-price">¥11,000</span>
+                <span class="text-xl font-black text-[#2892d8]" id="calc-result-price">¥11,000</span>
               </div>
             </div>
 
-            <!-- CTA BUTTONS (黒基調) -->
-            <button onclick="openModal('booking')" class="w-full py-3 px-4 bg-black hover:bg-neutral-800 text-white font-bold text-xs sm:text-sm rounded transition shadow flex items-center justify-center gap-2">
+            <!-- CTA BUTTONS (スカイブルー基調) -->
+            <button onclick="openModal('booking')" class="w-full py-3 px-4 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs sm:text-sm rounded transition shadow flex items-center justify-center gap-2">
               <i data-lucide="calendar" class="w-4 h-4"></i>
               <span>空室確認・見学予約をする</span>
             </button>
 
-            <button onclick="openModal('inquiry')" class="w-full py-2.5 px-4 bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300 font-semibold text-xs rounded transition flex items-center justify-center gap-1.5">
+            <button onclick="openModal('inquiry')" class="w-full py-2.5 px-4 bg-white hover:bg-neutral-50 text-neutral-800 border border-neutral-300 font-semibold text-xs rounded transition flex items-center justify-center gap-1.5">
               <i data-lucide="help-circle" class="w-3.5 h-3.5 text-neutral-500"></i>
               <span>利用について質問・相談する</span>
             </button>
 
             <!-- 定期利用リンク -->
             <div class="text-center pt-1">
-              <a href="javascript:void(0)" onclick="openModal('inquiry', '定期製造・定期利用のご相談')" class="text-xs font-semibold text-neutral-900 hover:underline inline-flex items-center gap-1">
-                定期仕込み・継続利用の方はこちら <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              <a href="javascript:void(0)" onclick="openModal('inquiry', '定期製造・定期利用のご相談')" class="text-xs font-semibold text-[#2892d8] hover:underline inline-flex items-center gap-1">
+                定期仕込み・継続利用の方はこちら <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
               </a>
             </div>
 
@@ -1023,14 +1023,14 @@
   <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 p-3 z-40 shadow-lg flex items-center justify-between gap-3">
     <div>
       <div class="text-[10px] text-neutral-500">1時間あたり</div>
-      <div class="text-base font-black text-neutral-900 leading-none">¥1,500〜</div>
+      <div class="text-base font-black text-[#2892d8] leading-none">¥1,500〜</div>
       <div class="text-[10px] text-neutral-600 font-medium mt-0.5">菓子製造許可完備</div>
     </div>
     <div class="flex items-center gap-2">
       <button onclick="openModal('inquiry')" class="px-3 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold rounded transition border border-neutral-300">
         内見相談
       </button>
-      <button onclick="openModal('booking')" class="px-4 py-2 bg-black hover:bg-neutral-800 text-white text-xs font-bold rounded transition shadow flex items-center gap-1.5">
+      <button onclick="openModal('booking')" class="px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white text-xs font-bold rounded transition shadow flex items-center gap-1.5">
         <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
         空室確認・予約
       </button>
@@ -1038,12 +1038,12 @@
   </div>
 
   <!-- ================= FOOTER ================= -->
-  <footer class="bg-black text-neutral-400 py-12 mt-16 border-t border-neutral-800">
+  <footer class="bg-neutral-900 text-neutral-400 py-12 mt-16 border-t border-neutral-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-neutral-800">
         <div class="md:col-span-2">
           <div class="flex items-center gap-2 text-white font-bold text-lg mb-2">
-            <div class="w-7 h-7 rounded bg-white text-black flex items-center justify-center text-sm font-black">S</div>
+            <div class="w-7 h-7 rounded bg-[#2892d8] text-white flex items-center justify-center text-sm font-black">S</div>
             Shonandai Kitchen Studio
           </div>
           <p class="text-xs text-neutral-400 max-w-md leading-relaxed">
@@ -1068,7 +1068,7 @@
             <li><a href="javascript:void(0)" onclick="openModal('inquiry', '定期利用のご相談')" class="hover:text-white transition">定期製造枠のご相談</a></li>
             <li><a href="#rules" class="hover:text-white transition">利用規約兼申込書</a></li>
             <li><a href="admin.html" class="text-neutral-300 hover:text-white font-semibold transition flex items-center gap-1">
-              <i data-lucide="lock" class="w-3 h-3"></i> 管理者ダッシュボード
+              <i data-lucide="lock" class="w-3 h-3 text-[#2892d8]"></i> 管理者ダッシュボード
             </a></li>
           </ul>
         </div>
@@ -1106,7 +1106,7 @@
     </div>
   </div>
 
-  <!-- 2. BOOKING & INQUIRY MODAL (FormSubmit & Local Storage 連携) -->
+  <!-- 2. BOOKING & INQUIRY MODAL -->
   <div id="form-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl relative my-8 border border-neutral-300">
       <button onclick="closeModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1.5 rounded hover:bg-neutral-100 transition">
@@ -1114,32 +1114,32 @@
       </button>
 
       <div class="mb-4">
-        <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block" id="modal-subtitle">RESERVATION & INQUIRY</span>
+        <span class="text-[10px] font-bold text-[#2892d8] uppercase tracking-wider block" id="modal-subtitle">RESERVATION & INQUIRY</span>
         <h3 class="text-lg font-bold text-neutral-900" id="modal-title">空室確認・見学予約・お問い合わせ</h3>
         <p class="text-xs text-neutral-500 mt-0.5">必要事項をご入力ください。管理者宛てに即時通知され、24時間以内にご案内いたします。</p>
       </div>
 
       <form id="contact-form" onsubmit="submitForm(event)" class="space-y-3 text-xs">
         <div>
-          <label class="block font-semibold text-neutral-800 mb-1">お名前 / 貴社名 <span class="text-neutral-900 font-bold">*</span></label>
-          <input type="text" id="form-name" required placeholder="例：山田 太郎 / 摂取資源株式会社" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-black">
+          <label class="block font-semibold text-neutral-800 mb-1">お名前 / 貴社名 <span class="text-[#2892d8] font-bold">*</span></label>
+          <input type="text" id="form-name" required placeholder="例：山田 太郎 / 摂取資源株式会社" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div>
-            <label class="block font-semibold text-neutral-800 mb-1">メールアドレス <span class="text-neutral-900 font-bold">*</span></label>
-            <input type="email" id="form-email" required placeholder="example@domain.com" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-black">
+            <label class="block font-semibold text-neutral-800 mb-1">メールアドレス <span class="text-[#2892d8] font-bold">*</span></label>
+            <input type="email" id="form-email" required placeholder="example@domain.com" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
           </div>
           <div>
-            <label class="block font-semibold text-neutral-800 mb-1">お電話番号 <span class="text-neutral-900 font-bold">*</span></label>
-            <input type="tel" id="form-tel" required placeholder="090-0000-0000" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-black">
+            <label class="block font-semibold text-neutral-800 mb-1">お電話番号 <span class="text-[#2892d8] font-bold">*</span></label>
+            <input type="tel" id="form-tel" required placeholder="090-0000-0000" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div>
             <label class="block font-semibold text-neutral-800 mb-1">ご希望プラン</label>
-            <select id="form-plan" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-black">
+            <select id="form-plan" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
               <option value="Kitchen & Lounge（全体貸切）">Kitchen & Lounge（全体貸切）</option>
               <option value="Kitchen（製造・仕込み特化）">Kitchen（製造・仕込み特化）</option>
               <option value="Lounge（ワーク・教室）">Lounge（ワーク・教室）</option>
@@ -1149,7 +1149,7 @@
           </div>
           <div>
             <label class="block font-semibold text-neutral-800 mb-1">ご利用希望日</label>
-            <input type="date" id="form-date" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-black">
+            <input type="date" id="form-date" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
           </div>
         </div>
 
@@ -1165,11 +1165,11 @@
 
         <div>
           <label class="block font-semibold text-neutral-800 mb-1">お問い合わせ・ご要望内容</label>
-          <textarea id="form-message" rows="3" placeholder="希望時間帯（例: 10:00〜14:00）、使用したい機材、定期利用の頻度などご自由にご記入ください。" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-black"></textarea>
+          <textarea id="form-message" rows="3" placeholder="希望時間帯（例: 10:00〜14:00）、使用したい機材、定期利用の頻度などご自由にご記入ください。" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]"></textarea>
         </div>
 
         <div class="pt-2">
-          <button type="submit" id="submit-btn" class="w-full py-3 bg-black hover:bg-neutral-800 text-white font-bold rounded transition shadow flex items-center justify-center gap-1.5 text-xs">
+          <button type="submit" id="submit-btn" class="w-full py-3 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold rounded transition shadow flex items-center justify-center gap-1.5 text-xs">
             <i data-lucide="send" class="w-4 h-4"></i>
             <span>送信する（管理者へ自動通知・24h以内返信）</span>
           </button>
@@ -1182,7 +1182,7 @@
   </div>
 
   <!-- TOAST NOTIFICATION -->
-  <div id="toast" class="fixed top-5 right-5 z-50 bg-black text-white px-4 py-3 rounded shadow-2xl flex items-center gap-2 text-xs transform transition-all duration-300 translate-y-[-100px] opacity-0 pointer-events-none border border-neutral-700">
+  <div id="toast" class="fixed top-5 right-5 z-50 bg-[#2892d8] text-white px-4 py-3 rounded shadow-2xl flex items-center gap-2 text-xs transform transition-all duration-300 translate-y-[-100px] opacity-0 pointer-events-none">
     <i data-lucide="check" class="w-4 h-4 text-white"></i>
     <span id="toast-text">リンクをコピーしました</span>
   </div>
@@ -1228,7 +1228,7 @@
       document.getElementById("lightbox-counter").innerText = `${currentLightboxIdx + 1} / ${photos.length}`;
     }
 
-    // 2. 料金プランタブ切り替え (モノトーン)
+    // 2. 料金プランタブ切り替え
     function switchPriceTab(tab) {
       const hourlyBtn = document.getElementById("tab-hourly");
       const packBtn = document.getElementById("tab-pack");
@@ -1236,19 +1236,19 @@
       const packView = document.getElementById("pricing-pack-view");
 
       if (tab === 'hourly') {
-        hourlyBtn.className = "px-3.5 py-1.5 rounded bg-black text-white transition";
-        packBtn.className = "px-3.5 py-1.5 rounded text-neutral-600 hover:text-black transition";
+        hourlyBtn.className = "px-3.5 py-1.5 rounded bg-[#2892d8] text-white transition shadow-sm";
+        packBtn.className = "px-3.5 py-1.5 rounded text-neutral-600 hover:text-[#2892d8] transition";
         hourlyView.classList.remove("hidden");
         packView.classList.add("hidden");
       } else {
-        packBtn.className = "px-3.5 py-1.5 rounded bg-black text-white transition";
-        hourlyBtn.className = "px-3.5 py-1.5 rounded text-neutral-600 hover:text-black transition";
+        packBtn.className = "px-3.5 py-1.5 rounded bg-[#2892d8] text-white transition shadow-sm";
+        hourlyBtn.className = "px-3.5 py-1.5 rounded text-neutral-600 hover:text-[#2892d8] transition";
         packView.classList.remove("hidden");
         hourlyView.classList.add("hidden");
       }
     }
 
-    // 3. カレンダー描画（モノトーン）
+    // 3. カレンダー描画
     let currentYear = 2026;
     let currentMonth = 9;
 
@@ -1275,7 +1275,7 @@
         const isToday = (currentMonth === 9 && day === todayDay);
         
         let symbol = "●";
-        let symbolClass = "text-black font-bold";
+        let symbolClass = "text-[#2892d8] font-bold";
         if (isPast) {
           symbol = "ー";
           symbolClass = "text-neutral-300";
@@ -1288,11 +1288,11 @@
         }
 
         cell.className = `p-1.5 rounded border transition cursor-pointer flex flex-col items-center justify-between min-h-[46px] ${
-          isToday ? 'border-black bg-neutral-100 font-bold' : 'border-neutral-200 hover:border-black bg-white'
+          isToday ? 'border-[#2892d8] bg-[#f0f7fc] font-bold' : 'border-neutral-200 hover:border-[#2892d8] bg-white'
         } ${isPast ? 'opacity-40 cursor-not-allowed bg-neutral-100' : ''}`;
 
         cell.innerHTML = `
-          <div class="text-[11px] ${isToday ? 'font-black text-black' : 'text-neutral-700'}">${day}</div>
+          <div class="text-[11px] ${isToday ? 'font-black text-[#2892d8]' : 'text-neutral-700'}">${day}</div>
           <div class="text-[10px] ${symbolClass}">${symbol}</div>
         `;
 
@@ -1410,7 +1410,6 @@
         status: "新規受付"
       };
 
-      // A. 管理者ダッシュボード用 localStorage への同期保存
       try {
         const stored = JSON.parse(localStorage.getItem("shonandai_requests") || "[]");
         stored.unshift(formData);
@@ -1419,7 +1418,6 @@
         console.error("Local storage error:", err);
       }
 
-      // B. FormSubmit による管理者宛て外部メール送信（非同期）
       try {
         const payload = new FormData();
         payload.append("_subject", `【湘南台キッチンスタジオ】${formData.name}様より予約・問い合わせ (${formData.plan})`);
@@ -1433,7 +1431,6 @@
         payload.append("_template", "table");
         payload.append("_captcha", "false");
 
-        // 管理者メール（必要に応じて変更可能）
         const adminEmail = "o.naoki0503@intakingresources.com";
         await fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
           method: "POST",
@@ -1459,12 +1456,12 @@
       const btn = document.getElementById("favorite-btn");
       const icon = document.getElementById("favorite-icon");
       if (isFavorited) {
-        btn.classList.add("border-black", "bg-black", "text-white");
-        icon.classList.add("fill-white");
+        btn.classList.add("border-[#2892d8]", "bg-[#f0f7fc]", "text-[#2892d8]");
+        icon.classList.add("fill-[#2892d8]");
         showToast("お気に入りに追加しました");
       } else {
-        btn.classList.remove("border-black", "bg-black", "text-white");
-        icon.classList.remove("fill-white");
+        btn.classList.remove("border-[#2892d8]", "bg-[#f0f7fc]", "text-[#2892d8]");
+        icon.classList.remove("fill-[#2892d8]");
         showToast("お気に入りを解除しました");
       }
     }
