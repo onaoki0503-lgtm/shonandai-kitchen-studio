@@ -99,7 +99,7 @@
             <div class="font-bold text-sm sm:text-base text-neutral-900 flex items-center gap-2">
               Shonandai Kitchen Studio
               <span class="text-[10px] font-semibold bg-neutral-100 text-neutral-700 border border-neutral-300 px-1.5 py-0.5 rounded">管理ポータル</span>
-              <span class="text-[10px] font-bold bg-[#2892d8] text-white px-2 py-0.5 rounded shadow-sm">v2.8.2 (最新)</span>
+              <span class="text-[10px] font-bold bg-[#2892d8] text-white px-2 py-0.5 rounded shadow-sm">v2.8.3 (タイムライン日付修正)</span>
             </div>
             <div class="text-[10px] text-neutral-500">株式会社APRECIO ｜ 湘南台スタジオ管理 (Supabase実データ・スタッフ認証稼働中)</div>
           </div>
@@ -1274,15 +1274,24 @@
       }
     }
 
+    function formatLocalDate(d) {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
     function shiftTimelineDate(offset) {
-      const d = new Date(selectedTimelineDate + "T00:00:00");
+      // タイムゾーン（UTC/JST）による日付巻き戻りを防ぐため、年月日を直接分解してローカルDateで計算
+      const parts = selectedTimelineDate.split('-').map(Number);
+      const d = new Date(parts[0], parts[1] - 1, parts[2]);
       d.setDate(d.getDate() + offset);
-      selectedTimelineDate = d.toISOString().slice(0, 10);
+      selectedTimelineDate = formatLocalDate(d);
       renderTimeline();
     }
 
     function setTimelineToday() {
-      selectedTimelineDate = new Date().toISOString().slice(0, 10);
+      selectedTimelineDate = formatLocalDate(new Date());
       renderTimeline();
     }
 
