@@ -7,6 +7,8 @@
   <meta name="description" content="神奈川県藤沢市湘南台駅徒歩5分。菓子製造業・飲食店営業許可完備の完全貸切レンタルキッチンスタジオ。スチームオーブン・真空パック機完備。お菓子の製造・販売仕込み、料理教室、商品撮影、ポップアップ、少人数パーティーに最適。">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Google Fonts (Noto Sans JP) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1389,45 +1391,110 @@
       modal.classList.add("hidden");
     }
 
-    // 6. 外部メール通知 ＆ ローカル管理ストレージへの二重書き込み
+    // 6. Supabase クラウド保存 ＆ 外部メール通知（二重保護）
+    const SUPABASE_URL = "https://ocgurkujxkxdmzebvdcv.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9jZ3Vya3VqeGt4ZG16ZWJ2ZGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMTgxNjEsImV4cCI6MjEwNTc5NDE2MX0.NaGmnB8UCJkzgKoSiM-0eEy4wtn3Y-jz-RIn9HIRL8A";
+    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+    const PLAN_RATES = {
+      "Kitchen & Lounge（全体貸切）": { unit: 3850, defaultHours: 6, total: 23100 },
+      "Kitchen（製造・仕込み特化）": { unit: 3300, defaultHours: 5, total: 16500 },
+      "Lounge（ワーク・教室）": { unit: 2750, defaultHours: 4, total: 11000 },
+      "定期利用・継続枠のご相談": { unit: 3000, defaultHours: 8, total: 24000 },
+      "無料内見・下見のみ": { unit: 0, defaultHours: 1, total: 0 }
+    };
+
     async function submitForm(e) {
       e.preventDefault();
       const submitBtn = document.getElementById("submit-btn");
       submitBtn.disabled = true;
       submitBtn.innerHTML = `<span>送信処理中...</span>`;
 
-      const usages = Array.from(document.querySelectorAll('input[name="usage"]:checked')).map(cb => cb.value).join(', ');
-      const formData = {
-        id: "REQ-" + Date.now().toString().slice(-6),
-        name: document.getElementById("form-name").value,
-        email: document.getElementById("form-email").value,
-        tel: document.getElementById("form-tel").value,
-        plan: document.getElementById("form-plan").value,
-        date: document.getElementById("form-date").value || "未定",
-        usage: usages || "その他",
-        message: document.getElementById("form-message").value || "なし",
+      const usages = Array.from(document.querySelectorAll('input[name="usage"]:checked')).map(cb => cb.value).join(', ') || "一般利用";
+      const nameVal = document.getElementById("form-name").value.trim();
+      const emailVal = document.getElementById("form-email").value.trim();
+      const telVal = document.getElementById("form-tel").value.trim();
+      const planVal = document.getElementById("form-plan").value;
+      const dateVal = document.getElementById("form-date").value || new Date().toISOString().slice(0, 10);
+      const messageVal = document.getElementById("form-message").value.trim();
+
+      const bookingId = "REQ-" + Date.now().toString().slice(-6);
+      const idempotencyKey = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (bookingId + "-" + Math.random().toString(36).slice(2));
+      const rateInfo = PLAN_RATES[planVal] || { unit: 3850, defaultHours: 5, total: 19250 };
+
+      // ローカルストレージ（オフラインバックアップ）
+      const localRecord = {
+        id: bookingId,
+        name: nameVal,
+        company: "",
+        email: emailVal,
+        tel: telVal,
+        plan: planVal,
+        date: dateVal,
+        usage: usages,
+        message: messageVal || "なし",
+        estimatedAmount: rateInfo.total,
+        durationHours: rateInfo.defaultHours,
         createdAt: new Date().toLocaleString("ja-JP"),
         status: "新規受付"
       };
 
       try {
         const stored = JSON.parse(localStorage.getItem("shonandai_requests") || "[]");
-        stored.unshift(formData);
+        stored.unshift(localRecord);
         localStorage.setItem("shonandai_requests", JSON.stringify(stored));
       } catch (err) {
         console.error("Local storage error:", err);
       }
 
+      // 1. Supabase クラウドDB への INSERT
+      if (supabaseClient) {
+        try {
+          const { error: dbError } = await supabaseClient
+            .from('bookings')
+            .insert([{
+              id: bookingId,
+              idempotency_key: idempotencyKey,
+              type: planVal.includes('内見') ? 'INQUIRY' : 'BOOKING',
+              customer_name: nameVal,
+              company_name: "",
+              email: emailVal,
+              tel: telVal,
+              plan_id: planVal,
+              usage_type: usages,
+              reserved_date: dateVal,
+              start_time: '10:00:00',
+              end_time: '18:00:00',
+              duration_hours: rateInfo.defaultHours,
+              unit_price: rateInfo.unit,
+              estimated_amount: rateInfo.total,
+              status: 'PENDING',
+              message: messageVal || "なし"
+            }]);
+
+          if (dbError) {
+            console.error("Supabase INSERT error:", dbError);
+          } else {
+            console.log("Supabase INSERT success:", bookingId);
+          }
+        } catch (dbErr) {
+          console.error("Supabase request exception:", dbErr);
+        }
+      }
+
+      // 2. 管理者へのメール即時通知 (FormSubmit)
       try {
         const payload = new FormData();
-        payload.append("_subject", `【湘南台キッチンスタジオ】${formData.name}様より予約・問い合わせ (${formData.plan})`);
-        payload.append("氏名・会社名", formData.name);
-        payload.append("メールアドレス", formData.email);
-        payload.append("電話番号", formData.tel);
-        payload.append("希望プラン", formData.plan);
-        payload.append("利用希望日", formData.date);
-        payload.append("利用用途", formData.usage);
-        payload.append("ご要望・詳細", formData.message);
+        payload.append("_subject", `【湘南台キッチンスタジオ】${nameVal}様より予約・問い合わせ (${planVal})`);
+        payload.append("管理ID", bookingId);
+        payload.append("氏名・貴社名", nameVal);
+        payload.append("メールアドレス", emailVal);
+        payload.append("電話番号", telVal);
+        payload.append("希望プラン", planVal);
+        payload.append("利用希望日", dateVal);
+        payload.append("利用用途", usages);
+        payload.append("ご要望・詳細", messageVal || "なし");
+        payload.append("想定概算金額", `¥${rateInfo.total.toLocaleString()}`);
         payload.append("_template", "table");
         payload.append("_captcha", "false");
 
@@ -1437,7 +1504,7 @@
           body: payload
         });
       } catch (err) {
-        console.warn("Mail forwarding:", err);
+        console.warn("Mail forwarding warning:", err);
       }
 
       submitBtn.disabled = false;
@@ -1446,7 +1513,7 @@
 
       closeModal();
       document.getElementById("contact-form").reset();
-      showToast("お問い合わせ・予約リクエストを送信しました。管理者より24時間以内にご案内いたします。");
+      showToast("お問い合わせ・予約リクエストを送信しました。24時間以内にご案内いたします。");
     }
 
     // 7. シェア・お気に入り・トースト機能
