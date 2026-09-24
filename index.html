@@ -1479,8 +1479,9 @@
             // ビュー作成前のフォールバック（特定カラムのみ限定取得）
             res = await supabaseClient
               .from('bookings')
-              .select('date, start_time, end_time, status')
-              .eq('date', targetDate)
+              .select('reserved_date, start_time, end_time, status')
+              .eq('reserved_date', targetDate)
+              .neq('status', 'CANCELLED')
               .neq('status', 'キャンセル');
           }
 
