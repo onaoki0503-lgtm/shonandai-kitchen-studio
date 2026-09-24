@@ -11,6 +11,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Supabase JS Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,17 +87,17 @@
             <div class="font-bold text-sm sm:text-base text-neutral-900 flex items-center gap-2">
               Shonandai Kitchen Studio
               <span class="text-[10px] font-semibold bg-neutral-100 text-neutral-700 border border-neutral-300 px-1.5 py-0.5 rounded">管理ポータル</span>
-              <span class="text-[10px] font-bold bg-[#2892d8] text-white px-2 py-0.5 rounded shadow-sm">v2.2 最新版</span>
+              <span class="text-[10px] font-bold bg-[#2892d8] text-white px-2 py-0.5 rounded shadow-sm">v2.3 (Supabase連動)</span>
             </div>
-            <div class="text-[10px] text-neutral-500">株式会社APRECIO ｜ 湘南台スタジオ管理 (空室連携・手動予約対応)</div>
+            <div class="text-[10px] text-neutral-500">株式会社APRECIO ｜ 湘南台スタジオ管理 (Supabaseクラウド実データ稼働中)</div>
           </div>
         </div>
 
         <div class="flex items-center gap-3">
           <!-- リアルタイム自動同期ステータス -->
           <div class="hidden md:flex items-center gap-1.5 text-xs text-neutral-600 bg-neutral-50 border border-neutral-200 px-2.5 py-1 rounded">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>リアルタイム同期中 (<span id="sync-time" class="font-mono font-medium">--:--:--</span>)</span>
+            <span id="sync-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="sync-label">Supabase クラウド同期中 (<span id="sync-time" class="font-mono font-medium">--:--:--</span>)</span>
           </div>
 
           <!-- 未対応アラートバッジ -->
@@ -545,80 +547,141 @@
       window.location.reload();
     }
 
-    // 2. データ初期化
-    function loadData() {
-      const stored = localStorage.getItem("shonandai_requests");
-      if (stored) {
-        requestsData = JSON.parse(stored);
-      } else {
-        requestsData = [
-          {
-            id: "REQ-901124",
-            name: "佐藤 美咲 様",
-            company: "洋菓子教室シュクレ",
-            email: "sato.sucre@example.com",
-            tel: "080-9876-5432",
-            plan: "Kitchen & Lounge（全体貸切）",
-            date: "2026-10-04",
-            usage: "料理教室・ワークショップ",
-            message: "生徒8名での秋の焼き菓子ワークショップを検討しています。テーブルレイアウトとオーブン台数について事前に下見可能でしょうか？",
-            createdAt: "2026/09/24 08:30",
-            status: "新規受付"
-          },
-          {
-            id: "REQ-901088",
-            name: "田中 健一 様",
-            company: "カフェプロジェクト",
-            email: "k.tanaka@example.com",
-            tel: "090-4444-2222",
-            plan: "定期利用・継続枠のご相談",
-            date: "2026-10-10",
-            usage: "菓子製造・販売仕込み",
-            message: "週1回の焼き菓子定期仕込み枠を相談したいです。食品衛生責任者証は取得済みです。",
-            createdAt: "2026/09/23 19:15",
-            status: "新規受付"
-          },
-          {
-            id: "REQ-890412",
-            name: "岡本 直樹 様",
-            company: "摂取資源株式会社",
-            email: "o.naoki0503@intakingresources.com",
-            tel: "090-1234-5678",
-            plan: "Kitchen（製造・仕込み特化）",
-            date: "2026-09-25",
-            usage: "菓子製造・販売仕込み",
-            message: "巨大塩プリンの定期製造検証として4.5時間利用希望です。スチームオーブンおよび真空包装機の使用動線を確認させていただきます。",
-            createdAt: "2026/09/23 15:42",
-            status: "承認済み"
-          },
-          {
-            id: "REQ-875620",
-            name: "株式会社フードメディア 制作部 様",
-            company: "株式会社フードメディア",
-            email: "info@foodmedia-sample.jp",
-            tel: "03-5555-0199",
-            plan: "Kitchen & Lounge（全体貸切）",
-            date: "2026-09-28",
-            usage: "料理・商品撮影/SNS",
-            message: "YouTubeおよびSNS用の新調理器具のプロモーション動画撮影で6時間貸切を希望します。テラスの自然光が入る時間帯での撮影を予定しています。",
-            createdAt: "2026/09/22 11:20",
-            status: "承認済み"
-          },
-          {
-            id: "REQ-861005",
-            name: "中村 陽子 様",
-            company: "個人",
-            email: "yoko.nakamura@example.com",
-            tel: "090-8888-9999",
-            plan: "Lounge（ワーク・教室）",
-            date: "2026-09-20",
-            usage: "料理教室・ワークショップ",
-            message: "少人数の食育ワークショップにて利用させていただきました。",
-            createdAt: "2026/09/18 10:00",
-            status: "完了"
+    // 2. Supabase クライアント初期化 & データ連携
+    const SUPABASE_URL = "https://ocgurkujxkxdmzebvdcv.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9jZ3Vya3VqeGt4ZG16ZWJ2ZGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMTgxNjEsImV4cCI6MjEwNTc5NDE2MX0.NaGmnB8UCJkzgKoSiM-0eEy4wtn3Y-jz-RIn9HIRL8A";
+    
+    let supabaseClient = null;
+    if (window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    const STATUS_DB_TO_UI = {
+      'PENDING': '新規受付',
+      'CONFIRMED': '承認済み',
+      'COMPLETED': '完了',
+      'CANCELLED': 'キャンセル'
+    };
+
+    const STATUS_UI_TO_DB = {
+      '新規受付': 'PENDING',
+      '承認済み': 'CONFIRMED',
+      '完了': 'COMPLETED',
+      'キャンセル': 'CANCELLED'
+    };
+
+    function mapDbToUi(row) {
+      return {
+        id: row.id,
+        name: row.customer_name || "名称未設定",
+        company: row.company_name || "",
+        email: row.email || "",
+        tel: row.tel || "",
+        plan: row.plan_id || "未定",
+        date: row.reserved_date || "",
+        usage: row.usage_type || "一般利用",
+        message: row.message || "",
+        estimatedAmount: Number(row.estimated_amount) || 0,
+        durationHours: Number(row.duration_hours) || 0,
+        createdAt: row.created_at ? new Date(row.created_at).toLocaleString("ja-JP", { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : "-",
+        status: STATUS_DB_TO_UI[row.status] || row.status || "新規受付"
+      };
+    }
+
+    async function loadData() {
+      let loadedFromSupabase = false;
+
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('bookings')
+            .select('*')
+            .order('reserved_date', { ascending: true });
+
+          if (!error && data && data.length > 0) {
+            requestsData = data.map(mapDbToUi);
+            loadedFromSupabase = true;
+            setCloudSyncStatus(true);
           }
-        ];
-        saveData();
+        } catch (e) {
+          console.warn("Supabase fetch failed, falling back to local storage", e);
+        }
+      }
+
+      if (!loadedFromSupabase) {
+        const stored = localStorage.getItem("shonandai_requests");
+        if (stored) {
+          requestsData = JSON.parse(stored);
+        } else {
+          requestsData = [
+            {
+              id: "REQ-20260924-001",
+              name: "佐藤 健太 様",
+              company: "合同会社スイーツラボ",
+              email: "sato@example.com",
+              tel: "090-1111-2222",
+              plan: "菓子製造マルシェ出店プラン",
+              date: "2026-09-25",
+              usage: "菓子製造販売",
+              message: "週末のイベント用クッキーの仕込みで利用希望です。",
+              estimatedAmount: 30800,
+              durationHours: 8.0,
+              createdAt: "2026/09/24 13:32",
+              status: "新規受付"
+            },
+            {
+              id: "REQ-20260924-002",
+              name: "高橋 優子 様",
+              company: "湘南クッキングサロン",
+              email: "takahashi@example.com",
+              tel: "090-3333-4444",
+              plan: "料理教室・ワークショップ",
+              date: "2026-09-28",
+              usage: "料理教室",
+              message: "少人数のパン作り教室を開催します。",
+              estimatedAmount: 19250,
+              durationHours: 5.0,
+              createdAt: "2026/09/24 13:32",
+              status: "承認済み"
+            },
+            {
+              id: "REQ-20260924-003",
+              name: "田中 美咲 様",
+              company: "",
+              email: "tanaka@example.com",
+              tel: "090-5555-6666",
+              plan: "キッチンスタジオ撮影プラン",
+              date: "2026-09-21",
+              usage: "YouTube撮影",
+              message: "料理動画の撮影で利用しました。",
+              estimatedAmount: 15400,
+              durationHours: 4.0,
+              createdAt: "2026/09/24 13:32",
+              status: "完了"
+            }
+          ];
+        }
+        setCloudSyncStatus(false);
+      }
+
+      saveData();
+      updateKPISummary();
+      handleFilterChange();
+      if (calendarMode === 'month') renderMonthCalendar();
+      else renderYearCalendar();
+    }
+
+    function setCloudSyncStatus(isCloud) {
+      const dot = document.getElementById("sync-dot");
+      const label = document.getElementById("sync-label");
+      if (dot && label) {
+        if (isCloud) {
+          dot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
+          label.innerHTML = `Supabase クラウド同期中 (<span id="sync-time" class="font-mono font-medium">${new Date().toLocaleTimeString("ja-JP")}</span>)`;
+        } else {
+          dot.className = "w-2 h-2 rounded-full bg-amber-500";
+          label.innerHTML = `ローカル動作中 (<span id="sync-time" class="font-mono font-medium">${new Date().toLocaleTimeString("ja-JP")}</span>)`;
+        }
       }
     }
 
@@ -632,7 +695,21 @@
       document.getElementById("kpi-pending-count").innerText = pendingCount;
       document.getElementById("kpi-total-count").innerText = requestsData.length;
       document.getElementById("header-alert-text").innerText = `${pendingCount}件の未対応`;
-      document.getElementById("sync-time").innerText = new Date().toLocaleTimeString("ja-JP");
+
+      // 想定稼働売上（承認済み + 完了）
+      const projectedRevenue = requestsData
+        .filter(r => r.status === "承認済み" || r.status === "完了")
+        .reduce((sum, r) => sum + (Number(r.estimatedAmount) || 0), 0);
+      
+      const revEl = document.getElementById("kpi-revenue");
+      if (revEl) {
+        revEl.innerText = `¥${projectedRevenue.toLocaleString()}`;
+      }
+
+      const syncTimeEl = document.getElementById("sync-time");
+      if (syncTimeEl) {
+        syncTimeEl.innerText = new Date().toLocaleTimeString("ja-JP");
+      }
     }
 
     // 3. PV × 予約相関グラフ描画 (Chart.js)
@@ -1027,6 +1104,17 @@
         if (calendarMode === 'month') renderMonthCalendar();
         else renderYearCalendar();
         showToast(`管理ID: ${id} のステータスを「${newStatus}」に変更しました`);
+
+        if (supabaseClient) {
+          const dbStatus = STATUS_UI_TO_DB[newStatus] || newStatus;
+          supabaseClient
+            .from('bookings')
+            .update({ status: dbStatus })
+            .eq('id', id)
+            .then(({ error }) => {
+              if (error) console.error("Supabase status update error:", error);
+            });
+        }
       }
     }
 
@@ -1116,6 +1204,32 @@
       // 該当日の予約を表示
       handleCalendarDateClick(newBooking.date, true);
       showToast(`${newBooking.date} の予約を登録しました`);
+
+      if (supabaseClient) {
+        const dbStatus = STATUS_UI_TO_DB[newBooking.status] || newBooking.status;
+        supabaseClient
+          .from('bookings')
+          .insert([{
+            id: newBooking.id,
+            customer_name: newBooking.name,
+            company_name: newBooking.company,
+            email: newBooking.email,
+            tel: newBooking.tel,
+            plan_id: newBooking.plan,
+            usage_type: newBooking.usage,
+            reserved_date: newBooking.date,
+            start_time: '10:00:00',
+            end_time: '18:00:00',
+            duration_hours: 8.0,
+            unit_price: 3850,
+            estimated_amount: 30800,
+            status: dbStatus,
+            message: newBooking.message
+          }])
+          .then(({ error }) => {
+            if (error) console.error("Supabase insert error:", error);
+          });
+      }
     }
 
     // 7. 詳細モーダル
