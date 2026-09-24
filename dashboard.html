@@ -44,6 +44,10 @@
     ::-webkit-scrollbar-track { background: #f8fafc; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     .sparkline-svg { width: 100%; height: 32px; overflow: visible; }
+    .grid-24 { display: grid; grid-template-columns: repeat(24, minmax(0, 1fr)); }
+    .timeline-conflict-pattern {
+      background-image: repeating-linear-gradient(45deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.15) 8px, transparent 8px, transparent 16px);
+    }
   </style>
 </head>
 <body class="bg-[#fafafa] text-neutral-900 antialiased min-h-screen">
@@ -87,9 +91,9 @@
             <div class="font-bold text-sm sm:text-base text-neutral-900 flex items-center gap-2">
               Shonandai Kitchen Studio
               <span class="text-[10px] font-semibold bg-neutral-100 text-neutral-700 border border-neutral-300 px-1.5 py-0.5 rounded">管理ポータル</span>
-              <span class="text-[10px] font-bold bg-[#2892d8] text-white px-2 py-0.5 rounded shadow-sm">v2.3 (Supabase連動)</span>
+              <span class="text-[10px] font-bold bg-[#2892d8] text-white px-2 py-0.5 rounded shadow-sm">v2.4 (24hタイムライン・重複検知)</span>
             </div>
-            <div class="text-[10px] text-neutral-500">株式会社APRECIO ｜ 湘南台スタジオ管理 (Supabaseクラウド実データ稼働中)</div>
+            <div class="text-[10px] text-neutral-500">株式会社APRECIO ｜ 湘南台スタジオ管理 (Supabase実データ・ダブルブッキング防止ガントチャート稼働中)</div>
           </div>
         </div>
 
@@ -255,6 +259,73 @@
         </div>
       </section>
 
+      <!-- 3.5. 日付別 24時間稼働タイムライン（ダブルブッキング防止ガントチャート） -->
+      <section id="timeline-section" class="bg-white rounded-lg border border-neutral-200 shadow-sm p-5 space-y-4 scroll-mt-20">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-neutral-100">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-neutral-900 text-sm sm:text-base flex items-center gap-2">
+                <i data-lucide="clock" class="w-4 h-4 text-[#2892d8]"></i>
+                <span id="timeline-date-label" class="font-mono text-neutral-900 font-bold">2026年09月25日</span> の24時間稼働タイムライン
+              </h3>
+              <span id="timeline-conflict-badge" class="hidden text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded shadow-sm animate-pulse flex items-center gap-1">
+                <i data-lucide="alert-triangle" class="w-3 h-3"></i> 重複予約を検知
+              </span>
+            </div>
+            <p class="text-xs text-neutral-500 mt-0.5" id="timeline-summary-text">
+              1時間区切りの稼働状況です。空いている枠をクリックすると、その時間帯で予約を手動追加できます。
+            </p>
+          </div>
+
+          <!-- コントロールボタン群 -->
+          <div class="flex items-center gap-1.5 self-start sm:self-auto flex-wrap">
+            <button onclick="shiftTimelineDate(-1)" class="px-2.5 py-1 text-xs border border-neutral-300 hover:bg-neutral-100 rounded text-neutral-700 flex items-center gap-1 transition">
+              <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> 前日
+            </button>
+            <button onclick="setTimelineToday()" class="px-2.5 py-1 text-xs border border-neutral-300 hover:bg-neutral-100 rounded text-neutral-700 font-medium transition">
+              今日
+            </button>
+            <button onclick="shiftTimelineDate(1)" class="px-2.5 py-1 text-xs border border-neutral-300 hover:bg-neutral-100 rounded text-neutral-700 flex items-center gap-1 transition">
+              翌日 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            </button>
+            <button onclick="openManualBookingModal(selectedTimelineDate)" class="ml-2 px-3 py-1 bg-[#2892d8] hover:bg-[#207cb9] text-white text-xs font-bold rounded shadow-sm inline-flex items-center gap-1 transition">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> この日に追加
+            </button>
+          </div>
+        </div>
+
+        <!-- タイムライン本体（横スクロール対応） -->
+        <div class="overflow-x-auto pb-2">
+          <div class="min-w-[800px]">
+            <!-- 時間目盛り 0:00 〜 24:00 -->
+            <div id="timeline-hours-header" class="grid-24 text-[10px] text-neutral-400 font-mono pb-1 border-b border-neutral-200 select-none text-center">
+            </div>
+
+            <!-- ガントチャートトラック -->
+            <div id="timeline-track-wrapper" class="relative mt-2 min-h-[88px] bg-neutral-50 rounded border border-neutral-200 select-none overflow-hidden cursor-pointer" onclick="handleTimelineTrackClick(event)">
+              <!-- 24時間グリッド背景線 -->
+              <div id="timeline-grid-bg" class="absolute inset-0 grid-24 pointer-events-none">
+              </div>
+              
+              <!-- 予約ブロック配置コンテナ -->
+              <div id="timeline-bars-container" class="relative z-10 p-2 space-y-1.5 min-h-[88px]">
+              </div>
+            </div>
+
+            <!-- 凡例 -->
+            <div class="flex items-center justify-between mt-3 text-[11px] text-neutral-500">
+              <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-[#2892d8] inline-block"></span> 新規受付（未対応）</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-neutral-900 inline-block"></span> 承認済み（予約確定）</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-neutral-200 border border-neutral-400 inline-block"></span> 利用完了</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded border-2 border-dashed border-amber-500 bg-amber-50 inline-block"></span> 重複（要調整）</span>
+              </div>
+              <span id="timeline-usage-stat" class="font-mono text-neutral-700 font-medium">予約: 8.0h / 空き: 16.0h</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- 4. 高機能 予約・問い合わせ管理テーブル -->
       <section id="ledger-section" class="bg-white rounded-lg border border-neutral-200 shadow-sm overflow-hidden scroll-mt-20">
         
@@ -400,8 +471,47 @@
             </select>
           </div>
           <div>
-            <label class="block font-semibold text-neutral-800 mb-1">利用時間帯（例: 09:00〜13:30）</label>
-            <input type="text" id="manual-time" placeholder="09:00〜13:30" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+            <label class="block font-semibold text-neutral-800 mb-1">利用時間帯（開始〜終了） <span class="text-[#2892d8] font-bold">*</span></label>
+            <div class="grid grid-cols-2 gap-1.5">
+              <select id="manual-start-time" class="border border-neutral-300 rounded p-2 text-xs text-neutral-900 font-mono focus:outline-none focus:border-[#2892d8]">
+                <option value="06:00">06:00</option>
+                <option value="07:00">07:00</option>
+                <option value="08:00">08:00</option>
+                <option value="09:00">09:00</option>
+                <option value="10:00" selected>10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+                <option value="13:00">13:00</option>
+                <option value="14:00">14:00</option>
+                <option value="15:00">15:00</option>
+                <option value="16:00">16:00</option>
+                <option value="17:00">17:00</option>
+                <option value="18:00">18:00</option>
+                <option value="19:00">19:00</option>
+                <option value="20:00">20:00</option>
+                <option value="21:00">21:00</option>
+                <option value="22:00">22:00</option>
+              </select>
+              <select id="manual-end-time" class="border border-neutral-300 rounded p-2 text-xs text-neutral-900 font-mono focus:outline-none focus:border-[#2892d8]">
+                <option value="08:00">08:00</option>
+                <option value="09:00">09:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+                <option value="13:00">13:00</option>
+                <option value="14:00">14:00</option>
+                <option value="15:00">15:00</option>
+                <option value="16:00">16:00</option>
+                <option value="17:00">17:00</option>
+                <option value="18:00" selected>18:00</option>
+                <option value="19:00">19:00</option>
+                <option value="20:00">20:00</option>
+                <option value="21:00">21:00</option>
+                <option value="22:00">22:00</option>
+                <option value="23:00">23:00</option>
+                <option value="24:00">24:00</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -511,6 +621,7 @@
     let calYear = 2026;
     let calMonth = 9;
     let selectedCalendarDate = ""; // カレンダーでクリックした日付
+    let selectedTimelineDate = "2026-09-25"; // タイムラインで表示中の日付
 
     // ページネーション設定
     let currentPage = 1;
@@ -571,6 +682,8 @@
     };
 
     function mapDbToUi(row) {
+      const sTime = row.start_time ? String(row.start_time).slice(0, 5) : "10:00";
+      const eTime = row.end_time ? String(row.end_time).slice(0, 5) : "18:00";
       return {
         id: row.id,
         name: row.customer_name || "名称未設定",
@@ -579,6 +692,9 @@
         tel: row.tel || "",
         plan: row.plan_id || "未定",
         date: row.reserved_date || "",
+        startTime: sTime,
+        endTime: eTime,
+        time: `${sTime}〜${eTime}`,
         usage: row.usage_type || "一般利用",
         message: row.message || "",
         estimatedAmount: Number(row.estimated_amount) || 0,
@@ -669,6 +785,7 @@
       handleFilterChange();
       if (calendarMode === 'month') renderMonthCalendar();
       else renderYearCalendar();
+      renderTimeline();
     }
 
     function setCloudSyncStatus(isCloud) {
@@ -688,6 +805,7 @@
     function saveData() {
       localStorage.setItem("shonandai_requests", JSON.stringify(requestsData));
       updateKPISummary();
+      renderTimeline();
     }
 
     function updateKPISummary() {
@@ -710,6 +828,180 @@
       if (syncTimeEl) {
         syncTimeEl.innerText = new Date().toLocaleTimeString("ja-JP");
       }
+    }
+
+    // ==========================================
+    // 2.5. 24時間タイムライン（ダブルブッキング検知・ガントチャート）
+    // ==========================================
+    function initTimeline() {
+      const header = document.getElementById("timeline-hours-header");
+      const gridBg = document.getElementById("timeline-grid-bg");
+      if (!header || !gridBg) return;
+
+      header.innerHTML = "";
+      gridBg.innerHTML = "";
+
+      for (let h = 0; h < 24; h++) {
+        const hourLabel = document.createElement("div");
+        hourLabel.className = "text-center";
+        hourLabel.innerText = `${h}:00`;
+        header.appendChild(hourLabel);
+
+        const colBorder = document.createElement("div");
+        colBorder.className = `border-r ${h === 23 ? 'border-transparent' : 'border-neutral-200/70'} h-full`;
+        gridBg.appendChild(colBorder);
+      }
+    }
+
+    function timeStringToHours(timeStr) {
+      if (!timeStr) return 10.0;
+      const parts = timeStr.split(":");
+      const h = parseInt(parts[0], 10) || 0;
+      const m = parseInt(parts[1], 10) || 0;
+      return h + (m / 60);
+    }
+
+    function renderTimeline() {
+      const container = document.getElementById("timeline-bars-container");
+      const dateLabel = document.getElementById("timeline-date-label");
+      const conflictBadge = document.getElementById("timeline-conflict-badge");
+      const statEl = document.getElementById("timeline-usage-stat");
+      if (!container) return;
+
+      const dObj = new Date(selectedTimelineDate + "T00:00:00");
+      const weekDays = ["日", "月", "火", "水", "木", "金", "土"];
+      const dayName = isNaN(dObj.getDay()) ? "" : `(${weekDays[dObj.getDay()]})`;
+      if (dateLabel) {
+        dateLabel.innerText = `${selectedTimelineDate} ${dayName}`;
+      }
+
+      // 該当日の有効な予約（キャンセル除外）
+      const dayBookings = requestsData.filter(r => r.date === selectedTimelineDate && r.status !== "キャンセル");
+
+      // 重複検査
+      let hasConflict = false;
+      const intervals = dayBookings.map(b => {
+        const start = timeStringToHours(b.startTime || "10:00");
+        const end = Math.max(start + 1, timeStringToHours(b.endTime || "18:00"));
+        return { booking: b, start, end, conflict: false };
+      });
+
+      for (let i = 0; i < intervals.length; i++) {
+        for (let j = i + 1; j < intervals.length; j++) {
+          if (intervals[i].start < intervals[j].end && intervals[i].end > intervals[j].start) {
+            intervals[i].conflict = true;
+            intervals[j].conflict = true;
+            hasConflict = true;
+          }
+        }
+      }
+
+      if (conflictBadge) {
+        if (hasConflict) conflictBadge.classList.remove("hidden");
+        else conflictBadge.classList.add("hidden");
+      }
+
+      container.innerHTML = "";
+
+      if (intervals.length === 0) {
+        container.innerHTML = `
+          <div class="h-14 rounded border-2 border-dashed border-neutral-300/80 bg-white/60 hover:bg-[#f0f7fc]/50 transition flex items-center justify-center text-xs text-neutral-500 font-medium">
+            <span class="inline-flex items-center gap-1.5 text-neutral-600">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              ◯ 終日 空室（00:00〜24:00 予約可能） — クリックしてこの日に予約を追加
+            </span>
+          </div>
+        `;
+        if (statEl) statEl.innerText = "予約: 0.0h / 空き: 24.0h";
+        return;
+      }
+
+      let totalBookedHours = 0;
+
+      intervals.forEach(item => {
+        const r = item.booking;
+        const startH = item.start;
+        const endH = item.end;
+        const duration = endH - startH;
+        totalBookedHours += duration;
+
+        const leftPercent = (startH / 24) * 100;
+        const widthPercent = (duration / 24) * 100;
+
+        const isUrgent = (r.status === "新規受付");
+        const isConflict = item.conflict;
+
+        const bar = document.createElement("div");
+        bar.className = `relative h-14 rounded shadow-sm px-2.5 py-1.5 flex flex-col justify-between cursor-pointer transition transform hover:scale-[1.008] hover:z-20 text-xs overflow-hidden ${
+          isConflict 
+            ? 'border-2 border-red-500 timeline-conflict-pattern bg-red-50 text-red-950 font-bold'
+            : isUrgent 
+            ? 'bg-[#2892d8] text-white hover:bg-[#207cb9]'
+            : r.status === '承認済み'
+            ? 'bg-neutral-900 text-white hover:bg-black'
+            : 'bg-neutral-200 text-neutral-900 border border-neutral-300 hover:bg-neutral-300'
+        }`;
+
+        bar.style.marginLeft = `${leftPercent}%`;
+        bar.style.width = `${Math.max(widthPercent, 5)}%`;
+
+        const statusTag = isConflict
+          ? `<span class="bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold animate-pulse">⚠️ 重複</span>`
+          : isUrgent
+          ? `<span class="bg-white/20 text-white text-[9px] px-1.5 py-0.5 rounded font-bold">新規受付</span>`
+          : r.status === '承認済み'
+          ? `<span class="bg-white/20 text-white text-[9px] px-1.5 py-0.5 rounded font-bold">確定</span>`
+          : `<span class="bg-neutral-400 text-white text-[9px] px-1.5 py-0.5 rounded">完了</span>`;
+
+        bar.innerHTML = `
+          <div class="flex items-center justify-between gap-1 overflow-hidden">
+            <span class="font-mono font-bold text-[11px] truncate">${r.startTime || '10:00'} - ${r.endTime || '18:00'}</span>
+            ${statusTag}
+          </div>
+          <div class="truncate font-semibold text-[11px] mt-0.5">
+            ${escapeHtml(r.name)} <span class="opacity-80 text-[10px] font-normal">(${escapeHtml(r.plan)})</span>
+          </div>
+        `;
+
+        bar.onclick = (e) => {
+          e.stopPropagation();
+          openDetailModal(r.id);
+        };
+
+        container.appendChild(bar);
+      });
+
+      const freeHours = Math.max(0, 24 - totalBookedHours);
+      if (statEl) {
+        statEl.innerText = `予約: ${totalBookedHours.toFixed(1)}h / 空き: ${freeHours.toFixed(1)}h`;
+      }
+    }
+
+    function shiftTimelineDate(offset) {
+      const d = new Date(selectedTimelineDate + "T00:00:00");
+      d.setDate(d.getDate() + offset);
+      selectedTimelineDate = d.toISOString().slice(0, 10);
+      renderTimeline();
+    }
+
+    function setTimelineToday() {
+      selectedTimelineDate = new Date().toISOString().slice(0, 10);
+      renderTimeline();
+    }
+
+    function handleTimelineTrackClick(e) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+      const clickedHour = Math.floor(ratio * 24);
+      const startStr = String(clickedHour).padStart(2, '0') + ":00";
+      const endStr = String(Math.min(24, clickedHour + 4)).padStart(2, '0') + ":00";
+
+      openManualBookingModal(selectedTimelineDate);
+      const startEl = document.getElementById("manual-start-time");
+      const endEl = document.getElementById("manual-end-time");
+      if (startEl) startEl.value = startStr;
+      if (endEl) endEl.value = endStr;
     }
 
     // 3. PV × 予約相関グラフ描画 (Chart.js)
@@ -906,19 +1198,22 @@
     // ★ カレンダーの日付クリック時（予約あり・空室を問わず下部に連動）
     function handleCalendarDateClick(dateStr, isBooked) {
       selectedCalendarDate = dateStr;
+      selectedTimelineDate = dateStr;
+      renderTimeline();
+
       document.getElementById("search-input").value = dateStr;
       handleFilterChange();
 
       // カレンダーの再描画（選択枠ハイライト）
       if (calendarMode === 'month') renderMonthCalendar();
 
-      // 台帳エリアまでスムーズスクロール
-      document.getElementById("ledger-section").scrollIntoView({ behavior: 'smooth' });
+      // タイムラインエリアまでスムーズスクロール
+      document.getElementById("timeline-section").scrollIntoView({ behavior: 'smooth' });
 
       if (isBooked) {
-        showToast(`${dateStr} の予約一覧を表示しました`);
+        showToast(`${dateStr} のタイムラインと予約一覧を表示しました`);
       } else {
-        showToast(`${dateStr} は終日【空室】です。手動登録が可能です`);
+        showToast(`${dateStr} は終日【空室】です。タイムラインから手動登録可能です`);
       }
     }
 
@@ -1178,17 +1473,27 @@
 
     function handleManualBookingSubmit(e) {
       e.preventDefault();
+      const sTime = document.getElementById("manual-start-time") ? document.getElementById("manual-start-time").value : "10:00";
+      const eTime = document.getElementById("manual-end-time") ? document.getElementById("manual-end-time").value : "18:00";
+      const startH = timeStringToHours(sTime);
+      const endH = timeStringToHours(eTime);
+      const dur = Math.max(1, endH - startH);
+
       const newBooking = {
         id: "DIR-" + Date.now().toString().slice(-6),
         name: document.getElementById("manual-name").value,
         company: document.getElementById("manual-company").value || "",
         plan: document.getElementById("manual-plan").value,
         date: document.getElementById("manual-date").value,
-        time: document.getElementById("manual-time").value || "時間要相談",
+        startTime: sTime,
+        endTime: eTime,
+        time: `${sTime}〜${eTime}`,
         usage: document.getElementById("manual-usage").value || "一般利用",
         tel: document.getElementById("manual-tel").value || "-",
         email: document.getElementById("manual-email").value || "-",
         message: document.getElementById("manual-memo").value || "電話・直接受付",
+        estimatedAmount: dur * 3850,
+        durationHours: dur,
         createdAt: new Date().toLocaleString("ja-JP", { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
         status: document.getElementById("manual-status").value
       };
@@ -1201,9 +1506,9 @@
       if (calendarMode === 'month') renderMonthCalendar();
       else renderYearCalendar();
 
-      // 該当日の予約を表示
+      // 該当日の予約を表示 & タイムライン更新
       handleCalendarDateClick(newBooking.date, true);
-      showToast(`${newBooking.date} の予約を登録しました`);
+      showToast(`${newBooking.date} (${sTime}-${eTime}) の予約を登録しました`);
 
       if (supabaseClient) {
         const dbStatus = STATUS_UI_TO_DB[newBooking.status] || newBooking.status;
@@ -1218,11 +1523,11 @@
             plan_id: newBooking.plan,
             usage_type: newBooking.usage,
             reserved_date: newBooking.date,
-            start_time: '10:00:00',
-            end_time: '18:00:00',
-            duration_hours: 8.0,
+            start_time: sTime + ':00',
+            end_time: eTime + ':00',
+            duration_hours: dur,
             unit_price: 3850,
-            estimated_amount: 30800,
+            estimated_amount: dur * 3850,
             status: dbStatus,
             message: newBooking.message
           }])
@@ -1322,9 +1627,11 @@
     }
 
     function initDashboard() {
+      initTimeline();
       loadData();
       initCorrelationChart();
       renderMonthCalendar();
+      renderTimeline();
       handleFilterChange();
     }
 
