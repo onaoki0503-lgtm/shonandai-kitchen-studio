@@ -1921,12 +1921,9 @@ ${signature}`;
       const staff = getSenderInfo();
       const fromEmail = (staff.email || "").trim();
 
-      // 指定アカウントで開くためのGmail URLを構築 (/u/{fromEmail}/ および authuserパラメータ)
-      const baseUrl = fromEmail 
-        ? `https://mail.google.com/mail/u/${encodeURIComponent(fromEmail)}/` 
-        : `https://mail.google.com/mail/`;
+      // Googleのリダイレクト破損（404）を防ぐため、パスではなくクエリパラメータauthuserを使用
       const authParam = fromEmail ? `&authuser=${encodeURIComponent(fromEmail)}` : '';
-      const gmailUrl = `${baseUrl}?view=cm&fs=1${authParam}&to=${encodeURIComponent(to)}&su=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1${authParam}&to=${encodeURIComponent(to)}&su=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
 
       checkAndApplyAutoStatus();
       window.open(gmailUrl, '_blank');
