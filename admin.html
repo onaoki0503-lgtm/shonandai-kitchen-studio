@@ -52,29 +52,37 @@
 </head>
 <body class="bg-[#fafafa] text-neutral-900 antialiased min-h-screen">
 
-  <!-- ================= AUTH MODAL (パスコード認証) ================= -->
+  <!-- ================= AUTH MODAL (スタッフ / 管理者ログイン) ================= -->
   <div id="auth-modal" class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-4">
     <div class="bg-white rounded-lg max-w-sm w-full p-6 shadow-2xl border border-neutral-300 text-center">
       <div class="w-12 h-12 bg-[#2892d8] text-white rounded flex items-center justify-center mx-auto mb-3 font-black text-xl shadow-sm">
         S
       </div>
-      <h2 class="text-base font-bold text-neutral-900 mb-1">管理者ログイン</h2>
-      <p class="text-xs text-neutral-500 mb-5">Shonandai Kitchen Studio 管理ダッシュボード</p>
+      <h2 class="text-base font-bold text-neutral-900 mb-1">管理ポータル ログイン</h2>
+      <p class="text-xs text-neutral-500 mb-5">Shonandai Kitchen Studio 予約管理システム</p>
       
-      <form onsubmit="handleLogin(event)" class="space-y-3">
+      <form onsubmit="handleLogin(event)" class="space-y-3 text-left">
         <div>
-          <label class="block text-left text-[11px] font-semibold text-neutral-700 mb-1">管理パスコード</label>
-          <input type="password" id="auth-code" required placeholder="パスコードを入力" class="w-full text-center tracking-widest text-sm border border-neutral-300 rounded p-2.5 focus:outline-none focus:border-[#2892d8] font-mono">
+          <label class="block text-[11px] font-semibold text-neutral-700 mb-1">ログイン用メールアドレス</label>
+          <input type="email" id="auth-email" required placeholder="例: o.naoki0503@intakingresources.com" class="w-full text-xs border border-neutral-300 rounded p-2.5 focus:outline-none focus:border-[#2892d8] font-medium text-neutral-900 bg-neutral-50">
         </div>
-        <div id="auth-error" class="hidden text-xs text-rose-600 font-semibold bg-rose-50 p-2 rounded border border-rose-200">
-          パスコードが正しくありません。
+        <div>
+          <label class="block text-[11px] font-semibold text-neutral-700 mb-1">パスワード</label>
+          <input type="password" id="auth-password" required placeholder="パスワードを入力" class="w-full text-xs border border-neutral-300 rounded p-2.5 focus:outline-none focus:border-[#2892d8] font-mono text-neutral-900 bg-neutral-50">
         </div>
-        <button type="submit" class="w-full py-2.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow">
-          認証して入室
+        <div id="auth-error" class="hidden text-xs text-rose-600 font-semibold bg-rose-50 p-2.5 rounded border border-rose-200">
+          メールアドレスまたはパスワードが正しくありません。
+        </div>
+        <button type="submit" id="auth-submit-btn" class="w-full py-2.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow flex items-center justify-center gap-1.5">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>ログインして入室</span>
         </button>
       </form>
-      <div class="mt-4 pt-3 border-t border-neutral-100 text-[10px] text-neutral-400">
-        初期パスコード: <code class="bg-neutral-100 px-1 py-0.5 rounded text-neutral-700 font-mono">shonandai2026</code>
+      <div class="mt-4 pt-3 border-t border-neutral-100 text-[10px] text-neutral-500 text-left space-y-1">
+        <div class="font-bold text-neutral-700">初期管理者アカウント:</div>
+        <div>・岡本代表: <code class="bg-neutral-100 px-1 py-0.5 rounded text-neutral-800 font-mono">o.naoki0503@intakingresources.com</code></div>
+        <div>・スタジオ運営: <code class="bg-neutral-100 px-1 py-0.5 rounded text-neutral-800 font-mono">info@shonandai-kitchen.jp</code></div>
+        <div class="text-neutral-400">（初期PW: <code class="font-mono">shonandai2026</code>）</div>
       </div>
     </div>
   </div>
@@ -91,29 +99,42 @@
             <div class="font-bold text-sm sm:text-base text-neutral-900 flex items-center gap-2">
               Shonandai Kitchen Studio
               <span class="text-[10px] font-semibold bg-neutral-100 text-neutral-700 border border-neutral-300 px-1.5 py-0.5 rounded">管理ポータル</span>
-              <span class="text-[10px] font-bold bg-[#2892d8] text-white px-2 py-0.5 rounded shadow-sm">v2.7 (Gmail送信元アカウント動的切替)</span>
+              <span class="text-[10px] font-bold bg-[#2892d8] text-white px-2 py-0.5 rounded shadow-sm">v2.8 (スタッフ認証＆管理者専用スタッフ管理)</span>
             </div>
-            <div class="text-[10px] text-neutral-500">株式会社APRECIO ｜ 湘南台スタジオ管理 (Supabase実データ・24hタイムライン・テンプレート返信稼働中)</div>
+            <div class="text-[10px] text-neutral-500">株式会社APRECIO ｜ 湘南台スタジオ管理 (Supabase実データ・スタッフ認証稼働中)</div>
           </div>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5">
+          <!-- ログイン中の担当者情報バッジ -->
+          <div class="flex items-center gap-1.5 text-xs text-neutral-700 bg-neutral-100 border border-neutral-200 px-2.5 py-1.5 rounded shadow-sm">
+            <i data-lucide="user-check" class="w-3.5 h-3.5 text-[#2892d8]"></i>
+            <span id="header-user-name" class="font-bold text-neutral-900">--</span>
+            <span id="header-user-role" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-neutral-200 text-neutral-700">--</span>
+          </div>
+
+          <!-- 管理者（admin）専用: スタッフ管理ボタン -->
+          <button id="btn-staff-mgmt" onclick="openStaffMgmtModal()" class="hidden items-center gap-1.5 text-xs font-bold text-[#2892d8] bg-[#f0f7fc] border border-[#2892d8]/40 hover:bg-[#2892d8] hover:text-white px-3 py-1.5 rounded transition shadow-sm">
+            <i data-lucide="users" class="w-3.5 h-3.5"></i>
+            <span>スタッフ管理</span>
+          </button>
+
           <!-- リアルタイム自動同期ステータス -->
-          <div class="hidden md:flex items-center gap-1.5 text-xs text-neutral-600 bg-neutral-50 border border-neutral-200 px-2.5 py-1 rounded">
+          <div class="hidden lg:flex items-center gap-1.5 text-xs text-neutral-600 bg-neutral-50 border border-neutral-200 px-2.5 py-1 rounded">
             <span id="sync-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span id="sync-label">Supabase クラウド同期中 (<span id="sync-time" class="font-mono font-medium">--:--:--</span>)</span>
+            <span id="sync-label">クラウド同期中 (<span id="sync-time" class="font-mono font-medium">--:--:--</span>)</span>
           </div>
 
           <!-- 未対応アラートバッジ -->
           <div id="header-alert-badge" class="flex items-center gap-1.5 text-xs font-bold text-white bg-[#2892d8] px-3 py-1 rounded shadow-sm">
             <i data-lucide="bell" class="w-3.5 h-3.5"></i>
-            <span id="header-alert-text">2件の未対応</span>
+            <span id="header-alert-text">0件</span>
           </div>
 
           <a href="index.html" target="_blank" class="hidden sm:inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-[#2892d8] font-medium border border-neutral-200 px-3 py-1.5 rounded hover:bg-neutral-50 transition">
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Webサイト表示
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Webサイト
           </a>
-          <button onclick="handleLogout()" class="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-black font-medium px-2.5 py-1.5 rounded hover:bg-neutral-100 transition">
+          <button onclick="handleLogout()" class="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-rose-600 font-medium px-2 py-1.5 rounded hover:bg-neutral-100 transition" title="ログアウト">
             <i data-lucide="log-out" class="w-3.5 h-3.5"></i> ログアウト
           </button>
         </div>
@@ -604,6 +625,101 @@
     </div>
   </div>
 
+  <!-- ================= STAFF MANAGEMENT MODAL (管理者専用) ================= -->
+  <div id="staff-mgmt-modal" class="fixed inset-0 z-50 bg-black/60 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-2xl w-full p-6 shadow-2xl border border-neutral-300 relative flex flex-col max-h-[90vh]">
+      <button onclick="closeStaffMgmtModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1 rounded hover:bg-neutral-100 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-4 pb-3 border-b border-neutral-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded bg-[#2892d8] text-white flex items-center justify-center text-xs">
+            <i data-lucide="users" class="w-3.5 h-3.5"></i>
+          </span>
+          <h3 class="text-base font-bold text-neutral-900">スタッフアカウント管理（管理者専用）</h3>
+        </div>
+      </div>
+
+      <div class="overflow-y-auto space-y-6 flex-1 pr-1">
+        <!-- 新規スタッフ追加フォーム -->
+        <div class="bg-neutral-50 p-4 rounded-lg border border-neutral-200">
+          <h4 class="text-xs font-bold text-neutral-800 mb-2.5 flex items-center gap-1.5">
+            <i data-lucide="user-plus" class="w-3.5 h-3.5 text-[#2892d8]"></i>
+            新しいスタッフ・管理者アカウントを発行
+          </h4>
+          <form onsubmit="handleCreateStaffUser(event)" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div>
+                <label class="block text-[11px] font-semibold text-neutral-700 mb-1">氏名 <span class="text-rose-500">*</span></label>
+                <input type="text" id="new-staff-name" required placeholder="例: 佐藤 花子" class="w-full text-xs border border-neutral-300 rounded px-2.5 py-1.5 bg-white text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-neutral-700 mb-1">署名略称 <span class="text-rose-500">*</span></label>
+                <input type="text" id="new-staff-display" required placeholder="例: 佐藤" class="w-full text-xs border border-neutral-300 rounded px-2.5 py-1.5 bg-white text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-neutral-700 mb-1">権限 (ロール) <span class="text-rose-500">*</span></label>
+                <select id="new-staff-role" class="w-full text-xs border border-neutral-300 rounded px-2 py-1.5 bg-white text-neutral-900 font-medium focus:outline-none focus:border-[#2892d8]">
+                  <option value="staff">一般スタッフ（予約管理・返信のみ）</option>
+                  <option value="admin">管理者（スタッフ管理権限あり）</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div>
+                <label class="block text-[11px] font-semibold text-neutral-700 mb-1">メールアドレス（ログインID兼Gmail） <span class="text-rose-500">*</span></label>
+                <input type="email" id="new-staff-email" required placeholder="例: sato@gmail.com" class="w-full text-xs border border-neutral-300 rounded px-2.5 py-1.5 bg-white text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-neutral-700 mb-1">初期パスワード <span class="text-rose-500">*</span></label>
+                <input type="text" id="new-staff-password" required placeholder="8文字以上推奨" class="w-full text-xs border border-neutral-300 rounded px-2.5 py-1.5 bg-white text-neutral-900 font-mono focus:outline-none focus:border-[#2892d8]">
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-1">
+              <button type="submit" id="btn-create-staff" class="px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow-sm flex items-center gap-1.5">
+                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+                <span>アカウントを発行して登録</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- スタッフ一覧テーブル -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs font-bold text-neutral-800 flex items-center gap-1.5">
+              <i data-lucide="list" class="w-3.5 h-3.5 text-neutral-500"></i>
+              登録済みアカウント一覧 (<span id="staff-count">0</span>名)
+            </h4>
+            <button onclick="fetchStaffUsers()" class="text-neutral-500 hover:text-[#2892d8] text-xs inline-flex items-center gap-1 transition">
+              <i data-lucide="refresh-cw" class="w-3 h-3"></i> 再読み込み
+            </button>
+          </div>
+
+          <div class="border border-neutral-200 rounded-lg overflow-hidden bg-white">
+            <table class="min-w-full divide-y divide-neutral-200 text-xs">
+              <thead class="bg-neutral-50">
+                <tr>
+                  <th class="px-3 py-2 text-left font-semibold text-neutral-600">氏名 / 略称</th>
+                  <th class="px-3 py-2 text-left font-semibold text-neutral-600">メールアドレス (Gmail)</th>
+                  <th class="px-3 py-2 text-center font-semibold text-neutral-600">権限</th>
+                  <th class="px-3 py-2 text-center font-semibold text-neutral-600">状態</th>
+                  <th class="px-3 py-2 text-right font-semibold text-neutral-600">操作</th>
+                </tr>
+              </thead>
+              <tbody id="staff-table-body" class="divide-y divide-neutral-100 font-mono text-[11px]">
+                <tr><td colspan="5" class="p-4 text-center text-neutral-400">読み込み中...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= EMAIL COMPOSE MODAL ================= -->
   <div id="email-compose-modal" class="fixed inset-0 z-50 bg-black/60 hidden items-center justify-center p-4">
     <div class="bg-white rounded-lg max-w-xl w-full p-6 shadow-2xl border border-neutral-300 relative flex flex-col max-h-[90vh]">
@@ -697,7 +813,17 @@
   <script>
     lucide.createIcons();
 
-    const AUTH_PASSCODE = "shonandai2026";
+    // Supabase クライアント初期化 (認証・DB連携共通)
+    const SUPABASE_URL = "https://ocgurkujxkxdmzebvdcv.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9jZ3Vya3VqeGt4ZG16ZWJ2ZGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMTgxNjEsImV4cCI6MjEwNTc5NDE2MX0.NaGmnB8UCJkzgKoSiM-0eEy4wtn3Y-jz-RIn9HIRL8A";
+    
+    let supabaseClient = null;
+    if (window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    let currentStaffUser = null;
+    let staffUsersList = [];
     let requestsData = [];
     let currentDetailItem = null;
     let calendarMode = "month";
@@ -711,43 +837,128 @@
     let pageSize = 10;
     let filteredData = [];
 
-    // 1. 認証
+    // パスワード暗号化ヘルパー (SHA-256)
+    async function hashPassword(plainText) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(plainText);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // 1. 認証チェック
     function checkAuth() {
-      if (sessionStorage.getItem("shonandai_admin_auth") === "true") {
+      const savedSession = localStorage.getItem("shonandai_staff_session");
+      if (savedSession) {
+        try {
+          currentStaffUser = JSON.parse(savedSession);
+          applyStaffSessionUI();
+          document.getElementById("auth-modal").classList.add("hidden");
+          document.getElementById("dashboard-app").classList.remove("hidden");
+          initDashboard();
+          fetchStaffUsersBackground();
+          return;
+        } catch(e) {
+          localStorage.removeItem("shonandai_staff_session");
+        }
+      }
+      // 未ログイン状態
+      document.getElementById("auth-modal").classList.remove("hidden");
+      document.getElementById("dashboard-app").classList.add("hidden");
+    }
+
+    // ログイン処理
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById("auth-email").value.trim().toLowerCase();
+      const password = document.getElementById("auth-password").value;
+      const errorEl = document.getElementById("auth-error");
+      const btn = document.getElementById("auth-submit-btn");
+
+      errorEl.classList.add("hidden");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="inline-block animate-spin mr-1">⌛</span> 認証中...`;
+
+      try {
+        const passwordHash = await hashPassword(password);
+        
+        // Supabase staff_users で照合
+        const { data, error } = await supabaseClient
+          .from('staff_users')
+          .select('*')
+          .eq('email', email)
+          .eq('password_hash', passwordHash)
+          .eq('is_active', true)
+          .maybeSingle();
+
+        if (error || !data) {
+          errorEl.innerText = "メールアドレスまたはパスワードが正しくありません。";
+          errorEl.classList.remove("hidden");
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="log-in" class="w-4 h-4"></i> <span>ログインして入室</span>`;
+          lucide.createIcons();
+          return;
+        }
+
+        // ログイン成功
+        currentStaffUser = data;
+        localStorage.setItem("shonandai_staff_session", JSON.stringify(data));
+        applyStaffSessionUI();
+
         document.getElementById("auth-modal").classList.add("hidden");
         document.getElementById("dashboard-app").classList.remove("hidden");
         initDashboard();
-      } else {
-        document.getElementById("auth-modal").classList.remove("hidden");
-        document.getElementById("dashboard-app").classList.add("hidden");
+        fetchStaffUsersBackground();
+      } catch (err) {
+        console.error("Login error:", err);
+        errorEl.innerText = "通信エラーが発生しました。もう一度お試しください。";
+        errorEl.classList.remove("hidden");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="log-in" class="w-4 h-4"></i> <span>ログインして入室</span>`;
+        lucide.createIcons();
       }
     }
 
-    function handleLogin(e) {
-      e.preventDefault();
-      const input = document.getElementById("auth-code").value.trim();
-      if (input === AUTH_PASSCODE) {
-        sessionStorage.setItem("shonandai_admin_auth", "true");
-        document.getElementById("auth-modal").classList.add("hidden");
-        document.getElementById("dashboard-app").classList.remove("hidden");
-        initDashboard();
+    // ログインセッションを画面UIに反映
+    function applyStaffSessionUI() {
+      if (!currentStaffUser) return;
+      document.getElementById("header-user-name").innerText = currentStaffUser.name;
+      const roleBadge = document.getElementById("header-user-role");
+      const mgmtBtn = document.getElementById("btn-staff-mgmt");
+
+      if (currentStaffUser.role === 'admin') {
+        roleBadge.innerText = "管理者";
+        roleBadge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#2892d8] text-white";
+        mgmtBtn.classList.remove("hidden");
+        mgmtBtn.classList.add("inline-flex");
       } else {
-        document.getElementById("auth-error").classList.remove("hidden");
+        roleBadge.innerText = "スタッフ";
+        roleBadge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-neutral-200 text-neutral-700";
+        mgmtBtn.classList.remove("inline-flex");
+        mgmtBtn.classList.add("hidden");
       }
+      lucide.createIcons();
     }
 
     function handleLogout() {
-      sessionStorage.removeItem("shonandai_admin_auth");
-      window.location.reload();
+      if (confirm("ログアウトしますか？")) {
+        localStorage.removeItem("shonandai_staff_session");
+        window.location.reload();
+      }
     }
 
-    // 2. Supabase クライアント初期化 & データ連携
-    const SUPABASE_URL = "https://ocgurkujxkxdmzebvdcv.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9jZ3Vya3VqeGt4ZG16ZWJ2ZGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMTgxNjEsImV4cCI6MjEwNTc5NDE2MX0.NaGmnB8UCJkzgKoSiM-0eEy4wtn3Y-jz-RIn9HIRL8A";
-    
-    let supabaseClient = null;
-    if (window.supabase) {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    async function fetchStaffUsersBackground() {
+      try {
+        const { data } = await supabaseClient
+          .from('staff_users')
+          .select('*')
+          .eq('is_active', true)
+          .order('created_at', { ascending: true });
+        if (data) staffUsersList = data;
+      } catch(e) {
+        console.error("Failed to load staff list background:", e);
+      }
     }
 
     const STATUS_DB_TO_UI = {
@@ -1670,31 +1881,165 @@
     }
 
     // ==========================================
-    // 7.5. 顧客返信メール作成・送信機能（タスクC - v2.6 送信元担当者切替＆Gmail一本化）
+    // 7.5. スタッフアカウント管理（管理者専用）
+    // ==========================================
+    function openStaffMgmtModal() {
+      if (!currentStaffUser || currentStaffUser.role !== 'admin') {
+        alert("スタッフ管理は管理者のみ操作可能です。");
+        return;
+      }
+      const modal = document.getElementById("staff-mgmt-modal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      fetchStaffUsers();
+      lucide.createIcons();
+    }
+
+    function closeStaffMgmtModal() {
+      const modal = document.getElementById("staff-mgmt-modal");
+      modal.classList.remove("flex");
+      modal.classList.add("hidden");
+    }
+
+    async function fetchStaffUsers() {
+      const tbody = document.getElementById("staff-table-body");
+      const countEl = document.getElementById("staff-count");
+      tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-neutral-400">読み込み中...</td></tr>`;
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('staff_users')
+          .select('*')
+          .order('created_at', { ascending: true });
+
+        if (error) throw error;
+        staffUsersList = data || [];
+        countEl.innerText = staffUsersList.length;
+
+        if (staffUsersList.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-neutral-400">スタッフが登録されていません</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = staffUsersList.map(u => {
+          const isSelf = currentStaffUser && currentStaffUser.id === u.id;
+          const roleBadge = u.role === 'admin' 
+            ? `<span class="bg-[#2892d8] text-white px-2 py-0.5 rounded text-[10px] font-bold shadow-sm">管理者</span>`
+            : `<span class="bg-neutral-100 text-neutral-700 border border-neutral-300 px-2 py-0.5 rounded text-[10px] font-medium">一般スタッフ</span>`;
+          
+          const statusBadge = u.is_active
+            ? `<span class="text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded text-[10px] font-bold">有効</span>`
+            : `<span class="text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded text-[10px]">停止中</span>`;
+
+          const actionBtn = isSelf 
+            ? `<span class="text-neutral-400 text-[10px]">（ログイン中）</span>`
+            : `<button onclick="handleToggleStaffActive('${u.id}', ${u.is_active})" class="text-xs ${u.is_active ? 'text-rose-600 hover:text-rose-800' : 'text-[#2892d8] hover:text-[#207cb9]'} underline font-medium">
+                ${u.is_active ? 'アカウント停止' : '再開する'}
+              </button>`;
+
+          return `
+            <tr class="hover:bg-neutral-50 transition">
+              <td class="px-3 py-2.5 font-bold text-neutral-900">${u.name} <span class="text-neutral-500 font-normal">(${u.display_name})</span></td>
+              <td class="px-3 py-2.5 text-neutral-700 font-mono">${u.email}</td>
+              <td class="px-3 py-2.5 text-center">${roleBadge}</td>
+              <td class="px-3 py-2.5 text-center">${statusBadge}</td>
+              <td class="px-3 py-2.5 text-right">${actionBtn}</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error("fetchStaffUsers error:", err);
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-rose-500">取得に失敗しました</td></tr>`;
+      }
+    }
+
+    async function handleCreateStaffUser(e) {
+      e.preventDefault();
+      if (!currentStaffUser || currentStaffUser.role !== 'admin') return;
+
+      const name = document.getElementById("new-staff-name").value.trim();
+      const display = document.getElementById("new-staff-display").value.trim();
+      const role = document.getElementById("new-staff-role").value;
+      const email = document.getElementById("new-staff-email").value.trim().toLowerCase();
+      const password = document.getElementById("new-staff-password").value;
+      const btn = document.getElementById("btn-create-staff");
+
+      if (password.length < 6) {
+        alert("パスワードは6文字以上で設定してください。");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="inline-block animate-spin mr-1">⌛</span> 登録中...`;
+
+      try {
+        const passwordHash = await hashPassword(password);
+        const { error } = await supabaseClient
+          .from('staff_users')
+          .insert([{
+            name: name,
+            display_name: display,
+            role: role,
+            email: email,
+            password_hash: passwordHash,
+            is_active: true
+          }]);
+
+        if (error) {
+          if (error.message.includes('unique') || error.code === '23505') {
+            alert("このメールアドレスは既に登録されています。");
+          } else {
+            alert("登録に失敗しました: " + error.message);
+          }
+          return;
+        }
+
+        // 成功
+        document.getElementById("new-staff-name").value = "";
+        document.getElementById("new-staff-display").value = "";
+        document.getElementById("new-staff-email").value = "";
+        document.getElementById("new-staff-password").value = "";
+        showToast(`${name} さんのアカウントを発行しました`);
+        fetchStaffUsers();
+        fetchStaffUsersBackground();
+      } catch (err) {
+        console.error("Create staff error:", err);
+        alert("エラーが発生しました。");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> <span>アカウントを発行して登録</span>`;
+        lucide.createIcons();
+      }
+    }
+
+    async function handleToggleStaffActive(id, currentStatus) {
+      if (!confirm(`このスタッフアカウントを${currentStatus ? '停止' : '再開'}しますか？`)) return;
+
+      try {
+        const { error } = await supabaseClient
+          .from('staff_users')
+          .update({ is_active: !currentStatus, updated_at: new Date().toISOString() })
+          .eq('id', id);
+
+        if (error) throw error;
+        showToast(`スタッフ状態を${currentStatus ? '停止' : '有効'}に変更しました`);
+        fetchStaffUsers();
+        fetchStaffUsersBackground();
+      } catch (err) {
+        console.error("Toggle active error:", err);
+        alert("状態更新に失敗しました: " + err.message);
+      }
+    }
+
+    // ==========================================
+    // 7.6. 顧客返信メール作成・送信機能（スタッフ自動連動）
     // ==========================================
     let currentEmailTarget = null;
 
-    const STAFF_LIST = {
-      okamoto: {
-        name: "岡本",
-        fullName: "岡本 直樹",
-        email: "o.naoki0503@intakingresources.com"
-      },
-      staff_a: {
-        name: "スタッフ担当",
-        fullName: "スタジオ担当（tensai.com）",
-        email: "2230186tensai.com@gmail.com"
-      },
-      common: {
-        name: "受付窓口",
-        fullName: "湘南台スタジオ運営事務局",
-        email: "info@shonandai-kitchen.jp"
-      }
-    };
-
     function getSenderInfo() {
       const select = document.getElementById("email-sender-select");
-      const key = select ? select.value : "okamoto";
+      const key = select ? select.value : "";
+      
       if (key === "custom") {
         const cName = (document.getElementById("custom-sender-name")?.value || "").trim() || "担当スタッフ";
         const cEmail = (document.getElementById("custom-sender-email")?.value || "").trim() || "info@shonandai-kitchen.jp";
@@ -1704,22 +2049,56 @@
           email: cEmail
         };
       }
-      return STAFF_LIST[key] || STAFF_LIST.okamoto;
+
+      // staffUsersListから検索
+      const found = staffUsersList.find(u => u.id === key || u.email === key);
+      if (found) {
+        return {
+          name: found.display_name || found.name,
+          fullName: found.name,
+          email: found.email
+        };
+      }
+
+      // ログイン中の自分
+      if (currentStaffUser) {
+        return {
+          name: currentStaffUser.display_name || currentStaffUser.name,
+          fullName: currentStaffUser.name,
+          email: currentStaffUser.email
+        };
+      }
+
+      return {
+        name: "岡本",
+        fullName: "岡本 直樹",
+        email: "o.naoki0503@intakingresources.com"
+      };
     }
 
     function initSenderSettings() {
-      const savedKey = localStorage.getItem("shonandai_sender_key") || "okamoto";
       const select = document.getElementById("email-sender-select");
-      if (select) select.value = savedKey;
+      if (!select) return;
 
-      const savedName = localStorage.getItem("shonandai_sender_custom_name") || "";
-      const savedEmail = localStorage.getItem("shonandai_sender_custom_email") || "";
-      const nameInput = document.getElementById("custom-sender-name");
-      const emailInput = document.getElementById("custom-sender-email");
-      if (nameInput) nameInput.value = savedName;
-      if (emailInput) emailInput.value = savedEmail;
+      // Supabaseのスタッフ一覧から動的生成
+      let optionsHtml = '';
+      if (staffUsersList && staffUsersList.length > 0) {
+        optionsHtml = staffUsersList.filter(u => u.is_active).map(u => {
+          const isMe = currentStaffUser && currentStaffUser.id === u.id;
+          return `<option value="${u.id}">${u.name} (${u.email})${isMe ? ' ★ログイン中' : ''}</option>`;
+        }).join('');
+      } else if (currentStaffUser) {
+        optionsHtml = `<option value="${currentStaffUser.id}">${currentStaffUser.name} (${currentStaffUser.email}) ★ログイン中</option>`;
+      }
+      optionsHtml += `<option value="custom">その他（自由入力）</option>`;
+      select.innerHTML = optionsHtml;
 
-      toggleCustomSenderUI(savedKey === "custom");
+      // デフォルトはログイン中の自分！
+      if (currentStaffUser) {
+        select.value = currentStaffUser.id;
+      }
+
+      toggleCustomSenderUI(select.value === "custom");
     }
 
     function toggleCustomSenderUI(isCustom) {
@@ -1737,16 +2116,11 @@
     function handleSenderChange() {
       const select = document.getElementById("email-sender-select");
       const key = select.value;
-      localStorage.setItem("shonandai_sender_key", key);
       toggleCustomSenderUI(key === "custom");
       applySenderToCurrentBody();
     }
 
     function handleCustomSenderInput() {
-      const name = document.getElementById("custom-sender-name")?.value || "";
-      const email = document.getElementById("custom-sender-email")?.value || "";
-      localStorage.setItem("shonandai_sender_custom_name", name);
-      localStorage.setItem("shonandai_sender_custom_email", email);
       applySenderToCurrentBody();
     }
 
