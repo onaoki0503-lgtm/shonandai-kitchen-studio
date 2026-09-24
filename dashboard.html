@@ -91,7 +91,7 @@
             <div class="font-bold text-sm sm:text-base text-neutral-900 flex items-center gap-2">
               Shonandai Kitchen Studio
               <span class="text-[10px] font-semibold bg-neutral-100 text-neutral-700 border border-neutral-300 px-1.5 py-0.5 rounded">管理ポータル</span>
-              <span class="text-[10px] font-bold bg-[#2892d8] text-white px-2 py-0.5 rounded shadow-sm">v2.6 (Gmail一本化・送信元担当者切替)</span>
+              <span class="text-[10px] font-bold bg-[#2892d8] text-white px-2 py-0.5 rounded shadow-sm">v2.7 (Gmail送信元アカウント動的切替)</span>
             </div>
             <div class="text-[10px] text-neutral-500">株式会社APRECIO ｜ 湘南台スタジオ管理 (Supabase実データ・24hタイムライン・テンプレート返信稼働中)</div>
           </div>
@@ -1916,12 +1916,22 @@ ${signature}`;
       const sub = document.getElementById("email-subject-input").value;
       const body = document.getElementById("email-body-input").value;
       const to = currentEmailTarget.email || "";
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
+
+      // 選択中の担当者情報（送信元アドレス）を取得
+      const staff = getSenderInfo();
+      const fromEmail = (staff.email || "").trim();
+
+      // 指定アカウントで開くためのGmail URLを構築 (/u/{fromEmail}/ および authuserパラメータ)
+      const baseUrl = fromEmail 
+        ? `https://mail.google.com/mail/u/${encodeURIComponent(fromEmail)}/` 
+        : `https://mail.google.com/mail/`;
+      const authParam = fromEmail ? `&authuser=${encodeURIComponent(fromEmail)}` : '';
+      const gmailUrl = `${baseUrl}?view=cm&fs=1${authParam}&to=${encodeURIComponent(to)}&su=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
 
       checkAndApplyAutoStatus();
       window.open(gmailUrl, '_blank');
       closeEmailModal();
-      showToast("Web版 Gmail の新規作成画面を開きました");
+      showToast(`${staff.name}（${fromEmail}）のアカウントでGmailを開きました`);
     }
 
     function copyEmailBody() {
