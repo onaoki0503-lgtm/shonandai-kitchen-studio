@@ -127,14 +127,14 @@
           <i data-lucide="check" class="w-3.5 h-3.5 text-[#2892d8]"></i>
           菓子製造・飲食店営業許可 完備
         </div>
-        <button onclick="openModal('inquiry')" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-neutral-800 bg-white border border-neutral-300 rounded hover:bg-neutral-100 transition">
-          <i data-lucide="mail" class="w-3.5 h-3.5 text-neutral-600"></i>
-          内見・ご相談
+        <button onclick="openInquiryModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-neutral-800 bg-white border border-neutral-300 rounded hover:bg-neutral-100 transition">
+          <i data-lucide="help-circle" class="w-3.5 h-3.5 text-neutral-600"></i>
+          お問い合わせ・ご相談
         </button>
-        <a href="#calendar-section" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#2892d8] hover:bg-[#207cb9] rounded transition shadow-sm">
+        <button onclick="openBookingModal()" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#2892d8] hover:bg-[#207cb9] rounded transition shadow-sm">
           <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-          空室確認・予約
-        </a>
+          利用予約を申し込む
+        </button>
         <!-- 管理者ポータルリンク -->
         <a href="dashboard.html" class="p-2 text-neutral-400 hover:text-[#2892d8] hover:bg-neutral-100 rounded transition" title="管理者ポータル">
           <i data-lucide="shield-check" class="w-4 h-4"></i>
@@ -183,8 +183,9 @@
           <i data-lucide="map-pin" class="w-4 h-4 text-neutral-400"></i>
           <span>神奈川県藤沢市湘南台4-15-5（小田急・相鉄・横浜市営地下鉄「湘南台駅」東口徒歩5分）</span>
         </div>
-        <button onclick="openModal('inquiry')" class="text-[#2892d8] hover:underline font-semibold">
-          無料見学・内見を相談
+        <button onclick="openInquiryModal()" class="text-[#2892d8] hover:underline font-semibold flex items-center gap-1">
+          <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+          お問い合わせ・ご相談
         </button>
       </div>
     </div>
@@ -267,7 +268,8 @@
                 </div>
               </div>
             </div>
-            <button onclick="openModal('inquiry')" class="text-xs font-semibold text-[#2892d8] bg-[#f0f7fc] hover:bg-[#e0f0fa] px-3.5 py-2 rounded transition border border-[#bce0f6]">
+            <button onclick="openInquiryModal('その他のお問い合わせ', 'ホストへのご相談：')" class="text-xs font-semibold text-[#2892d8] bg-[#f0f7fc] hover:bg-[#e0f0fa] px-3.5 py-2 rounded transition border border-[#bce0f6] flex items-center gap-1">
+              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
               ホストに相談
             </button>
           </div>
@@ -556,7 +558,7 @@
                 <h4 class="font-bold text-neutral-900 text-xs sm:text-sm mt-1">週1回・月数回の定期的な製造・教室利用をご検討の方へ</h4>
                 <p class="text-xs text-neutral-600 mt-0.5">継続利用枠（格割プラン）をご相談可能です。定期製造枠の確保や材料保管をサポートします。</p>
               </div>
-              <button onclick="openModal('inquiry', '定期利用・仕込み枠の相談')" class="whitespace-nowrap px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white font-semibold text-xs rounded transition shadow-sm self-start sm:self-auto">
+              <button onclick="openInquiryModal('定期利用・仕込み枠のご相談')" class="whitespace-nowrap px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white font-semibold text-xs rounded transition shadow-sm self-start sm:self-auto">
                 定期利用を相談する
               </button>
             </div>
@@ -1067,11 +1069,6 @@
         
         <div class="bg-white rounded-lg border border-neutral-300 shadow-sm p-5 space-y-4">
           
-          <!-- BANNER HEADER (スカイブルー) -->
-          <div class="bg-[#2892d8] text-white text-[11px] font-bold py-1.5 px-3 rounded text-center tracking-wider shadow-sm">
-            定期仕込み・教室利用の無料相談受付中
-          </div>
-
           <!-- PRICE SUMMARY -->
           <div>
             <div class="text-[11px] text-neutral-500 font-medium">基本利用料金（1時間あたり）</div>
@@ -1141,23 +1138,16 @@
               </div>
             </div>
 
-            <!-- CTA BUTTONS (スカイブルー基調) -->
-            <button onclick="openModal('booking')" class="w-full py-3 px-4 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs sm:text-sm rounded transition shadow flex items-center justify-center gap-2">
+            <!-- CTA BUTTONS（厳選2本：利用予約を申し込む / お問い合わせ・ご相談） -->
+            <button onclick="openBookingModal()" class="w-full py-3 px-4 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs sm:text-sm rounded transition shadow flex items-center justify-center gap-2">
               <i data-lucide="calendar" class="w-4 h-4"></i>
-              <span>空室確認・見学予約をする</span>
+              <span>利用予約を申し込む</span>
             </button>
 
-            <button onclick="openModal('inquiry')" class="w-full py-2.5 px-4 bg-white hover:bg-neutral-50 text-neutral-800 border border-neutral-300 font-semibold text-xs rounded transition flex items-center justify-center gap-1.5">
+            <button onclick="openInquiryModal()" class="w-full py-2.5 px-4 bg-white hover:bg-neutral-50 text-neutral-800 border border-neutral-300 font-semibold text-xs rounded transition flex items-center justify-center gap-1.5">
               <i data-lucide="help-circle" class="w-3.5 h-3.5 text-neutral-500"></i>
-              <span>利用について質問・相談する</span>
+              <span>お問い合わせ・ご相談</span>
             </button>
-
-            <!-- 定期利用リンク -->
-            <div class="text-center pt-1">
-              <a href="javascript:void(0)" onclick="openModal('inquiry', '定期製造・定期利用のご相談')" class="text-xs font-semibold text-[#2892d8] hover:underline inline-flex items-center gap-1">
-                定期仕込み・継続利用の方はこちら <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-              </a>
-            </div>
 
             <!-- SHARE BUTTONS -->
             <div class="pt-4 border-t border-neutral-100">
@@ -1196,12 +1186,13 @@
       <div class="text-[10px] text-neutral-600 font-medium mt-0.5">菓子製造許可完備</div>
     </div>
     <div class="flex items-center gap-2">
-      <button onclick="openModal('inquiry')" class="px-3 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold rounded transition border border-neutral-300">
-        内見相談
+      <button onclick="openInquiryModal()" class="px-3.5 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-semibold rounded transition border border-neutral-300 flex items-center gap-1">
+        <i data-lucide="help-circle" class="w-3.5 h-3.5 text-neutral-600"></i>
+        お問い合わせ
       </button>
-      <button onclick="openModal('booking')" class="px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white text-xs font-bold rounded transition shadow flex items-center gap-1.5">
+      <button onclick="openBookingModal()" class="px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white text-xs font-bold rounded transition shadow flex items-center gap-1.5">
         <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-        空室確認・予約
+        利用予約を申し込む
       </button>
     </div>
   </div>
@@ -1231,10 +1222,10 @@
           </ul>
         </div>
         <div>
-          <h4 class="text-white text-xs font-bold uppercase tracking-wider mb-3">管理者・サポート</h4>
+          <h4 class="text-white text-xs font-bold uppercase tracking-wider mb-3">ご案内・お問い合わせ</h4>
           <ul class="space-y-2 text-xs">
-            <li><a href="javascript:void(0)" onclick="openModal('inquiry')" class="hover:text-white transition">内見・下見のご予約</a></li>
-            <li><a href="javascript:void(0)" onclick="openModal('inquiry', '定期利用のご相談')" class="hover:text-white transition">定期製造枠のご相談</a></li>
+            <li><a href="javascript:void(0)" onclick="openBookingModal()" class="hover:text-white transition font-medium text-[#5bb6f0]">利用予約のお申し込み</a></li>
+            <li><a href="javascript:void(0)" onclick="openInquiryModal()" class="hover:text-white transition">お問い合わせ・内見相談</a></li>
             <li><a href="#rules" class="hover:text-white transition">利用規約兼申込書</a></li>
             <li><a href="dashboard.html" class="text-neutral-300 hover:text-white font-semibold transition flex items-center gap-1">
               <i data-lucide="lock" class="w-3 h-3 text-[#2892d8]"></i> 管理者ダッシュボード
@@ -1275,66 +1266,64 @@
     </div>
   </div>
 
-  <!-- 2. BOOKING & INQUIRY MODAL -->
-  <div id="form-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto">
+  <!-- 2. BOOKING MODAL (利用予約申込専用フォーム) -->
+  <div id="booking-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl relative my-8 border border-neutral-300">
-      <button onclick="closeModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1.5 rounded hover:bg-neutral-100 transition">
+      <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1.5 rounded hover:bg-neutral-100 transition">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
       <div class="mb-4">
-        <span class="text-[10px] font-bold text-[#2892d8] uppercase tracking-wider block" id="modal-subtitle">RESERVATION & INQUIRY</span>
-        <h3 class="text-lg font-bold text-neutral-900" id="modal-title">空室確認・見学予約・お問い合わせ</h3>
-        <p class="text-xs text-neutral-500 mt-0.5">必要事項をご入力ください。管理者宛てに即時通知され、24時間以内にご案内いたします。</p>
+        <span class="text-[10px] font-bold text-[#2892d8] uppercase tracking-wider block">RESERVATION FORM</span>
+        <h3 class="text-lg font-bold text-neutral-900">利用予約のお申し込み</h3>
+        <p class="text-xs text-neutral-500 mt-0.5">必要事項をご入力ください。内容確認後、管理者より請求書・お振込先口座をご案内いたします。</p>
       </div>
 
       <!-- 選択中の予約枠バナー -->
-      <div id="modal-selected-time-banner" class="hidden mb-4 p-3 bg-[#f0f7fc] border border-[#bce0f6] rounded text-xs text-[#207cb9] flex items-center justify-between">
+      <div id="booking-selected-time-banner" class="hidden mb-4 p-3 bg-[#f0f7fc] border border-[#bce0f6] rounded text-xs text-[#207cb9] flex items-center justify-between">
         <div class="flex items-center gap-2">
           <i data-lucide="clock" class="w-4 h-4 text-[#2892d8] flex-shrink-0"></i>
           <div>
             <span class="text-[10px] text-neutral-500 block">ご希望の日時・時間帯</span>
-            <strong id="modal-selected-time-text" class="text-neutral-900 font-bold">2026年10月7日 13:00 〜 17:00 (4時間)</strong>
+            <strong id="booking-selected-time-text" class="text-neutral-900 font-bold">2026年10月7日 13:00 〜 17:00 (4時間)</strong>
           </div>
         </div>
         <span class="text-[10px] bg-[#2892d8] text-white px-2 py-0.5 rounded font-bold">タイムライン指定</span>
       </div>
 
-      <form id="contact-form" onsubmit="submitForm(event)" class="space-y-3 text-xs">
+      <form id="booking-form" onsubmit="submitBookingForm(event)" class="space-y-3 text-xs">
         <div>
           <label class="block font-semibold text-neutral-800 mb-1">お名前 / 貴社名 <span class="text-[#2892d8] font-bold">*</span></label>
-          <input type="text" id="form-name" required placeholder="例：山田 太郎 / 摂取資源株式会社" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+          <input type="text" id="booking-name" required placeholder="例：山田 太郎 / 摂取資源株式会社" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div>
             <label class="block font-semibold text-neutral-800 mb-1">メールアドレス <span class="text-[#2892d8] font-bold">*</span></label>
-            <input type="email" id="form-email" required placeholder="example@domain.com" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+            <input type="email" id="booking-email" required placeholder="example@domain.com" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
           </div>
           <div>
             <label class="block font-semibold text-neutral-800 mb-1">お電話番号 <span class="text-[#2892d8] font-bold">*</span></label>
-            <input type="tel" id="form-tel" required placeholder="090-0000-0000" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+            <input type="tel" id="booking-tel" required placeholder="090-0000-0000" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div>
-            <label class="block font-semibold text-neutral-800 mb-1">ご希望プラン</label>
-            <select id="form-plan" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
-              <option value="Kitchen & Lounge（全体貸切）">Kitchen & Lounge（全体貸切）</option>
-              <option value="Kitchen（製造・仕込み特化）">Kitchen（製造・仕込み特化）</option>
-              <option value="Lounge（ワーク・教室）">Lounge（ワーク・教室）</option>
-              <option value="定期利用・継続枠のご相談">定期利用・継続枠のご相談</option>
-              <option value="無料内見・下見のみ">無料内見・下見のみ</option>
+            <label class="block font-semibold text-neutral-800 mb-1">ご希望プラン <span class="text-[#2892d8] font-bold">*</span></label>
+            <select id="booking-plan" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+              <option value="Kitchen & Lounge（全体貸切）">Kitchen & Lounge（全体貸切 ¥2,500/h）</option>
+              <option value="Kitchen（製造・仕込み特化）">Kitchen（製造・仕込み特化 ¥2,000/h）</option>
+              <option value="Lounge（ワーク・教室）">Lounge（ワーク・教室特化 ¥1,500/h）</option>
             </select>
           </div>
           <div>
-            <label class="block font-semibold text-neutral-800 mb-1">ご利用希望日</label>
-            <input type="date" id="form-date" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+            <label class="block font-semibold text-neutral-800 mb-1">ご利用希望日 <span class="text-[#2892d8] font-bold">*</span></label>
+            <input type="date" id="booking-date" required class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
           </div>
         </div>
 
-        <!-- 【要件2】ご利用人数 & 主な利用用途 -->
+        <!-- ご利用人数 & 主な利用用途 -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div>
             <label class="block font-semibold text-neutral-800 mb-1">
@@ -1342,13 +1331,13 @@
               <span class="text-[10px] text-neutral-500 font-normal">（最大10名推奨）</span>
             </label>
             <div class="relative">
-              <input type="number" id="form-guests" min="1" max="30" value="1" required class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8] pr-8">
+              <input type="number" id="booking-guests" min="1" max="30" value="1" required class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8] pr-8">
               <span class="absolute right-3 top-2 text-xs text-neutral-500 pointer-events-none">名</span>
             </div>
           </div>
           <div>
             <label class="block font-semibold text-neutral-800 mb-1">主な利用用途 <span class="text-[#2892d8] font-bold">*</span></label>
-            <select id="form-usage-category" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+            <select id="booking-usage" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
               <option value="菓子製造・仕込み販売">菓子製造・仕込み販売</option>
               <option value="料理教室・ワークショップ">料理教室・ワークショップ</option>
               <option value="料理撮影・商品SNS撮影">料理撮影・商品SNS撮影</option>
@@ -1358,27 +1347,27 @@
           </div>
         </div>
 
-        <!-- 食品衛生責任者名（利用規約兼申込書 準拠） -->
+        <!-- 食品衛生責任者名 -->
         <div>
           <label class="block font-semibold text-neutral-800 mb-1">
             食品衛生責任者名
             <span class="text-[10px] text-neutral-500 font-normal">（食品製造・調理・イベント等を伴う場合はご記入ください）</span>
           </label>
-          <input type="text" id="form-hygiene-officer" placeholder="例：山田 太郎（資格保有者・修了者氏名）" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+          <input type="text" id="booking-hygiene-officer" placeholder="例：山田 太郎（資格保有者・修了者氏名）" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
         </div>
 
-        <!-- 【要件2】その他のご要望・使用予定機材 -->
+        <!-- その他のご要望・使用予定機材 -->
         <div>
           <label class="block font-semibold text-neutral-800 mb-1">その他のご要望・使用機材</label>
-          <textarea id="form-message" rows="3" placeholder="使用したい機材（オーブン・ミキサー等）、当日の搬入予定、レイアウト希望などがあればご自由にご記入ください。" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]"></textarea>
+          <textarea id="booking-message" rows="3" placeholder="使用したい機材（オーブン・真空包装機等）、当日の搬入予定、レイアウト希望などがあればご自由にご記入ください。" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]"></textarea>
         </div>
 
-        <!-- 【要件1】利用規約兼申込書（添付文章そのまま表示・別タブ遷移なし） -->
+        <!-- 利用規約兼申込書（全25条インライン表示・別タブ遷移なし） -->
         <div class="space-y-1.5 pt-1">
           <label class="block font-semibold text-neutral-800">
             Shonandai Kitchen Studio 利用規約兼申込書
           </label>
-          <div class="h-44 overflow-y-auto p-3 bg-neutral-50 border border-neutral-300 rounded text-neutral-800 text-[11px] leading-relaxed space-y-3 select-text shadow-inner">
+          <div class="h-40 overflow-y-auto p-3 bg-neutral-50 border border-neutral-300 rounded text-neutral-800 text-[11px] leading-relaxed space-y-3 select-text shadow-inner">
             <p class="font-bold text-neutral-900 border-b border-neutral-200 pb-1 text-center">
               Shonandai Kitchen Studio利用規約兼申込書
             </p>
@@ -1430,23 +1419,89 @@
           </div>
 
           <div class="flex items-start gap-2 pt-1.5">
-            <input type="checkbox" id="form-terms" class="mt-0.5 w-4 h-4 text-[#2892d8] border-neutral-300 rounded cursor-pointer focus:ring-[#2892d8]">
-            <label for="form-terms" class="text-xs text-neutral-900 font-semibold cursor-pointer select-none leading-relaxed">
+            <input type="checkbox" id="booking-terms" class="mt-0.5 w-4 h-4 text-[#2892d8] border-neutral-300 rounded cursor-pointer focus:ring-[#2892d8]">
+            <label for="booking-terms" class="text-xs text-neutral-900 font-semibold cursor-pointer select-none leading-relaxed">
               上記の「利用規約兼申込書」の内容を確認し、同意します。 <span class="text-red-500 font-bold">*</span>
             </label>
           </div>
-          <p id="terms-error-msg" class="text-[11px] text-red-600 hidden font-semibold">
-            ※ 送信するには利用規約への同意が必要です。
+          <p id="booking-terms-error" class="text-[11px] text-red-600 hidden font-semibold">
+            ※ お申し込みには利用規約への同意が必要です。
           </p>
         </div>
 
         <div class="pt-1">
-          <button type="submit" id="submit-btn" disabled class="w-full py-3 bg-[#2892d8] opacity-50 cursor-not-allowed text-white font-bold rounded transition shadow flex items-center justify-center gap-1.5 text-xs">
+          <button type="submit" id="booking-submit-btn" disabled class="w-full py-3 bg-[#2892d8] opacity-50 cursor-not-allowed text-white font-bold rounded transition shadow flex items-center justify-center gap-1.5 text-xs">
             <i data-lucide="send" class="w-4 h-4"></i>
-            <span>予約・利用を申し込む（銀行振込・管理者が確認）</span>
+            <span>利用予約を申し込む（銀行振込・管理者が確認）</span>
           </button>
           <p class="text-[10px] text-neutral-500 text-center mt-2">
             ※ 送信完了後、折り返しご請求内容とお振込先口座をご案内いたします。
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. INQUIRY MODAL (お問い合わせ・ご相談専用フォーム：規約同意不要) -->
+  <div id="inquiry-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl relative my-8 border border-neutral-300">
+      <button onclick="closeInquiryModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1.5 rounded hover:bg-neutral-100 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-4">
+        <span class="text-[10px] font-bold text-[#2892d8] uppercase tracking-wider block">CONTACT & INQUIRY</span>
+        <h3 class="text-lg font-bold text-neutral-900">お問い合わせ・ご相談</h3>
+        <p class="text-xs text-neutral-500 mt-0.5">無料内見・下見、定期利用のご相談、ご質問など、お気軽にお問い合わせください。</p>
+      </div>
+
+      <form id="inquiry-form" onsubmit="submitInquiryForm(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-neutral-800 mb-1">お問い合わせ項目 <span class="text-[#2892d8] font-bold">*</span></label>
+          <select id="inquiry-category" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+            <option value="無料内見・下見のご相談">無料内見・下見のご相談</option>
+            <option value="定期利用・仕込み枠のご相談">定期利用・仕込み枠のご相談</option>
+            <option value="設備・機材についてのご質問">設備・機材についてのご質問</option>
+            <option value="その他のお問い合わせ">その他のお問い合わせ</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-neutral-800 mb-1">お名前 / 貴社名 <span class="text-[#2892d8] font-bold">*</span></label>
+          <input type="text" id="inquiry-name" required placeholder="例：山田 太郎 / 摂取資源株式会社" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label class="block font-semibold text-neutral-800 mb-1">メールアドレス <span class="text-[#2892d8] font-bold">*</span></label>
+            <input type="email" id="inquiry-email" required placeholder="example@domain.com" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+          </div>
+          <div>
+            <label class="block font-semibold text-neutral-800 mb-1">お電話番号 <span class="text-[#2892d8] font-bold">*</span></label>
+            <input type="tel" id="inquiry-tel" required placeholder="090-0000-0000" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-neutral-800 mb-1">
+            ご希望日時・時期
+            <span class="text-[10px] text-neutral-500 font-normal">（内見や利用開始の目安があればご記入ください）</span>
+          </label>
+          <input type="text" id="inquiry-preferred-date" placeholder="例：来週水曜日の午後、10月上旬から定期利用希望など" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-neutral-800 mb-1">お問い合わせ・ご相談内容 <span class="text-[#2892d8] font-bold">*</span></label>
+          <textarea id="inquiry-message" rows="4" required placeholder="ご質問やご相談内容を詳しくご記入ください。" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]"></textarea>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" id="inquiry-submit-btn" class="w-full py-3 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold rounded transition shadow flex items-center justify-center gap-1.5 text-xs cursor-pointer">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>お問い合わせを送信する</span>
+          </button>
+          <p class="text-[10px] text-neutral-500 text-center mt-2">
+            ※ 通常24時間以内に担当者よりご返信いたします。
           </p>
         </div>
       </form>
@@ -1827,13 +1882,13 @@
     }
 
     function openBookingWithSelectedHours() {
-      openModal('booking', `${publicSelectedDate} のご利用予約お申し込み`);
-      const dateEl = document.getElementById("form-date");
+      openBookingModal();
+      const dateEl = document.getElementById("booking-date");
       if (dateEl) dateEl.value = publicSelectedDate;
 
-      const banner = document.getElementById("modal-selected-time-banner");
-      const bannerText = document.getElementById("modal-selected-time-text");
-      const messageEl = document.getElementById("form-message");
+      const banner = document.getElementById("booking-selected-time-banner");
+      const bannerText = document.getElementById("booking-selected-time-text");
+      const messageEl = document.getElementById("booking-message");
 
       const parts = publicSelectedDate.split('-').map(Number);
       const dObj = new Date(parts[0], parts[1] - 1, parts[2]);
@@ -1902,61 +1957,74 @@
       display.innerText = `¥${price.toLocaleString()}${isDiscount ? ' (直前20%割適用)' : ''}`;
     }
 
-    // 5. モーダル操作
-    function openModal(type, defaultMessage = "") {
-      const modal = document.getElementById("form-modal");
-      const title = document.getElementById("modal-title");
-      const subtitle = document.getElementById("modal-subtitle");
-      const messageField = document.getElementById("form-message");
+    // 5. モーダル操作（完全2系統分離）
+    // 5.1 【利用予約を申し込む】モーダル操作
+    function openBookingModal(defaultMessage = "") {
+      const modal = document.getElementById("booking-modal");
+      if (!modal) return;
 
-      if (type === 'booking') {
-        subtitle.innerText = "RESERVATION";
-        title.innerText = "空室確認・利用予約のお申し込み";
-      } else {
-        subtitle.innerText = "INQUIRY";
-        title.innerText = "無料内見・利用についてのお問い合わせ";
+      const dateEl = document.getElementById("booking-date");
+      if (dateEl && !dateEl.value) {
+        dateEl.value = publicSelectedDate || formatLocalDate(new Date());
       }
 
-      if (defaultMessage) {
-        messageField.value = defaultMessage;
+      const messageEl = document.getElementById("booking-message");
+      if (defaultMessage && messageEl && !messageEl.value.includes(defaultMessage)) {
+        messageEl.value = defaultMessage + "\n" + messageEl.value;
       }
 
       modal.classList.remove("hidden");
       modal.classList.add("flex");
+      lucide.createIcons();
     }
 
-    function closeModal() {
-      const modal = document.getElementById("form-modal");
-      modal.classList.remove("flex");
-      modal.classList.add("hidden");
-    }
-
-    // 5.1 利用規約兼申込書 モーダル操作
-    function openTermsDetailModal() {
-      const modal = document.getElementById("terms-detail-modal");
-      if (modal) {
-        modal.classList.remove("hidden");
-        modal.classList.add("flex");
-        lucide.createIcons();
-      }
-    }
-
-    function closeTermsDetailModal() {
-      const modal = document.getElementById("terms-detail-modal");
+    function closeBookingModal() {
+      const modal = document.getElementById("booking-modal");
       if (modal) {
         modal.classList.remove("flex");
         modal.classList.add("hidden");
       }
     }
 
-    function agreeTermsAndCloseModal() {
-      const termsCheckbox = document.getElementById("form-terms");
-      if (termsCheckbox) {
-        termsCheckbox.checked = true;
-        termsCheckbox.dispatchEvent(new Event('change'));
+    // 5.2 【お問い合わせ・ご相談】モーダル操作
+    function openInquiryModal(defaultCategory = "", defaultMessage = "") {
+      const modal = document.getElementById("inquiry-modal");
+      if (!modal) return;
+
+      if (defaultCategory) {
+        const categorySelect = document.getElementById("inquiry-category");
+        if (categorySelect) categorySelect.value = defaultCategory;
       }
-      closeTermsDetailModal();
-      showToast("利用規約兼申込書（全25条）に同意しました");
+
+      if (defaultMessage) {
+        const messageEl = document.getElementById("inquiry-message");
+        if (messageEl) messageEl.value = defaultMessage;
+      }
+
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      lucide.createIcons();
+    }
+
+    function closeInquiryModal() {
+      const modal = document.getElementById("inquiry-modal");
+      if (modal) {
+        modal.classList.remove("flex");
+        modal.classList.add("hidden");
+      }
+    }
+
+    // 互換性ラッパー（既存リンクからの呼び出し安全化）
+    function openModal(type, msg = "") {
+      if (type === 'booking') {
+        openBookingModal(msg);
+      } else {
+        openInquiryModal(msg.includes('定期') ? '定期利用・仕込み枠のご相談' : '無料内見・下見のご相談', msg);
+      }
+    }
+    function closeModal() {
+      closeBookingModal();
+      closeInquiryModal();
     }
 
     // 6. Supabase クラウド保存 ＆ 外部メール通知（二重保護）
@@ -1972,15 +2040,15 @@
       "無料内見・下見のみ": { unit: 0, defaultHours: 1, total: 0 }
     };
 
-    // 6.1 利用規約チェックボックス連動バリデーション
+    // 6.1 利用規約チェックボックス連動バリデーション（予約モーダル専用）
     document.addEventListener("DOMContentLoaded", function () {
       initTermsValidation();
     });
 
     function initTermsValidation() {
-      const termsCheckbox = document.getElementById("form-terms");
-      const submitBtn = document.getElementById("submit-btn");
-      const termsErrorMsg = document.getElementById("terms-error-msg");
+      const termsCheckbox = document.getElementById("booking-terms");
+      const submitBtn = document.getElementById("booking-submit-btn");
+      const termsErrorMsg = document.getElementById("booking-terms-error");
 
       if (termsCheckbox && submitBtn) {
         termsCheckbox.addEventListener("change", function () {
@@ -1998,36 +2066,37 @@
       }
     }
 
-    async function submitForm(e) {
+    // 6.2 【利用予約の送信処理】
+    async function submitBookingForm(e) {
       e.preventDefault();
 
-      const termsCheckbox = document.getElementById("form-terms");
-      const submitBtn = document.getElementById("submit-btn");
-      const termsErrorMsg = document.getElementById("terms-error-msg");
+      const termsCheckbox = document.getElementById("booking-terms");
+      const submitBtn = document.getElementById("booking-submit-btn");
+      const termsErrorMsg = document.getElementById("booking-terms-error");
 
-      // 二重バリデーション（規約同意チェック）
+      // 規約同意チェック
       if (!termsCheckbox || !termsCheckbox.checked) {
         if (termsErrorMsg) termsErrorMsg.classList.remove("hidden");
         if (termsCheckbox) termsCheckbox.focus();
-        alert("利用規約をご確認の上、「同意します」にチェックを入れてください。");
+        alert("利用規約兼申込書をご確認の上、「同意します」にチェックを入れてください。");
         return;
       }
 
       submitBtn.disabled = true;
       submitBtn.innerHTML = `<span>送信処理中...</span>`;
 
-      const usageCategory = document.getElementById("form-usage-category") ? document.getElementById("form-usage-category").value : "一般利用";
-      const hygieneOfficerVal = document.getElementById("form-hygiene-officer") ? document.getElementById("form-hygiene-officer").value.trim() : "";
-      const guestsVal = parseInt(document.getElementById("form-guests")?.value, 10) || 1;
-      const nameVal = document.getElementById("form-name").value.trim();
-      const emailVal = document.getElementById("form-email").value.trim();
-      const telVal = document.getElementById("form-tel").value.trim();
-      const planVal = document.getElementById("form-plan").value;
-      const dateVal = document.getElementById("form-date").value || new Date().toISOString().slice(0, 10);
-      const rawMessageVal = document.getElementById("form-message").value.trim();
+      const usageCategory = document.getElementById("booking-usage") ? document.getElementById("booking-usage").value : "菓子製造・仕込み販売";
+      const hygieneOfficerVal = document.getElementById("booking-hygiene-officer") ? document.getElementById("booking-hygiene-officer").value.trim() : "";
+      const guestsVal = parseInt(document.getElementById("booking-guests")?.value, 10) || 1;
+      const nameVal = document.getElementById("booking-name").value.trim();
+      const emailVal = document.getElementById("booking-email").value.trim();
+      const telVal = document.getElementById("booking-tel").value.trim();
+      const planVal = document.getElementById("booking-plan").value;
+      const dateVal = document.getElementById("booking-date").value || new Date().toISOString().slice(0, 10);
+      const rawMessageVal = document.getElementById("booking-message").value.trim();
       const messageVal = hygieneOfficerVal ? `【食品衛生責任者】${hygieneOfficerVal}\n${rawMessageVal || 'なし'}` : (rawMessageVal || "なし");
 
-      const bookingId = "REQ-" + Date.now().toString().slice(-6);
+      const bookingId = "BK-" + Date.now().toString().slice(-6);
       const idempotencyKey = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (bookingId + "-" + Math.random().toString(36).slice(2));
       const rateInfo = PLAN_RATES[planVal] || { unit: 3850, defaultHours: 5, total: 19250 };
 
@@ -2065,7 +2134,7 @@
         durationHours: calcDuration,
         termsAgreed: true,
         createdAt: new Date().toLocaleString("ja-JP"),
-        status: "新規受付"
+        status: "予約申込受付"
       };
 
       try {
@@ -2076,7 +2145,7 @@
         console.error("Local storage error:", err);
       }
 
-      // 1. Supabase クラウドDB への INSERT
+      // 1. Supabase クラウドDB への INSERT (type: 'BOOKING')
       if (supabaseClient) {
         try {
           const { error: dbError } = await supabaseClient
@@ -2084,7 +2153,7 @@
             .insert([{
               id: bookingId,
               idempotency_key: idempotencyKey,
-              type: planVal.includes('内見') ? 'INQUIRY' : 'BOOKING',
+              type: 'BOOKING',
               customer_name: nameVal,
               company_name: "",
               email: emailVal,
@@ -2106,7 +2175,7 @@
           if (dbError) {
             console.error("Supabase INSERT error:", dbError);
           } else {
-            console.log("Supabase INSERT success:", bookingId);
+            console.log("Supabase INSERT booking success:", bookingId);
           }
         } catch (dbErr) {
           console.error("Supabase request exception:", dbErr);
@@ -2116,7 +2185,8 @@
       // 2. 管理者へのメール即時通知 (FormSubmit)
       try {
         const payload = new FormData();
-        payload.append("_subject", `【湘南台キッチンスタジオ】${nameVal}様より予約・利用申込 (${planVal} / ${guestsVal}名)`);
+        payload.append("_subject", `【湘南台キッチンスタジオ】${nameVal}様より利用予約申込 (${planVal} / ${guestsVal}名)`);
+        payload.append("種別", "【利用予約申込】");
         payload.append("管理ID", bookingId);
         payload.append("氏名・貴社名", nameVal);
         payload.append("メールアドレス", emailVal);
@@ -2145,12 +2215,104 @@
       submitBtn.disabled = true;
       submitBtn.classList.add("opacity-50", "cursor-not-allowed");
       submitBtn.classList.remove("hover:bg-[#207cb9]", "cursor-pointer");
-      submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>予約・利用を申し込む（銀行振込・管理者が確認）</span>`;
+      submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>利用予約を申し込む（銀行振込・管理者が確認）</span>`;
       lucide.createIcons();
 
-      closeModal();
-      document.getElementById("contact-form").reset();
-      showToast("ご予約・お申込みを受け付けました。折り返しご請求・お振込先をご案内いたします。");
+      closeBookingModal();
+      document.getElementById("booking-form").reset();
+      showToast("利用予約のお申し込みを受け付けました。折り返し請求書・お振込先口座をご案内いたします。");
+    }
+
+    // 6.3 【お問い合わせ・ご相談の送信処理】
+    async function submitInquiryForm(e) {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById("inquiry-submit-btn");
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>送信処理中...</span>`;
+
+      const categoryVal = document.getElementById("inquiry-category").value;
+      const nameVal = document.getElementById("inquiry-name").value.trim();
+      const emailVal = document.getElementById("inquiry-email").value.trim();
+      const telVal = document.getElementById("inquiry-tel").value.trim();
+      const preferredDateVal = document.getElementById("inquiry-preferred-date") ? document.getElementById("inquiry-preferred-date").value.trim() : "";
+      const rawMessageVal = document.getElementById("inquiry-message").value.trim();
+
+      const fullMessage = preferredDateVal 
+        ? `【ご希望時期・日時】${preferredDateVal}\n\n【お問い合わせ内容】\n${rawMessageVal}`
+        : rawMessageVal;
+
+      const inquiryId = "INQ-" + Date.now().toString().slice(-6);
+      const idempotencyKey = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (inquiryId + "-" + Math.random().toString(36).slice(2));
+
+      // 1. Supabase クラウドDB への INSERT (type: 'INQUIRY')
+      if (supabaseClient) {
+        try {
+          const { error: dbError } = await supabaseClient
+            .from('bookings')
+            .insert([{
+              id: inquiryId,
+              idempotency_key: idempotencyKey,
+              type: 'INQUIRY',
+              customer_name: nameVal,
+              company_name: "",
+              email: emailVal,
+              tel: telVal,
+              plan_id: categoryVal,
+              guest_count: 1,
+              usage_type: categoryVal,
+              terms_agreed: false,
+              reserved_date: new Date().toISOString().slice(0, 10),
+              start_time: "10:00:00",
+              end_time: "11:00:00",
+              duration_hours: 1,
+              unit_price: 0,
+              estimated_amount: 0,
+              status: 'PENDING',
+              message: fullMessage
+            }]);
+
+          if (dbError) {
+            console.error("Supabase INSERT inquiry error:", dbError);
+          } else {
+            console.log("Supabase INSERT inquiry success:", inquiryId);
+          }
+        } catch (dbErr) {
+          console.error("Supabase request exception:", dbErr);
+        }
+      }
+
+      // 2. 管理者へのメール即時通知 (FormSubmit)
+      try {
+        const payload = new FormData();
+        payload.append("_subject", `【湘南台キッチンスタジオ】${nameVal}様よりお問い合わせ・ご相談 (${categoryVal})`);
+        payload.append("種別", "【お問い合わせ・ご相談】");
+        payload.append("管理ID", inquiryId);
+        payload.append("項目", categoryVal);
+        payload.append("氏名・貴社名", nameVal);
+        payload.append("メールアドレス", emailVal);
+        payload.append("電話番号", telVal);
+        payload.append("希望日時・時期", preferredDateVal || "特になし");
+        payload.append("お問い合わせ内容", rawMessageVal);
+        payload.append("_template", "table");
+        payload.append("_captcha", "false");
+
+        const adminEmail = "o.naoki0503@intakingresources.com";
+        await fetch(`https://formsubmit.co/ajax/${adminEmail}`, {
+          method: "POST",
+          body: payload
+        });
+      } catch (err) {
+        console.warn("Mail forwarding warning:", err);
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>お問い合わせを送信する</span>`;
+      lucide.createIcons();
+
+      closeInquiryModal();
+      document.getElementById("inquiry-form").reset();
+      showToast("お問い合わせ・ご相談を送信しました。担当者より24時間以内にご案内いたします。");
     }
 
     // 7. シェア・お気に入り・トースト機能
@@ -2222,7 +2384,7 @@
 
       const dateInput = document.getElementById("calc-date");
       if (dateInput) dateInput.value = today;
-      const modalDate = document.getElementById("form-date");
+      const modalDate = document.getElementById("booking-date");
       if (modalDate) modalDate.value = today;
 
       renderCalendar();
