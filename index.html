@@ -652,21 +652,40 @@
                   </div>
                 </div>
 
-                <!-- 凡例＆予約誘導 -->
-                <div class="mt-3 pt-2.5 border-t border-neutral-100 flex flex-wrap items-center justify-between gap-2 text-[11px]">
-                  <div class="flex items-center gap-3">
-                    <span class="flex items-center gap-1">
-                      <span class="w-3 h-3 rounded bg-emerald-50 border border-emerald-300 inline-block"></span>
-                      <strong class="text-emerald-700">◯ 空き（クリックで予約）</strong>
-                    </span>
-                    <span class="flex items-center gap-1">
-                      <span class="w-3 h-3 rounded bg-neutral-200 border border-neutral-300 timeline-booked-pattern inline-block"></span>
-                      <span class="text-neutral-500">× 予約済（利用不可）</span>
-                    </span>
+                <!-- 凡例＆選択サマリー＆予約誘導 -->
+                <div class="mt-3 pt-3 border-t border-neutral-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                  <div class="space-y-1.5">
+                    <div class="flex flex-wrap items-center gap-3 text-[11px]">
+                      <span class="flex items-center gap-1">
+                        <span class="w-3 h-3 rounded bg-emerald-50 border border-emerald-300 inline-block"></span>
+                        <span class="text-neutral-700">◯ 空き（タップで選択）</span>
+                      </span>
+                      <span class="flex items-center gap-1">
+                        <span class="w-3 h-3 rounded bg-[#2892d8] border border-[#207cb9] inline-block shadow-xs"></span>
+                        <strong class="text-[#2892d8]">✓ 選択中</strong>
+                      </span>
+                      <span class="flex items-center gap-1">
+                        <span class="w-3 h-3 rounded bg-neutral-200 border border-neutral-300 timeline-booked-pattern inline-block"></span>
+                        <span class="text-neutral-400">× 予約済（利用不可）</span>
+                      </span>
+                    </div>
+                    <!-- 選択中の時間帯リアルタイム表示 -->
+                    <div class="flex items-center gap-1.5 text-xs text-neutral-800 bg-[#f0f7fc] px-2.5 py-1.5 rounded border border-[#bce0f6]">
+                      <span class="w-2 h-2 rounded-full bg-[#2892d8] animate-pulse"></span>
+                      <span class="font-medium">選択時間:</span>
+                      <strong id="public-selected-hours-summary" class="text-[#207cb9]">枠をタップして希望時間帯をお選びください</strong>
+                    </div>
                   </div>
-                  <button type="button" onclick="openModalWithCurrentDate()" class="px-3.5 py-1.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold rounded text-xs transition shadow-sm inline-flex items-center gap-1">
-                    <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i> この日付で予約申し込む
-                  </button>
+
+                  <div class="flex items-center gap-2 self-end sm:self-center">
+                    <button type="button" id="public-clear-hours-btn" onclick="clearSelectedHours()" class="hidden px-2.5 py-2 text-xs border border-neutral-300 hover:bg-neutral-100 text-neutral-600 rounded transition">
+                      選択クリア
+                    </button>
+                    <button type="button" id="public-book-submit-btn" onclick="openBookingWithSelectedHours()" class="px-5 py-2.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold rounded text-xs transition shadow flex items-center gap-1.5">
+                      <i data-lucide="calendar-check" class="w-4 h-4"></i>
+                      <span id="public-book-btn-text">この日程・時間で予約申し込む</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1186,6 +1205,18 @@
         <p class="text-xs text-neutral-500 mt-0.5">必要事項をご入力ください。管理者宛てに即時通知され、24時間以内にご案内いたします。</p>
       </div>
 
+      <!-- 選択中の予約枠バナー -->
+      <div id="modal-selected-time-banner" class="hidden mb-4 p-3 bg-[#f0f7fc] border border-[#bce0f6] rounded text-xs text-[#207cb9] flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="clock" class="w-4 h-4 text-[#2892d8] flex-shrink-0"></i>
+          <div>
+            <span class="text-[10px] text-neutral-500 block">ご希望の日時・時間帯</span>
+            <strong id="modal-selected-time-text" class="text-neutral-900 font-bold">2026年10月7日 13:00 〜 17:00 (4時間)</strong>
+          </div>
+        </div>
+        <span class="text-[10px] bg-[#2892d8] text-white px-2 py-0.5 rounded font-bold">タイムライン指定</span>
+      </div>
+
       <form id="contact-form" onsubmit="submitForm(event)" class="space-y-3 text-xs">
         <div>
           <label class="block font-semibold text-neutral-800 mb-1">お名前 / 貴社名 <span class="text-[#2892d8] font-bold">*</span></label>
@@ -1390,6 +1421,8 @@
 
     // ================= 公開用 空き状況タイムライン連動 =================
     let publicSelectedDate = "2026-09-25"; // 初期選択日
+    let publicSelectedHours = []; // 選択中の時間インデックス配列 (例: [13, 14, 15, 16])
+    let currentDayBookedSlots = new Array(24).fill(false); // 該当日付の予約済フラグ
 
     function formatLocalDate(d) {
       const year = d.getFullYear();
@@ -1403,12 +1436,14 @@
       const d = new Date(parts[0], parts[1] - 1, parts[2]);
       d.setDate(d.getDate() + offset);
       publicSelectedDate = formatLocalDate(d);
+      publicSelectedHours = []; // 日付変更時は選択リセット
       fetchAndRenderPublicTimeline(publicSelectedDate);
       renderCalendar(); // カレンダーの選択ハイライトも連動
     }
 
     function setPublicToday() {
       publicSelectedDate = formatLocalDate(new Date());
+      publicSelectedHours = [];
       fetchAndRenderPublicTimeline(publicSelectedDate);
       renderCalendar();
     }
@@ -1416,6 +1451,7 @@
     function selectCalendarDate(y, m, d) {
       const formatted = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       publicSelectedDate = formatted;
+      publicSelectedHours = []; // 日付選択時は時間選択リセット
       
       const dateInput = document.getElementById("calc-date");
       if (dateInput) {
@@ -1430,6 +1466,107 @@
       const tl = document.getElementById("public-timeline-container");
       if (tl) {
         tl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function togglePublicHourSlot(h) {
+      if (currentDayBookedSlots[h]) return; // 予約済は選択不可
+
+      const idx = publicSelectedHours.indexOf(h);
+      if (idx > -1) {
+        publicSelectedHours.splice(idx, 1);
+      } else {
+        publicSelectedHours.push(h);
+      }
+      publicSelectedHours.sort((a, b) => a - b);
+      renderPublicSlotsUI();
+      updatePublicSelectedHoursSummary();
+    }
+
+    function clearSelectedHours() {
+      publicSelectedHours = [];
+      renderPublicSlotsUI();
+      updatePublicSelectedHoursSummary();
+    }
+
+    function getFormattedTimeRanges(hoursArray) {
+      if (!hoursArray || hoursArray.length === 0) return "";
+      const ranges = [];
+      let start = hoursArray[0];
+      let prev = hoursArray[0];
+
+      for (let i = 1; i < hoursArray.length; i++) {
+        const curr = hoursArray[i];
+        if (curr === prev + 1) {
+          prev = curr;
+        } else {
+          ranges.push(`${String(start).padStart(2, '0')}:00〜${String(prev + 1).padStart(2, '0')}:00`);
+          start = curr;
+          prev = curr;
+        }
+      }
+      ranges.push(`${String(start).padStart(2, '0')}:00〜${String(prev + 1).padStart(2, '0')}:00`);
+      return ranges.join(', ');
+    }
+
+    function updatePublicSelectedHoursSummary() {
+      const summaryEl = document.getElementById("public-selected-hours-summary");
+      const clearBtn = document.getElementById("public-clear-hours-btn");
+      const btnText = document.getElementById("public-book-btn-text");
+
+      const count = publicSelectedHours.length;
+      if (count === 0) {
+        if (summaryEl) summaryEl.innerHTML = "枠をタップして希望時間帯をお選びください（複数選択可）";
+        if (clearBtn) clearBtn.classList.add("hidden");
+        if (btnText) btnText.innerText = "この日程・時間で予約申し込む";
+      } else {
+        const rangeStr = getFormattedTimeRanges(publicSelectedHours);
+        if (summaryEl) summaryEl.innerHTML = `<span class="font-bold text-[#207cb9] text-xs">${rangeStr}</span> <span class="text-neutral-500 font-normal">（合計 ${count}時間）</span>`;
+        if (clearBtn) clearBtn.classList.remove("hidden");
+        if (btnText) btnText.innerText = `${rangeStr}（${count}時間）で予約申し込む`;
+      }
+    }
+
+    function renderPublicSlotsUI() {
+      const slotsContainer = document.getElementById("public-timeline-slots");
+      if (!slotsContainer) return;
+
+      slotsContainer.innerHTML = "";
+      for (let h = 0; h < 24; h++) {
+        const isBooked = currentDayBookedSlots[h];
+        const isSelected = publicSelectedHours.includes(h);
+        const timeLabel = `${String(h).padStart(2, '0')}:00`;
+
+        const cell = document.createElement("button");
+        cell.type = "button";
+
+        let className = "h-11 rounded border transition-all flex flex-col items-center justify-center p-0.5 select-none ";
+        if (isBooked) {
+          className += "bg-neutral-100 border-neutral-300 text-neutral-400 timeline-booked-pattern cursor-not-allowed opacity-60";
+        } else if (isSelected) {
+          className += "bg-[#2892d8] border-[#207cb9] text-white font-bold ring-2 ring-[#2892d8] ring-offset-1 shadow-md scale-105 z-10 cursor-pointer";
+        } else {
+          className += "bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100 hover:border-emerald-400 cursor-pointer shadow-xs hover:scale-102";
+        }
+        cell.className = className;
+
+        let iconSymbol = isBooked ? '×' : isSelected ? '✓' : '◯';
+        let numColorClass = isBooked ? 'text-neutral-400' : isSelected ? 'text-white font-black' : 'text-emerald-700 font-bold';
+        let iconColorClass = isBooked ? 'text-neutral-400' : isSelected ? 'text-white font-black text-[10px]' : 'text-emerald-600';
+
+        cell.innerHTML = `
+          <span class="text-[9px] font-mono leading-none ${numColorClass}">${h}</span>
+          <span class="text-[9px] font-bold mt-1 leading-none ${iconColorClass}">${iconSymbol}</span>
+        `;
+
+        if (isBooked) {
+          cell.title = `${timeLabel}〜 は予約済です`;
+        } else {
+          cell.title = isSelected ? `${timeLabel}〜 選択中（タップで解除）` : `${timeLabel}〜 空き（タップで選択）`;
+          cell.onclick = () => togglePublicHourSlot(h);
+        }
+
+        slotsContainer.appendChild(cell);
       }
     }
 
@@ -1463,20 +1600,18 @@
 
       slotsContainer.innerHTML = "<div class='col-span-24 text-center py-2 text-xs text-neutral-400'>空き状況を読み込み中...</div>";
 
-      const bookedSlots = new Array(24).fill(false); // false: 空き, true: 予約済
+      currentDayBookedSlots = new Array(24).fill(false);
       let bookings = [];
 
       if (supabaseClient) {
         try {
           // 🛡️ セキュリティ設計: 個人情報を含まない公開ビュー（または特定カラムのみ）を取得
-          // 1. まず public_bookings_calendar ビューを試行
           let res = await supabaseClient
             .from('public_bookings_calendar')
             .select('date, start_time, end_time, status')
             .eq('date', targetDate);
 
           if (res.error || !res.data) {
-            // ビュー作成前のフォールバック（特定カラムのみ限定取得）
             res = await supabaseClient
               .from('bookings')
               .select('reserved_date, start_time, end_time, status')
@@ -1499,72 +1634,62 @@
         const s = parseInt(b.start_time.split(':')[0], 10);
         const e = parseInt(b.end_time.split(':')[0], 10);
         for (let h = s; h < e; h++) {
-          if (h >= 0 && h < 24) bookedSlots[h] = true;
+          if (h >= 0 && h < 24) currentDayBookedSlots[h] = true;
         }
       });
 
+      // 選択中だった時間枠がもし予約済みになっていたら除外
+      publicSelectedHours = publicSelectedHours.filter(h => !currentDayBookedSlots[h]);
+
       // スロット描画
-      slotsContainer.innerHTML = "";
-      let freeCount = 0;
-      let bookedCount = 0;
+      renderPublicSlotsUI();
+      updatePublicSelectedHoursSummary();
 
-      for (let h = 0; h < 24; h++) {
-        const isBooked = bookedSlots[h];
-        if (isBooked) bookedCount++; else freeCount++;
-
-        const timeLabel = `${String(h).padStart(2, '0')}:00`;
-        const nextLabel = `${String(Math.min(24, h + 4)).padStart(2, '0')}:00`;
-
-        const cell = document.createElement("button");
-        cell.type = "button";
-        cell.className = `h-10 rounded border transition flex flex-col items-center justify-center p-0.5 ${
-          isBooked 
-            ? "bg-neutral-100 border-neutral-300 text-neutral-400 timeline-booked-pattern cursor-not-allowed" 
-            : "bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100 hover:border-emerald-500 cursor-pointer shadow-xs group"
-        }`;
-
-        cell.innerHTML = `
-          <span class="text-[9px] font-mono leading-none ${isBooked ? 'text-neutral-400' : 'text-emerald-700 font-bold'}">${h}</span>
-          <span class="text-[9px] font-bold mt-0.5 leading-none ${isBooked ? 'text-neutral-400' : 'text-emerald-600'}">${isBooked ? '×' : '◯'}</span>
-        `;
-
-        if (isBooked) {
-          cell.title = `${timeLabel}〜 は予約済（受付終了）です`;
-        } else {
-          cell.title = `${timeLabel}〜 は空き（クリックして予約）`;
-          cell.onclick = () => {
-            openBookingModalWithTime(targetDate, timeLabel, nextLabel);
-          };
-        }
-
-        slotsContainer.appendChild(cell);
-      }
-
+      let freeCount = currentDayBookedSlots.filter(b => !b).length;
+      let bookedCount = 24 - freeCount;
       if (statText) {
-        statText.innerHTML = `空き枠: <strong class="text-emerald-700">${freeCount}時間</strong> / 予約済: <strong class="text-neutral-600">${bookedCount}時間</strong> （枠をクリックして予約）`;
+        statText.innerHTML = `空き枠: <strong class="text-emerald-700">${freeCount}時間</strong> / 予約済: <strong class="text-neutral-600">${bookedCount}時間</strong> （使いたい時間をタップして選択）`;
       }
     }
 
-    function openBookingModalWithTime(dateStr, startStr, endStr) {
-      openModal('booking', `${dateStr} のご利用予約お申し込み`);
+    function openBookingWithSelectedHours() {
+      openModal('booking', `${publicSelectedDate} のご利用予約お申し込み`);
       const dateEl = document.getElementById("form-date");
-      if (dateEl) dateEl.value = dateStr;
+      if (dateEl) dateEl.value = publicSelectedDate;
 
+      const banner = document.getElementById("modal-selected-time-banner");
+      const bannerText = document.getElementById("modal-selected-time-text");
       const messageEl = document.getElementById("form-message");
-      if (messageEl) {
-        const timeNote = `【希望利用時間】${startStr} 〜 ${endStr}（目安）\n`;
-        if (!messageEl.value.includes("【希望利用時間】")) {
-          messageEl.value = timeNote + messageEl.value;
-        } else {
-          messageEl.value = messageEl.value.replace(/【希望利用時間】.*?\n/, timeNote);
+
+      const parts = publicSelectedDate.split('-').map(Number);
+      const dObj = new Date(parts[0], parts[1] - 1, parts[2]);
+      const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
+      const dayName = dayNames[dObj.getDay()];
+      const dateJp = `${parts[0]}年${parts[1]}月${parts[2]}日(${dayName})`;
+
+      if (publicSelectedHours.length > 0) {
+        const rangeStr = getFormattedTimeRanges(publicSelectedHours);
+        const count = publicSelectedHours.length;
+        const timeNote = `【希望利用時間】${publicSelectedDate} ${rangeStr} (合計${count}時間)\n`;
+
+        if (banner && bannerText) {
+          bannerText.innerText = `${dateJp} ${rangeStr} (${count}時間)`;
+          banner.classList.remove("hidden");
+        }
+
+        if (messageEl) {
+          if (!messageEl.value.includes("【希望利用時間】")) {
+            messageEl.value = timeNote + messageEl.value;
+          } else {
+            messageEl.value = messageEl.value.replace(/【希望利用時間】.*?\n/, timeNote);
+          }
+        }
+      } else {
+        if (banner) banner.classList.add("hidden");
+        if (messageEl && !messageEl.value.includes("【希望利用時間】")) {
+          messageEl.value = `【利用希望日】${dateJp} (時間は相談)\n` + messageEl.value;
         }
       }
-    }
-
-    function openModalWithCurrentDate() {
-      const defaultStart = "10:00";
-      const defaultEnd = "14:00";
-      openBookingModalWithTime(publicSelectedDate, defaultStart, defaultEnd);
     }
 
     // 4. 見積もり計算
@@ -1663,6 +1788,21 @@
       const idempotencyKey = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (bookingId + "-" + Math.random().toString(36).slice(2));
       const rateInfo = PLAN_RATES[planVal] || { unit: 3850, defaultHours: 5, total: 19250 };
 
+      // タイムラインで選択された時間帯から動的に計算
+      let calcStartTime = "10:00:00";
+      let calcEndTime = "18:00:00";
+      let calcDuration = rateInfo.defaultHours;
+
+      if (publicSelectedHours && publicSelectedHours.length > 0) {
+        const minH = publicSelectedHours[0];
+        const maxH = publicSelectedHours[publicSelectedHours.length - 1];
+        calcStartTime = `${String(minH).padStart(2, '0')}:00:00`;
+        calcEndTime = `${String(maxH + 1).padStart(2, '0')}:00:00`;
+        calcDuration = publicSelectedHours.length;
+      }
+
+      const totalEstimated = rateInfo.unit && calcDuration > 0 ? (rateInfo.unit * calcDuration) : rateInfo.total;
+
       // ローカルストレージ（オフラインバックアップ）
       const localRecord = {
         id: bookingId,
@@ -1672,10 +1812,12 @@
         tel: telVal,
         plan: planVal,
         date: dateVal,
+        startTime: calcStartTime.slice(0, 5),
+        endTime: calcEndTime.slice(0, 5),
         usage: usages,
         message: messageVal || "なし",
-        estimatedAmount: rateInfo.total,
-        durationHours: rateInfo.defaultHours,
+        estimatedAmount: totalEstimated,
+        durationHours: calcDuration,
         createdAt: new Date().toLocaleString("ja-JP"),
         status: "新規受付"
       };
@@ -1704,11 +1846,11 @@
               plan_id: planVal,
               usage_type: usages,
               reserved_date: dateVal,
-              start_time: '10:00:00',
-              end_time: '18:00:00',
-              duration_hours: rateInfo.defaultHours,
+              start_time: calcStartTime,
+              end_time: calcEndTime,
+              duration_hours: calcDuration,
               unit_price: rateInfo.unit,
-              estimated_amount: rateInfo.total,
+              estimated_amount: totalEstimated,
               status: 'PENDING',
               message: messageVal || "なし"
             }]);
