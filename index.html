@@ -680,12 +680,9 @@
                   </div>
 
                   <div class="flex items-center gap-2 self-end sm:self-center">
-                    <button type="button" id="public-clear-hours-btn" onclick="clearSelectedHours()" class="hidden px-2.5 py-2 text-xs border border-neutral-300 hover:bg-neutral-100 text-neutral-600 rounded transition">
-                      選択クリア
-                    </button>
-                    <button type="button" id="public-book-submit-btn" onclick="openBookingWithSelectedHours()" class="px-5 py-2.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold rounded text-xs transition shadow flex items-center gap-1.5">
-                      <i data-lucide="calendar-check" class="w-4 h-4"></i>
-                      <span id="public-book-btn-text">この日程・時間で予約申し込む</span>
+                    <button type="button" id="public-clear-hours-btn" onclick="clearSelectedHours()" class="hidden px-3 py-1.5 text-xs font-medium border border-neutral-300 hover:bg-neutral-100 text-neutral-600 rounded transition flex items-center gap-1">
+                      <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                      <span>選択をクリア</span>
                     </button>
                   </div>
                 </div>
@@ -1738,22 +1735,55 @@
       return ranges.join(', ');
     }
 
+    // ★【要件1】タイムラインの選択状態を右側料金シミュレーターへリアルタイム連動
+    function syncTimelineToSimulator() {
+      // 1. 利用日の反映
+      const calcDateInput = document.getElementById("calc-date");
+      if (calcDateInput && publicSelectedDate) {
+        calcDateInput.value = publicSelectedDate;
+      }
+
+      // 2. 利用時間数の反映
+      const calcHoursSelect = document.getElementById("calc-hours");
+      if (calcHoursSelect) {
+        const count = publicSelectedHours.length;
+        if (count > 0) {
+          let optionExists = false;
+          for (let i = 0; i < calcHoursSelect.options.length; i++) {
+            if (parseInt(calcHoursSelect.options[i].value, 10) === count) {
+              calcHoursSelect.selectedIndex = i;
+              optionExists = true;
+              break;
+            }
+          }
+          if (!optionExists) {
+            const newOpt = new Option(`${count}時間（選択枠連動）`, count);
+            calcHoursSelect.add(newOpt);
+            calcHoursSelect.value = count;
+          }
+        }
+      }
+
+      // 3. 概算料金を自動再計算
+      calculateEstimate();
+    }
+
     function updatePublicSelectedHoursSummary() {
       const summaryEl = document.getElementById("public-selected-hours-summary");
       const clearBtn = document.getElementById("public-clear-hours-btn");
-      const btnText = document.getElementById("public-book-btn-text");
 
       const count = publicSelectedHours.length;
       if (count === 0) {
         if (summaryEl) summaryEl.innerHTML = "枠をタップして希望時間帯をお選びください（複数選択可）";
         if (clearBtn) clearBtn.classList.add("hidden");
-        if (btnText) btnText.innerText = "この日程・時間で予約申し込む";
       } else {
         const rangeStr = getFormattedTimeRanges(publicSelectedHours);
         if (summaryEl) summaryEl.innerHTML = `<span class="font-bold text-[#207cb9] text-xs">${rangeStr}</span> <span class="text-neutral-500 font-normal">（合計 ${count}時間）</span>`;
         if (clearBtn) clearBtn.classList.remove("hidden");
-        if (btnText) btnText.innerText = `${rangeStr}（${count}時間）で予約申し込む`;
       }
+
+      // 右側シミュレーターへ即時連動
+      syncTimelineToSimulator();
     }
 
     function renderPublicSlotsUI() {
@@ -1881,45 +1911,7 @@
       }
     }
 
-    function openBookingWithSelectedHours() {
-      openBookingModal();
-      const dateEl = document.getElementById("booking-date");
-      if (dateEl) dateEl.value = publicSelectedDate;
 
-      const banner = document.getElementById("booking-selected-time-banner");
-      const bannerText = document.getElementById("booking-selected-time-text");
-      const messageEl = document.getElementById("booking-message");
-
-      const parts = publicSelectedDate.split('-').map(Number);
-      const dObj = new Date(parts[0], parts[1] - 1, parts[2]);
-      const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
-      const dayName = dayNames[dObj.getDay()];
-      const dateJp = `${parts[0]}年${parts[1]}月${parts[2]}日(${dayName})`;
-
-      if (publicSelectedHours.length > 0) {
-        const rangeStr = getFormattedTimeRanges(publicSelectedHours);
-        const count = publicSelectedHours.length;
-        const timeNote = `【希望利用時間】${publicSelectedDate} ${rangeStr} (合計${count}時間)\n`;
-
-        if (banner && bannerText) {
-          bannerText.innerText = `${dateJp} ${rangeStr} (${count}時間)`;
-          banner.classList.remove("hidden");
-        }
-
-        if (messageEl) {
-          if (!messageEl.value.includes("【希望利用時間】")) {
-            messageEl.value = timeNote + messageEl.value;
-          } else {
-            messageEl.value = messageEl.value.replace(/【希望利用時間】.*?\n/, timeNote);
-          }
-        }
-      } else {
-        if (banner) banner.classList.add("hidden");
-        if (messageEl && !messageEl.value.includes("【希望利用時間】")) {
-          messageEl.value = `【利用希望日】${dateJp} (時間は相談)\n` + messageEl.value;
-        }
-      }
-    }
 
     // 4. 見積もり計算
     function calculateEstimate() {
@@ -1958,17 +1950,64 @@
     }
 
     // 5. モーダル操作（完全2系統分離）
-    // 5.1 【利用予約を申し込む】モーダル操作
+    // 5.1 【利用予約を申し込む】モーダル操作（左側タイムラインの選択状態を完全統合）
     function openBookingModal(defaultMessage = "") {
       const modal = document.getElementById("booking-modal");
       if (!modal) return;
 
+      const targetDate = publicSelectedDate || formatLocalDate(new Date());
+
+      // A. 利用日の反映
       const dateEl = document.getElementById("booking-date");
-      if (dateEl && !dateEl.value) {
-        dateEl.value = publicSelectedDate || formatLocalDate(new Date());
+      if (dateEl) {
+        dateEl.value = targetDate;
       }
 
+      // B. シミュレーターで選択中のプランがあれば反映
+      const calcPlanEl = document.getElementById("calc-plan");
+      const bookingPlanEl = document.getElementById("booking-plan");
+      if (calcPlanEl && bookingPlanEl) {
+        const pVal = calcPlanEl.value;
+        if (pVal === 'kitchen_lounge') bookingPlanEl.value = "Kitchen & Lounge（全体貸切）";
+        else if (pVal === 'kitchen') bookingPlanEl.value = "Kitchen（製造・仕込み特化）";
+        else if (pVal === 'lounge') bookingPlanEl.value = "Lounge（ワーク・教室）";
+      }
+
+      // C. 選択時間帯のバナー表示＆メッセージ欄自動差し込み
+      const banner = document.getElementById("booking-selected-time-banner");
+      const bannerText = document.getElementById("booking-selected-time-text");
       const messageEl = document.getElementById("booking-message");
+
+      const parts = targetDate.split('-').map(Number);
+      const dObj = new Date(parts[0], parts[1] - 1, parts[2]);
+      const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
+      const dayName = dayNames[dObj.getDay()];
+      const dateJp = `${parts[0]}年${parts[1]}月${parts[2]}日(${dayName})`;
+
+      if (publicSelectedHours && publicSelectedHours.length > 0) {
+        const rangeStr = getFormattedTimeRanges(publicSelectedHours);
+        const count = publicSelectedHours.length;
+        const timeNote = `【希望利用時間】${targetDate} ${rangeStr} (合計${count}時間)\n`;
+
+        if (banner && bannerText) {
+          bannerText.innerText = `${dateJp} ${rangeStr} (${count}時間)`;
+          banner.classList.remove("hidden");
+        }
+
+        if (messageEl) {
+          if (!messageEl.value.includes("【希望利用時間】")) {
+            messageEl.value = timeNote + messageEl.value;
+          } else {
+            messageEl.value = messageEl.value.replace(/【希望利用時間】.*?\n/, timeNote);
+          }
+        }
+      } else {
+        if (banner) banner.classList.add("hidden");
+        if (messageEl && !messageEl.value.includes("【希望利用時間】")) {
+          messageEl.value = `【利用希望日】${dateJp} (時間は相談)\n` + messageEl.value;
+        }
+      }
+
       if (defaultMessage && messageEl && !messageEl.value.includes(defaultMessage)) {
         messageEl.value = defaultMessage + "\n" + messageEl.value;
       }
