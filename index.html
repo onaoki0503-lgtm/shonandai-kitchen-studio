@@ -233,7 +233,7 @@
         <a href="#amenities" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">設備・備品</a>
         <a href="#access" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">アクセス</a>
         <a href="#flow" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">ご利用の流れ</a>
-        <a href="#rules" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">禁止・注意事項</a>
+        <a href="#rules" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">利用規約兼申込書</a>
         <a href="#inquiry" class="hover:text-[#2892d8] pb-2.5 -mb-3 whitespace-nowrap">お問い合わせ</a>
       </div>
     </div>
@@ -884,256 +884,139 @@
           </div>
         </section>
 
-        <!-- RULES & POLICIES (利用規約兼申込書 正本) -->
+        <!-- RULES & POLICIES (Shonandai Kitchen Studio利用規約兼申込書 正本) -->
         <section id="rules" class="bg-white rounded-lg p-6 border border-neutral-200">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-4 border-b border-neutral-100 gap-2">
-            <div>
-              <div class="flex items-center gap-2">
-                <i data-lucide="file-check-2" class="w-5 h-5 text-[#2892d8]"></i>
-                <h2 class="text-base font-bold text-neutral-900">Shonandai Kitchen Studio 利用規約兼申込書</h2>
-              </div>
-              <p class="text-[11px] text-neutral-500 mt-0.5">運営：株式会社APRECIO（以下「甲」） / 制定利用規約 全25条</p>
-            </div>
-            <button type="button" onclick="openTermsDetailModal()" class="self-start sm:self-auto text-xs px-3 py-1.5 border border-[#2892d8] text-[#2892d8] hover:bg-[#f0f7fc] font-bold rounded flex items-center gap-1 transition">
-              <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> 全文をモーダルで開く
-            </button>
+          <div class="pb-3 mb-5 border-b border-neutral-200">
+            <h2 class="text-base sm:text-lg font-bold text-neutral-900 text-center tracking-wide">
+              Shonandai Kitchen Studio利用規約兼申込書
+            </h2>
           </div>
 
-          <!-- 前文 -->
-          <div class="bg-neutral-50 border border-neutral-200 p-3.5 rounded text-xs text-neutral-700 leading-relaxed mb-5">
-            株式会社APRECIO（以下「甲」という。）の運営するShonandai Kitchen Studio（以下「当施設」という。）について、貸スタジオとして撮影・料理教室・ワークショップ・イベント・シェアキッチン・オンライン講座・セミナーなどを目的としたご利用を原則と致します。飲食店営業及び菓子製造業の営業許可を取得していますので、営業許可の範囲内でのご利用も可能です。事前に正確なご利用内容をお知らせください。当該内容によりご利用を承れない場合がありますのでご了承ください。
-          </div>
+          <div class="text-xs text-neutral-800 leading-relaxed space-y-4 max-w-3xl mx-auto">
+            <p>
+              株式会社APRECIO（以下「甲」という。）の運営するShonandai Kitchen Studio（以下「当施設」という。）について、貸スタジオとして撮影・料理教室・ワークショップ・イベント・シェアキッチン・オンライン講座・セミナーなどを目的としたご利用を原則と致します。飲食店営業及び菓子製造業の営業許可を取得していますので、営業許可の範囲内でのご利用も可能です。事前に正確なご利用内容をお知らせください。当該内容によりご利用を承れない場合がありますのでご了承ください。
+            </p>
 
-          <!-- 重要ポイント ハイライト4項目 -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-6 text-xs">
-            <!-- 1. 食品衛生責任者 -->
-            <div class="border-l-4 border-[#2892d8] bg-[#f0f7fc] p-3 rounded-r">
-              <div class="font-bold text-neutral-900 flex items-center gap-1.5 mb-1 text-xs">
-                <i data-lucide="award" class="w-4 h-4 text-[#2892d8]"></i> 【第2条】食品衛生責任者の常駐
-              </div>
-              <p class="text-neutral-600 text-[11px] leading-relaxed">
-                飲食店営業、菓子製造業、食のイベント、料理教室など、食品の製造や調理した食品の提供・販売をする場合は、<strong>食品衛生責任者の資格取得者が1名以上常駐</strong>することが条件です。ご利用前に証明をご提示ください。
-              </p>
-            </div>
-
-            <!-- 2. キャンセルポリシー -->
-            <div class="border-l-4 border-amber-500 bg-amber-50/60 p-3 rounded-r">
-              <div class="font-bold text-neutral-900 flex items-center gap-1.5 mb-1 text-xs">
-                <i data-lucide="calendar-x" class="w-4 h-4 text-amber-600"></i> 【第4条】キャンセルポリシー
-              </div>
-              <ul class="text-neutral-700 text-[11px] space-y-0.5">
-                <li>・ご利用の<strong>2週間前まで</strong>の連絡：利用料金の <strong>20%</strong></li>
-                <li>・ご利用の<strong>1週間前まで</strong>の連絡：利用料金の <strong>50%</strong></li>
-                <li>・ご利用の<strong>3日前〜当日</strong>の連絡：利用料金の <strong>100%</strong></li>
-              </ul>
-            </div>
-
-            <!-- 3. 利用時間・入室・延長 -->
-            <div class="border-l-4 border-emerald-500 bg-emerald-50/60 p-3 rounded-r">
-              <div class="font-bold text-neutral-900 flex items-center gap-1.5 mb-1 text-xs">
-                <i data-lucide="clock" class="w-4 h-4 text-emerald-600"></i> 【第1・5・6・7条】利用時間・入退室
-              </div>
-              <p class="text-neutral-600 text-[11px] leading-relaxed">
-                利用時間：<strong>午前9時〜午後9時</strong>。準備〜片付け・引渡確認まで予約時間内となります。<strong>開始15分前より入室可能</strong>（30分以上前は延長対象）。延長は30分単位で対応可能です。
-              </p>
-            </div>
-
-            <!-- 4. お支払い方法（銀行振込） -->
-            <div class="border-l-4 border-indigo-500 bg-indigo-50/60 p-3 rounded-r">
-              <div class="font-bold text-neutral-900 flex items-center gap-1.5 mb-1 text-xs">
-                <i data-lucide="credit-card" class="w-4 h-4 text-indigo-600"></i> 【第8条】利用料のお支払い（銀行振込）
-              </div>
-              <p class="text-neutral-600 text-[11px] leading-relaxed">
-                当施設利用料については、期日までに請求書記載の<strong>銀行口座へ振込</strong>にてお支払いをお願い致します（振込手数料はお客様ご負担）。
-              </p>
-            </div>
-          </div>
-
-          <!-- 全25条 条文リスト -->
-          <div class="border border-neutral-200 rounded-lg overflow-hidden">
-            <div class="bg-neutral-100 px-4 py-2.5 border-b border-neutral-200 flex items-center justify-between">
-              <h3 class="font-bold text-neutral-900 text-xs flex items-center gap-1.5">
-                <i data-lucide="list-ordered" class="w-4 h-4 text-neutral-600"></i>
-                利用規約 条文一覧（第1条 〜 第25条）
-              </h3>
-              <span class="text-[10px] text-neutral-500">※予告なく変更される場合があります</span>
-            </div>
-
-            <div class="p-4 space-y-3.5 text-xs text-neutral-700 max-h-[460px] overflow-y-auto leading-relaxed divide-y divide-neutral-100">
-              
-              <!-- 第1条 -->
-              <div class="pt-1 first:pt-0">
-                <strong class="text-neutral-900 font-bold block mb-1">1. 【ご利用基本情報】</strong>
-                <ul class="list-none space-y-1 text-neutral-600 text-[11px] pl-2">
-                  <li><strong>① ご利用料金：</strong>Shonandai Kitchen Studio 料金表のとおり</li>
-                  <li><strong>② ご利用時間：</strong>午前9時から午後9時まで</li>
-                  <li><strong>③ 設備：</strong>システムキッチン、スチームオーブン1台、冷蔵庫1台、テーブル3つ（80cm×100cm 2つ、80cm×200cm 1つ）・イス10脚・照明・食器・グラスなど。当施設面積 36.52㎡（1階のキッチン部分 17.12㎡、ダイニング部分 19.40㎡、トイレ） ※駐車場のご利用については、ご相談ください。</li>
-                  <li><strong>④ お問合せ先：</strong>当利用規約をご確認の上、info@shonandai-kitchen-studio.jp 宛にご希望の日時・用途をお問い合わせください。</li>
-                </ul>
-              </div>
-
-              <!-- 第2条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">2. 食品衛生責任者の常駐条件</strong>
-                <p class="text-neutral-600 text-[11px]">飲食店営業、菓子製造業、食のイベント、料理教室など、食品の製造や調理した食品の提供や販売をする場合は、食品衛生責任者の資格を取得している方が1名以上常駐していただくことを条件としています。ご利用前に「食品衛生責任者」養成講座を修了されていることの証明をご提示ください。</p>
-              </div>
-
-              <!-- 第3条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">3. 初回のご利用・内見</strong>
-                <p class="text-neutral-600 text-[11px]">最初のご利用の場合は、まずはお問い合せください。当施設を内見又は相談していただき、スタッフから概要を説明させていただくことをお願いしております。</p>
-              </div>
-
-              <!-- 第4条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">4. キャンセルポリシー</strong>
-                <p class="text-neutral-600 text-[11px] mb-1.5">予約確定後、お客様のご都合でキャンセルとなった場合、キャンセルポリシーのとおり料金が発生致しますのでご了承ください。</p>
-                <div class="border border-neutral-200 rounded overflow-hidden text-[11px] max-w-md">
-                  <div class="grid grid-cols-2 bg-neutral-100 p-2 font-bold text-neutral-800 border-b border-neutral-200">
-                    <span>ご連絡時期</span>
-                    <span class="text-right">キャンセル料金</span>
-                  </div>
-                  <div class="grid grid-cols-2 p-2 border-b border-neutral-100">
-                    <span>ご利用の2週間前までに連絡の場合</span>
-                    <span class="text-right font-semibold">利用料金の 20%</span>
-                  </div>
-                  <div class="grid grid-cols-2 p-2 border-b border-neutral-100">
-                    <span>ご利用の1週間前までに連絡の場合</span>
-                    <span class="text-right font-semibold">利用料金の 50%</span>
-                  </div>
-                  <div class="grid grid-cols-2 p-2 bg-rose-50/50">
-                    <span class="font-semibold text-neutral-900">ご利用の3日前〜当日の連絡の場合</span>
-                    <span class="text-right font-bold text-rose-600">利用料金の 100%</span>
-                  </div>
+            <div class="space-y-4">
+              <div>
+                <p class="font-bold text-neutral-900">1. 【ご利用基本情報】</p>
+                <div class="pl-3 space-y-1.5 mt-1 text-neutral-700">
+                  <p>① ご利用料金<br>Shonandai Kitchen Studio 料金表のとおり</p>
+                  <p>② ご利用時間<br>午前9時から午後9時まで</p>
+                  <p>③ 設備<br>システムキッチン、スチームオーブン1台、冷蔵庫1台<br>テーブル3つ（80cm×100cm 2つ、80cm×200cm 1つ）・イス10脚・照明・食器・グラスなど<br>当施設面積 36.52㎡（1階のキッチン部分 17.12㎡、ダイニング部分 19.40㎡、トイレ）<br>※駐車場のご利用については、ご相談ください。</p>
+                  <p>④ お問合せ先<br>当利用規約をご確認の上、info@shonandai-kitchen-studio.jp 宛にご希望の日時・用途をお問い合わせください。</p>
                 </div>
               </div>
 
-              <!-- 第5条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">5. 利用時間内の厳守と料金適用</strong>
-                <p class="text-neutral-600 text-[11px]">ご利用は、入室・準備〜片付け・引渡確認までをご予約いただいた利用時間内でお願い致します。ご予約時間内で開始・終了した場合は、開始時間・終了時間にかかわらず、ご予約時間での利用料金となりますのでご了承ください。</p>
+              <p>
+                2. 飲食店営業、菓子製造業、食のイベント、料理教室など、食品の製造や調理した食品の提供や販売をする場合は、食品衛生責任者の資格を取得している方が1名以上常駐していただくことを条件としています。ご利用前に「食品衛生責任者」養成講座を修了されていることの証明をご提示ください。
+              </p>
+
+              <p>
+                3. 最初のご利用の場合は、まずはお問い合せください。当施設を内見又は相談していただき、スタッフから概要を説明させていただくことをお願いしております。
+              </p>
+
+              <div>
+                <p>
+                  4. 予約確定後、お客様のご都合でキャンセルとなった場合、キャンセルポリシーのとおり料金が発生致しますのでご了承ください。
+                </p>
+                <div class="mt-1 pl-3 text-neutral-700 space-y-0.5">
+                  <p class="font-bold text-neutral-800">【キャンセルポリシー】</p>
+                  <p>ご利用の2週間前までに連絡の場合 利用料金の20%</p>
+                  <p>ご利用の1週間前までに連絡の場合 利用料金の50%</p>
+                  <p>ご利用の3日前〜当日の連絡の場合 利用料金の100%</p>
+                </div>
               </div>
 
-              <!-- 第6条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">6. 入室可能時間</strong>
-                <p class="text-neutral-600 text-[11px]">ご予約開始時間の15分前より入室いただけます。ご予約時間より30分以上早い入室は、延長の対象となりますのでご了承ください。</p>
-              </div>
+              <p>
+                5. ご利用は、入室・準備〜片付け・引渡確認までをご予約いただいた利用時間内でお願い致します。<br>
+                ご予約時間内で開始・終了した場合は、開始時間・終了時間にかかわらず、ご予約時間での利用料金となりますのでご了承ください。
+              </p>
 
-              <!-- 第7条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">7. 当日の延長対応</strong>
-                <p class="text-neutral-600 text-[11px]">当日の状況により延長をご希望の場合は、可能な範囲で対応させていただきますのでご相談ください。延長料金：30分単位（使用する曜日・時間帯により料金が異なります）。</p>
-              </div>
+              <p>
+                6. ご予約開始時間の15分前より入室いただけます。ご予約時間より30分以上早い入室は、延長の対象となりますのでご了承ください。
+              </p>
 
-              <!-- 第8条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">8. 利用料のお支払い（銀行振込）</strong>
-                <p class="text-neutral-600 text-[11px]">当施設利用料については、期日までに請求書記載の銀行口座へ振込にてお支払いをお願い致します。振込手数料はお客様ご負担でお願い致します。</p>
-              </div>
+              <p>
+                7. 当日の状況により延長をご希望の場合は、可能な範囲で対応させていただきますのでご相談ください。<br>
+                延長料金：30分単位（使用する曜日・時間帯により料金が異なります）
+              </p>
 
-              <!-- 第9条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">9. 禁止行為・利用制限</strong>
-                <p class="text-neutral-600 text-[11px]">承認のない物品の販売、営業行為、宗教の勧誘、違法販売セミナー、その他法律に反する目的によるご利用、公序良俗に反するご利用はお断り致します。</p>
-              </div>
+              <p>
+                8. 当施設利用料については、期日までに請求書記載の銀行口座へ振込にてお支払いをお願い致します。振込手数料はお客様ご負担でお願い致します。
+              </p>
 
-              <!-- 第10条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">10. 申込内容との相違</strong>
-                <p class="text-neutral-600 text-[11px]">申込み時と利用内容が異なる場合、当日でもご利用をお断りする場合がありますのでお気をつけください。その場合、返金はできませんのでご了承ください。</p>
-              </div>
+              <p>
+                9. 承認のない物品の販売、営業行為、宗教の勧誘、違法販売セミナー、その他法律に反する目的によるご利用、公序良俗に反するご利用はお断り致します。
+              </p>
 
-              <!-- 第11条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">11. 近隣・周辺への配慮</strong>
-                <p class="text-neutral-600 text-[11px]">キッチンスタジオ周辺に迷惑を及ぼす恐れのある行為はご遠慮ください（大声、大音量のオーディオ、勧誘等）。</p>
-              </div>
+              <p>
+                10. 申込み時と利用内容が異なる場合、当日でもご利用をお断りする場合がありますのでお気をつけください。その場合、返金はできませんのでご了承ください。
+              </p>
 
-              <!-- 第12条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">12. 完全禁煙</strong>
-                <p class="text-neutral-600 text-[11px]">当施設、敷地及び周辺道路は禁煙です。</p>
-              </div>
+              <p>
+                11. キッチンスタジオ周辺に迷惑を及ぼす恐れのある行為はご遠慮ください（大声、大音量のオーディオ、勧誘等）。
+              </p>
 
-              <!-- 第13条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">13. 荷物・貴重品の自己管理責任</strong>
-                <p class="text-neutral-600 text-[11px]">荷物・貴重品などはご利用者の責任で管理をお願い致します。盗難や紛失、破損等があった場合、甲は一切の責任を負いかねます。</p>
-              </div>
+              <p>
+                12. 当施設、敷地及び周辺道路は禁煙です。
+              </p>
 
-              <!-- 第14条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">14. 清掃と原状回復</strong>
-                <p class="text-neutral-600 text-[11px]">使用後は、掃除と原状回復をお願い致します。テーブルやイスなどレイアウト変更を行った場合は、必ず規定のレイアウトに戻し、調理器具、道具類等は元の場所にお戻しください。</p>
-              </div>
+              <p>
+                13. 荷物・貴重品などはご利用者の責任で管理をお願い致します。盗難や紛失、破損等があった場合、甲は一切の責任を負いかねます。
+              </p>
 
-              <!-- 第15条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">15. 設備・備品の損害賠償</strong>
-                <p class="text-neutral-600 text-[11px]">設備、備品の取り扱いは十分お気をつけください。万が一、汚損・破損・紛失などがあった場合、修理費等の実費を別途請求させていただきます。</p>
-              </div>
+              <p>
+                14. 使用後は、掃除と原状回復をお願い致します。テーブルやイスなどレイアウト変更を行った場合は、必ず規定のレイアウトに戻し、調理器具、道具類等は元の場所にお戻しください。
+              </p>
 
-              <!-- 第16条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">16. 造作・工作の禁止</strong>
-                <p class="text-neutral-600 text-[11px]">当施設の床、壁、天井等に釘・強力なテープ等はご使用できません。</p>
-              </div>
+              <p>
+                15. 設備、備品の取り扱いは十分お気をつけください。万が一、汚損・破損・紛失などがあった場合、修理費等の実費を別途請求させていただきます。
+              </p>
 
-              <!-- 第17条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">17. 食材・消耗品の自己手配</strong>
-                <p class="text-neutral-600 text-[11px]">使用する食材及び調味料、消耗品等は必ず利用者側でご準備ください。</p>
-              </div>
+              <p>
+                16. 当施設の床、壁、天井等に釘・強力なテープ等はご使用できません。
+              </p>
 
-              <!-- 第18条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">18. 荷物等の事前預かり不可</strong>
-                <p class="text-neutral-600 text-[11px]">原則として、食材、道具、機材などを事前にお預かりすることはできません。ご利用時間内での搬入、受け取りをお願い致します。</p>
-              </div>
+              <p>
+                17. 使用する食材及び調味料、消耗品等は必ず利用者側でご準備ください。
+              </p>
 
-              <!-- 第19条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">19. 施設内事故・ケガの免責</strong>
-                <p class="text-neutral-600 text-[11px]">当施設内での事故・ケガ等について、甲は一切の責任を負いかねます。熱機器・刃物等の取扱いには十分お気をつけください。</p>
-              </div>
+              <p>
+                18. 原則として、食材、道具、機材などを事前にお預かりすることはできません。ご利用時間内での搬入、受け取りをお願い致します。
+              </p>
 
-              <!-- 第20条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">20. 人的・物的損害の賠償責任</strong>
-                <p class="text-neutral-600 text-[11px]">利用中（搬入を含む）の人的・物的損害に対する賠償責任は利用者側の負担となります。</p>
-              </div>
+              <p>
+                19. 当施設内での事故・ケガ等について、甲は一切の責任を負いかねます。熱機器・刃物等の取扱いには十分お気をつけください。
+              </p>
 
-              <!-- 第21条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">21. 衛生面・食中毒・持ち帰り品の自己責任</strong>
-                <p class="text-neutral-600 text-[11px]">食中毒などの衛生面、参加者やお子様の安全にも十分ご注意ください。料理講座などで調理されたお持ち帰り品は自己責任で行ってください。</p>
-              </div>
+              <p>
+                20. 利用中（搬入を含む）の人的・物的損害に対する賠償責任は利用者側の負担となります。
+              </p>
 
-              <!-- 第22条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">22. 利用責任者の常駐と避難誘導</strong>
-                <p class="text-neutral-600 text-[11px]">利用責任者は必ず常駐するものとし、警備や参加者・来場者の整理及び避難誘導については利用者の責任で行ってください。</p>
-              </div>
+              <p>
+                21. 食中毒などの衛生面、参加者やお子様の安全にも十分ご注意ください。料理講座などで調理されたお持ち帰り品は自己責任で行ってください。
+              </p>
 
-              <!-- 第23条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">23. 残材・生ごみ等の持ち帰り</strong>
-                <p class="text-neutral-600 text-[11px]">ご利用にあたり発生した残材や生ごみ等は、全てお持ち帰りください。</p>
-              </div>
+              <p>
+                22. 利用責任者は必ず常駐するものとし、警備や参加者・来場者の整理及び避難誘導については利用者の責任で行ってください。
+              </p>
 
-              <!-- 第24条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">24. 持ち込み食材の完全撤収と残置物の処分</strong>
-                <p class="text-neutral-600 text-[11px]">ご利用終了後、持ち込んだ食材や調味料等は必ず全てお持ち帰りください。もし冷蔵庫、冷凍庫等に残置された場合は全て処分させていただきます。</p>
-              </div>
+              <p>
+                23. ご利用にあたり発生した残材や生ごみ等は、全てお持ち帰りください。
+              </p>
 
-              <!-- 第25条 -->
-              <div class="pt-3">
-                <strong class="text-neutral-900 font-bold block mb-0.5">25. 次回利用のお断り</strong>
-                <p class="text-neutral-600 text-[11px]">利用状況により、当利用規約を遵守いただけないと判断した場合（破損・汚損・迷惑行為など）、次回以降のご利用をお断りさせていただく場合がございます。</p>
-              </div>
+              <p>
+                24. ご利用終了後、持ち込んだ食材や調味料等は必ず全てお持ち帰りください。もし冷蔵庫、冷凍庫等に残置された場合は全て処分させていただきます。
+              </p>
 
+              <p>
+                25. 利用状況により、当利用規約を遵守いただけないと判断した場合（破損・汚損・迷惑行為など）、次回以降のご利用をお断りさせていただく場合がございます。
+              </p>
+
+              <p class="text-[11px] text-neutral-500 pt-3 border-t border-neutral-100">
+                ※本利用規約は予告なく変更される場合がありますのであらかじめご了承ください。
+              </p>
             </div>
           </div>
         </section>
@@ -1490,22 +1373,67 @@
           <textarea id="form-message" rows="3" placeholder="使用したい機材（オーブン・ミキサー等）、当日の搬入予定、レイアウト希望などがあればご自由にご記入ください。" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]"></textarea>
         </div>
 
-        <!-- 【要件1】利用規約の同意必須化チェックボックス（送信ボタン直前） -->
-        <div class="p-3 bg-neutral-50 border border-neutral-200 rounded-lg space-y-2">
-          <div class="flex items-start gap-2">
-            <input type="checkbox" id="form-terms" class="mt-0.5 w-4 h-4 text-[#2892d8] border-neutral-300 rounded cursor-pointer focus:ring-[#2892d8]">
-            <label for="form-terms" class="text-xs text-neutral-700 cursor-pointer select-none leading-relaxed">
-              <button type="button" onclick="openTermsDetailModal()" class="text-[#2892d8] font-bold underline hover:text-[#207cb9]">
-                「Shonandai Kitchen Studio 利用規約兼申込書（全25条）」
-              </button>
-              の内容を確認し、同意の上、利用を申し込みます。 <span class="text-red-500 font-bold">*</span>
-            </label>
+        <!-- 【要件1】利用規約兼申込書（添付文章そのまま表示・別タブ遷移なし） -->
+        <div class="space-y-1.5 pt-1">
+          <label class="block font-semibold text-neutral-800">
+            Shonandai Kitchen Studio 利用規約兼申込書
+          </label>
+          <div class="h-44 overflow-y-auto p-3 bg-neutral-50 border border-neutral-300 rounded text-neutral-800 text-[11px] leading-relaxed space-y-3 select-text shadow-inner">
+            <p class="font-bold text-neutral-900 border-b border-neutral-200 pb-1 text-center">
+              Shonandai Kitchen Studio利用規約兼申込書
+            </p>
+            <p>
+              株式会社APRECIO（以下「甲」という。）の運営するShonandai Kitchen Studio（以下「当施設」という。）について、貸スタジオとして撮影・料理教室・ワークショップ・イベント・シェアキッチン・オンライン講座・セミナーなどを目的としたご利用を原則と致します。飲食店営業及び菓子製造業の営業許可を取得していますので、営業許可の範囲内でのご利用も可能です。事前に正確なご利用内容をお知らせください。当該内容によりご利用を承れない場合がありますのでご了承ください。
+            </p>
+            <div>
+              <p class="font-bold text-neutral-900">1. 【ご利用基本情報】</p>
+              <div class="pl-2 space-y-1 mt-0.5 text-neutral-700">
+                <p>① ご利用料金<br>Shonandai Kitchen Studio 料金表のとおり</p>
+                <p>② ご利用時間<br>午前9時から午後9時まで</p>
+                <p>③ 設備<br>システムキッチン、スチームオーブン1台、冷蔵庫1台<br>テーブル3つ（80cm×100cm 2つ、80cm×200cm 1つ）・イス10脚・照明・食器・グラスなど<br>当施設面積 36.52㎡（1階のキッチン部分 17.12㎡、ダイニング部分 19.40㎡、トイレ）<br>※駐車場のご利用については、ご相談ください。</p>
+                <p>④ お問合せ先<br>当利用規約をご確認の上、info@shonandai-kitchen-studio.jp 宛にご希望の日時・用途をお問い合わせください。</p>
+              </div>
+            </div>
+            <p>2. 飲食店営業、菓子製造業、食のイベント、料理教室など、食品の製造や調理した食品の提供や販売をする場合は、食品衛生責任者の資格を取得している方が1名以上常駐していただくことを条件としています。ご利用前に「食品衛生責任者」養成講座を修了されていることの証明をご提示ください。</p>
+            <p>3. 最初のご利用の場合は、まずはお問い合せください。当施設を内見又は相談していただき、スタッフから概要を説明させていただくことをお願いしております。</p>
+            <div>
+              <p>4. 予約確定後、お客様のご都合でキャンセルとなった場合、キャンセルポリシーのとおり料金が発生致しますのでご了承ください。</p>
+              <div class="pl-2 mt-0.5 text-neutral-700 space-y-0.5">
+                <p class="font-bold text-neutral-800">【キャンセルポリシー】</p>
+                <p>ご利用の2週間前までに連絡の場合 利用料金の20%</p>
+                <p>ご利用の1週間前までに連絡の場合 利用料金の50%</p>
+                <p>ご利用の3日前〜当日の連絡の場合 利用料金の100%</p>
+              </div>
+            </div>
+            <p>5. ご利用は、入室・準備〜片付け・引渡確認までをご予約いただいた利用時間内でお願い致します。<br>ご予約時間内で開始・終了した場合は、開始時間・終了時間にかかわらず、ご予約時間での利用料金となりますのでご了承ください。</p>
+            <p>6. ご予約開始時間の15分前より入室いただけます。ご予約時間より30分以上早い入室は、延長の対象となりますのでご了承ください。</p>
+            <p>7. 当日の状況により延長をご希望の場合は、可能な範囲で対応させていただきますのでご相談ください。<br>延長料金：30分単位（使用する曜日・時間帯により料金が異なります）</p>
+            <p>8. 当施設利用料については、期日までに請求書記載の銀行口座へ振込にてお支払いをお願い致します。振込手数料はお客様ご負担でお願い致します。</p>
+            <p>9. 承認のない物品の販売、営業行為、宗教の勧誘、違法販売セミナー、その他法律に反する目的によるご利用、公序良俗に反するご利用はお断り致します。</p>
+            <p>10. 申込み時と利用内容が異なる場合、当日でもご利用をお断りする場合がありますのでお気をつけください。その場合、返金はできませんのでご了承ください。</p>
+            <p>11. キッチンスタジオ周辺に迷惑を及ぼす恐れのある行為はご遠慮ください（大声、大音量のオーディオ、勧誘等）。</p>
+            <p>12. 当施設、敷地及び周辺道路は禁煙です。</p>
+            <p>13. 荷物・貴重品などはご利用者の責任で管理をお願い致します。盗難や紛失、破損等があった場合、甲は一切の責任を負いかねます。</p>
+            <p>14. 使用後は、掃除と原状回復をお願い致します。テーブルやイスなどレイアウト変更を行った場合は、必ず規定のレイアウトに戻し、調理器具、道具類等は元の場所にお戻しください。</p>
+            <p>15. 設備、備品の取り扱いは十分お気をつけください。万が一、汚損・破損・紛失などがあった場合、修理費等の実費を別途請求させていただきます。</p>
+            <p>16. 当施設の床、壁、天井等に釘・強力なテープ等はご使用できません。</p>
+            <p>17. 使用する食材及び調味料、消耗品等は必ず利用者側でご準備ください。</p>
+            <p>18. 原則として、食材、道具、機材などを事前にお預かりすることはできません。ご利用時間内での搬入、受け取りをお願い致します。</p>
+            <p>19. 当施設内での事故・ケガ等について、甲は一切の責任を負いかねます。熱機器・刃物等の取扱いには十分お気をつけください。</p>
+            <p>20. 利用中（搬入を含む）の人的・物的損害に対する賠償責任は利用者側の負担となります。</p>
+            <p>21. 食中毒などの衛生面、参加者やお子様の安全にも十分ご注意ください。料理講座などで調理されたお持ち帰り品は自己責任で行ってください。</p>
+            <p>22. 利用責任者は必ず常駐するものとし、警備や参加者・来場者の整理及び避難誘導については利用者の責任で行ってください。</p>
+            <p>23. ご利用にあたり発生した残材や生ごみ等は、全てお持ち帰りください。</p>
+            <p>24. ご利用終了後、持ち込んだ食材や調味料等は必ず全てお持ち帰りください。もし冷蔵庫、冷凍庫等に残置された場合は全て処分させていただきます。</p>
+            <p>25. 利用状況により、当利用規約を遵守いただけないと判断した場合（破損・汚損・迷惑行為など）、次回以降のご利用をお断りさせていただく場合がございます。</p>
+            <p class="text-[10px] text-neutral-500 pt-1 border-t border-neutral-200">※本利用規約は予告なく変更される場合がありますのであらかじめご了承ください。</p>
           </div>
-          <div class="flex items-center justify-between text-[11px] text-neutral-500 pt-1.5 border-t border-neutral-200/60">
-            <span>※ キャンセル料・利用時間・衛生責任者等の規定を含みます</span>
-            <button type="button" onclick="openTermsDetailModal()" class="text-[#2892d8] font-bold hover:underline flex items-center gap-1">
-              <i data-lucide="file-text" class="w-3.5 h-3.5"></i> 規約全文（全25条）を読む
-            </button>
+
+          <div class="flex items-start gap-2 pt-1.5">
+            <input type="checkbox" id="form-terms" class="mt-0.5 w-4 h-4 text-[#2892d8] border-neutral-300 rounded cursor-pointer focus:ring-[#2892d8]">
+            <label for="form-terms" class="text-xs text-neutral-900 font-semibold cursor-pointer select-none leading-relaxed">
+              上記の「利用規約兼申込書」の内容を確認し、同意します。 <span class="text-red-500 font-bold">*</span>
+            </label>
           </div>
           <p id="terms-error-msg" class="text-[11px] text-red-600 hidden font-semibold">
             ※ 送信するには利用規約への同意が必要です。
@@ -1522,193 +1450,6 @@
           </p>
         </div>
       </form>
-    </div>
-  </div>
-
-  <!-- 3. TERMS DETAIL MODAL (利用規約兼申込書 全文ポップアップ) -->
-  <div id="terms-detail-modal" class="fixed inset-0 z-50 bg-black/75 hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-lg max-w-2xl w-full p-6 shadow-2xl relative my-8 border border-neutral-300 flex flex-col max-h-[90vh]">
-      <!-- ヘッダー -->
-      <div class="flex items-start justify-between pb-3 border-b border-neutral-200 mb-3">
-        <div>
-          <div class="flex items-center gap-2">
-            <i data-lucide="file-text" class="w-5 h-5 text-[#2892d8]"></i>
-            <h3 class="text-base font-bold text-neutral-900">Shonandai Kitchen Studio 利用規約兼申込書</h3>
-          </div>
-          <p class="text-[11px] text-neutral-500 mt-0.5">運営：株式会社APRECIO（以下「甲」という。） / 全25条</p>
-        </div>
-        <button onclick="closeTermsDetailModal()" class="text-neutral-400 hover:text-black p-1.5 rounded hover:bg-neutral-100 transition">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <!-- スクロール本文（全25条） -->
-      <div class="overflow-y-auto pr-2 text-xs text-neutral-700 leading-relaxed space-y-4 flex-1">
-        <div class="bg-neutral-50 border border-neutral-200 p-3 rounded text-[11px]">
-          株式会社APRECIO（以下「甲」という。）の運営するShonandai Kitchen Studio（以下「当施設」という。）について、貸スタジオとして撮影・料理教室・ワークショップ・イベント・シェアキッチン・オンライン講座・セミナーなどを目的としたご利用を原則と致します。飲食店営業及び菓子製造業の営業許可を取得していますので、営業許可の範囲内でのご利用も可能です。事前に正確なご利用内容をお知らせください。当該内容によりご利用を承れない場合がありますのでご了承ください。
-        </div>
-
-        <div class="space-y-3 divide-y divide-neutral-100 text-[11px]">
-          <div class="pt-2 first:pt-0">
-            <strong class="text-neutral-900 font-bold block mb-1">1. 【ご利用基本情報】</strong>
-            <ul class="list-none space-y-1 text-neutral-600 pl-2">
-              <li><strong>① ご利用料金：</strong>Shonandai Kitchen Studio 料金表のとおり</li>
-              <li><strong>② ご利用時間：</strong>午前9時から午後9時まで</li>
-              <li><strong>③ 設備：</strong>システムキッチン、スチームオーブン1台、冷蔵庫1台、テーブル3つ（80cm×100cm 2つ、80cm×200cm 1つ）・イス10脚・照明・食器・グラスなど。当施設面積 36.52㎡（1階のキッチン部分 17.12㎡、ダイニング部分 19.40㎡、トイレ） ※駐車場のご利用については、ご相談ください。</li>
-              <li><strong>④ お問合せ先：</strong>当利用規約をご確認の上、info@shonandai-kitchen-studio.jp 宛にご希望の日時・用途をお問い合わせください。</li>
-            </ul>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">2. 食品衛生責任者の常駐条件</strong>
-            <p class="text-neutral-600">飲食店営業、菓子製造業、食のイベント、料理教室など、食品の製造や調理した食品の提供や販売をする場合は、食品衛生責任者の資格を取得している方が1名以上常駐していただくことを条件としています。ご利用前に「食品衛生責任者」養成講座を修了されていることの証明をご提示ください。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">3. 初回のご利用・内見</strong>
-            <p class="text-neutral-600">最初のご利用の場合は、まずはお問い合せください。当施設を内見又は相談していただき、スタッフから概要を説明させていただくことをお願いしております。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">4. キャンセルポリシー</strong>
-            <p class="text-neutral-600 mb-1.5">予約確定後、お客様のご都合でキャンセルとなった場合、キャンセルポリシーのとおり料金が発生致しますのでご了承ください。</p>
-            <div class="border border-neutral-200 rounded overflow-hidden text-[10px]">
-              <div class="grid grid-cols-2 bg-neutral-100 p-1.5 font-bold text-neutral-800 border-b border-neutral-200">
-                <span>ご連絡時期</span>
-                <span class="text-right">キャンセル料金</span>
-              </div>
-              <div class="grid grid-cols-2 p-1.5 border-b border-neutral-100">
-                <span>ご利用の2週間前までに連絡の場合</span>
-                <span class="text-right font-semibold">利用料金の 20%</span>
-              </div>
-              <div class="grid grid-cols-2 p-1.5 border-b border-neutral-100">
-                <span>ご利用の1週間前までに連絡の場合</span>
-                <span class="text-right font-semibold">利用料金の 50%</span>
-              </div>
-              <div class="grid grid-cols-2 p-1.5 bg-rose-50/60">
-                <span class="font-semibold text-neutral-900">ご利用の3日前〜当日の連絡の場合</span>
-                <span class="text-right font-bold text-rose-600">利用料金の 100%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">5. 利用時間内の厳守と料金適用</strong>
-            <p class="text-neutral-600">ご利用は、入室・準備〜片付け・引渡確認までをご予約いただいた利用時間内でお願い致します。ご予約時間内で開始・終了した場合は、開始時間・終了時間にかかわらず、ご予約時間での利用料金となりますのでご了承ください。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">6. 入室可能時間</strong>
-            <p class="text-neutral-600">ご予約開始時間の15分前より入室いただけます。ご予約時間より30分以上早い入室は、延長の対象となりますのでご了承ください。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">7. 当日の延長対応</strong>
-            <p class="text-neutral-600">当日の状況により延長をご希望の場合は、可能な範囲で対応させていただきますのでご相談ください。延長料金：30分単位（使用する曜日・時間帯により料金が異なります）。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">8. 利用料のお支払い（銀行振込）</strong>
-            <p class="text-neutral-600">当施設利用料については、期日までに請求書記載の銀行口座へ振込にてお支払いをお願い致します。振込手数料はお客様ご負担でお願い致します。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">9. 禁止行為・利用制限</strong>
-            <p class="text-neutral-600">承認のない物品の販売、営業行為、宗教の勧誘、違法販売セミナー、その他法律に反する目的によるご利用、公序良俗に反するご利用はお断り致します。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">10. 申込内容との相違</strong>
-            <p class="text-neutral-600">申込み時と利用内容が異なる場合、当日でもご利用をお断りする場合がありますのでお気をつけください。その場合、返金はできませんのでご了承ください。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">11. 近隣・周辺への配慮</strong>
-            <p class="text-neutral-600">キッチンスタジオ周辺に迷惑を及ぼす恐れのある行為はご遠慮ください（大声、大音量のオーディオ、勧誘等）。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">12. 完全禁煙</strong>
-            <p class="text-neutral-600">当施設、敷地及び周辺道路は禁煙です。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">13. 荷物・貴重品の自己管理責任</strong>
-            <p class="text-neutral-600">荷物・貴重品などはご利用者の責任で管理をお願い致します。盗難や紛失、破損等があった場合、甲は一切の責任を負いかねます。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">14. 清掃と原状回復</strong>
-            <p class="text-neutral-600">使用後は、掃除と原状回復をお願い致します。テーブルやイスなどレイアウト変更を行った場合は、必ず規定のレイアウトに戻し、調理器具、道具類等は元の場所にお戻しください。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">15. 設備・備品の損害賠償</strong>
-            <p class="text-neutral-600">設備、備品の取り扱いは十分お気をつけください。万が一、汚損・破損・紛失などがあった場合、修理費等の実費を別途請求させていただきます。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">16. 造作・工作の禁止</strong>
-            <p class="text-neutral-600">当施設の床、壁、天井等に釘・強力なテープ等はご使用できません。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">17. 食材・消耗品の自己手配</strong>
-            <p class="text-neutral-600">使用する食材及び調味料、消耗品等は必ず利用者側でご準備ください。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">18. 荷物等の事前預かり不可</strong>
-            <p class="text-neutral-600">原則として、食材、道具、機材などを事前にお預かりすることはできません。ご利用時間内での搬入、受け取りをお願い致します。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">19. 施設内事故・ケガの免責</strong>
-            <p class="text-neutral-600">当施設内での事故・ケガ等について、甲は一切の責任を負いかねます。熱機器・刃物等の取扱いには十分お気をつけください。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">20. 人的・物的損害の賠償責任</strong>
-            <p class="text-neutral-600">利用中（搬入を含む）の人的・物的損害に対する賠償責任は利用者側の負担となります。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">21. 衛生面・食中毒・持ち帰り品の自己責任</strong>
-            <p class="text-neutral-600">食中毒などの衛生面、参加者やお子様の安全にも十分ご注意ください。料理講座などで調理されたお持ち帰り品は自己責任で行ってください。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">22. 利用責任者の常駐と避難誘導</strong>
-            <p class="text-neutral-600">利用責任者は必ず常駐するものとし、警備や参加者・来場者の整理及び避難誘導については利用者の責任で行ってください。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">23. 残材・生ごみ等の持ち帰り</strong>
-            <p class="text-neutral-600">ご利用にあたり発生した残材や生ごみ等は、全てお持ち帰りください。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">24. 持ち込み食材の完全撤収と残置物の処分</strong>
-            <p class="text-neutral-600">ご利用終了後、持ち込んだ食材や調味料等は必ず全てお持ち帰りください。もし冷蔵庫、冷凍庫等に残置された場合は全て処分させていただきます。</p>
-          </div>
-
-          <div class="pt-2.5">
-            <strong class="text-neutral-900 font-bold block mb-0.5">25. 次回利用のお断り</strong>
-            <p class="text-neutral-600">利用状況により、当利用規約を遵守いただけないと判断した場合（破損・汚損・迷惑行為など）、次回以降のご利用をお断りさせていただく場合がございます。</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- フッターアクション -->
-      <div class="pt-3 border-t border-neutral-200 mt-3 flex items-center justify-between gap-3">
-        <button type="button" onclick="closeTermsDetailModal()" class="px-4 py-2 border border-neutral-300 hover:bg-neutral-100 text-neutral-700 rounded text-xs transition">
-          閉じる
-        </button>
-        <button type="button" onclick="agreeTermsAndCloseModal()" class="px-5 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold rounded text-xs transition shadow flex items-center gap-1.5">
-          <i data-lucide="check" class="w-4 h-4"></i>
-          <span>規約に同意してチェックを入れる</span>
-        </button>
-      </div>
     </div>
   </div>
 
