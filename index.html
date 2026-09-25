@@ -1251,28 +1251,56 @@
           </div>
         </div>
 
-        <div>
-          <label class="block font-semibold text-neutral-800 mb-1">ご利用用途</label>
-          <div class="grid grid-cols-2 gap-2 text-neutral-700">
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="usage" value="菓子製造・仕込み"> 菓子製造・販売仕込み</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="usage" value="料理教室"> 料理教室・ワークショップ</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="usage" value="動画・写真撮影"> 料理・商品撮影/SNS</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="usage" value="食事会・懇親会"> 食事会・懇親会</label>
+        <!-- 【要件2】ご利用人数 & 主な利用用途 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label class="block font-semibold text-neutral-800 mb-1">
+              ご利用人数 <span class="text-[#2892d8] font-bold">*</span>
+              <span class="text-[10px] text-neutral-500 font-normal">（最大10名推奨）</span>
+            </label>
+            <div class="relative">
+              <input type="number" id="form-guests" min="1" max="30" value="1" required class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8] pr-8">
+              <span class="absolute right-3 top-2 text-xs text-neutral-500 pointer-events-none">名</span>
+            </div>
+          </div>
+          <div>
+            <label class="block font-semibold text-neutral-800 mb-1">主な利用用途 <span class="text-[#2892d8] font-bold">*</span></label>
+            <select id="form-usage-category" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+              <option value="菓子製造・仕込み販売">菓子製造・仕込み販売</option>
+              <option value="料理教室・ワークショップ">料理教室・ワークショップ</option>
+              <option value="料理撮影・商品SNS撮影">料理撮影・商品SNS撮影</option>
+              <option value="食事会・プライベートパーティー">食事会・プライベートパーティー</option>
+              <option value="その他">その他（ご要望欄に詳細をご記入ください）</option>
+            </select>
           </div>
         </div>
 
+        <!-- 【要件2】その他のご要望・使用予定機材 -->
         <div>
-          <label class="block font-semibold text-neutral-800 mb-1">お問い合わせ・ご要望内容</label>
-          <textarea id="form-message" rows="3" placeholder="希望時間帯（例: 10:00〜14:00）、使用したい機材、定期利用の頻度などご自由にご記入ください。" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]"></textarea>
+          <label class="block font-semibold text-neutral-800 mb-1">その他のご要望・使用機材</label>
+          <textarea id="form-message" rows="3" placeholder="使用したい機材（オーブン・ミキサー等）、当日の搬入予定、レイアウト希望などがあればご自由にご記入ください。" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]"></textarea>
         </div>
 
-        <div class="pt-2">
-          <button type="submit" id="submit-btn" class="w-full py-3 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold rounded transition shadow flex items-center justify-center gap-1.5 text-xs">
+        <!-- 【要件1】利用規約の同意必須化チェックボックス（送信ボタン直前） -->
+        <div class="p-3 bg-neutral-50 border border-neutral-200 rounded-lg space-y-1.5">
+          <div class="flex items-start gap-2">
+            <input type="checkbox" id="form-terms" class="mt-0.5 w-4 h-4 text-[#2892d8] border-neutral-300 rounded cursor-pointer focus:ring-[#2892d8]">
+            <label for="form-terms" class="text-xs text-neutral-700 cursor-pointer select-none leading-relaxed">
+              <a href="#rules" target="_blank" class="text-[#2892d8] font-bold hover:underline">利用規約および注意事項</a>を確認し、同意します。 <span class="text-red-500 font-bold">*</span>
+            </label>
+          </div>
+          <p id="terms-error-msg" class="text-[11px] text-red-600 hidden font-semibold">
+            ※ 送信するには利用規約への同意が必要です。
+          </p>
+        </div>
+
+        <div class="pt-1">
+          <button type="submit" id="submit-btn" disabled class="w-full py-3 bg-[#2892d8] opacity-50 cursor-not-allowed text-white font-bold rounded transition shadow flex items-center justify-center gap-1.5 text-xs">
             <i data-lucide="send" class="w-4 h-4"></i>
-            <span>送信する（管理者へ自動通知・24h以内返信）</span>
+            <span>予約・利用を申し込む（銀行振込・管理者が確認）</span>
           </button>
           <p class="text-[10px] text-neutral-500 text-center mt-2">
-            送信完了と同時に管理者宛てに即時通知メールが送信されます。
+            ※ 送信完了後、折り返しご請求内容とお振込先口座をご案内いたします。
           </p>
         </div>
       </form>
@@ -1770,13 +1798,52 @@
       "無料内見・下見のみ": { unit: 0, defaultHours: 1, total: 0 }
     };
 
+    // 6.1 利用規約チェックボックス連動バリデーション
+    document.addEventListener("DOMContentLoaded", function () {
+      initTermsValidation();
+    });
+
+    function initTermsValidation() {
+      const termsCheckbox = document.getElementById("form-terms");
+      const submitBtn = document.getElementById("submit-btn");
+      const termsErrorMsg = document.getElementById("terms-error-msg");
+
+      if (termsCheckbox && submitBtn) {
+        termsCheckbox.addEventListener("change", function () {
+          if (this.checked) {
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
+            submitBtn.classList.add("hover:bg-[#207cb9]", "cursor-pointer");
+            if (termsErrorMsg) termsErrorMsg.classList.add("hidden");
+          } else {
+            submitBtn.disabled = true;
+            submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+            submitBtn.classList.remove("hover:bg-[#207cb9]", "cursor-pointer");
+          }
+        });
+      }
+    }
+
     async function submitForm(e) {
       e.preventDefault();
+
+      const termsCheckbox = document.getElementById("form-terms");
       const submitBtn = document.getElementById("submit-btn");
+      const termsErrorMsg = document.getElementById("terms-error-msg");
+
+      // 二重バリデーション（規約同意チェック）
+      if (!termsCheckbox || !termsCheckbox.checked) {
+        if (termsErrorMsg) termsErrorMsg.classList.remove("hidden");
+        if (termsCheckbox) termsCheckbox.focus();
+        alert("利用規約をご確認の上、「同意します」にチェックを入れてください。");
+        return;
+      }
+
       submitBtn.disabled = true;
       submitBtn.innerHTML = `<span>送信処理中...</span>`;
 
-      const usages = Array.from(document.querySelectorAll('input[name="usage"]:checked')).map(cb => cb.value).join(', ') || "一般利用";
+      const usageCategory = document.getElementById("form-usage-category") ? document.getElementById("form-usage-category").value : "一般利用";
+      const guestsVal = parseInt(document.getElementById("form-guests")?.value, 10) || 1;
       const nameVal = document.getElementById("form-name").value.trim();
       const emailVal = document.getElementById("form-email").value.trim();
       const telVal = document.getElementById("form-tel").value.trim();
@@ -1811,13 +1878,15 @@
         email: emailVal,
         tel: telVal,
         plan: planVal,
+        guests: guestsVal,
         date: dateVal,
         startTime: calcStartTime.slice(0, 5),
         endTime: calcEndTime.slice(0, 5),
-        usage: usages,
+        usage: usageCategory,
         message: messageVal || "なし",
         estimatedAmount: totalEstimated,
         durationHours: calcDuration,
+        termsAgreed: true,
         createdAt: new Date().toLocaleString("ja-JP"),
         status: "新規受付"
       };
@@ -1844,7 +1913,9 @@
               email: emailVal,
               tel: telVal,
               plan_id: planVal,
-              usage_type: usages,
+              guest_count: guestsVal,
+              usage_type: usageCategory,
+              terms_agreed: true,
               reserved_date: dateVal,
               start_time: calcStartTime,
               end_time: calcEndTime,
@@ -1868,16 +1939,19 @@
       // 2. 管理者へのメール即時通知 (FormSubmit)
       try {
         const payload = new FormData();
-        payload.append("_subject", `【湘南台キッチンスタジオ】${nameVal}様より予約・問い合わせ (${planVal})`);
+        payload.append("_subject", `【湘南台キッチンスタジオ】${nameVal}様より予約・利用申込 (${planVal} / ${guestsVal}名)`);
         payload.append("管理ID", bookingId);
         payload.append("氏名・貴社名", nameVal);
         payload.append("メールアドレス", emailVal);
         payload.append("電話番号", telVal);
         payload.append("希望プラン", planVal);
+        payload.append("利用人数", `${guestsVal}名`);
         payload.append("利用希望日", dateVal);
-        payload.append("利用用途", usages);
-        payload.append("ご要望・詳細", messageVal || "なし");
-        payload.append("想定概算金額", `¥${rateInfo.total.toLocaleString()}`);
+        payload.append("利用時間帯", `${calcStartTime.slice(0, 5)} 〜 ${calcEndTime.slice(0, 5)} (${calcDuration}時間)`);
+        payload.append("利用用途", usageCategory);
+        payload.append("ご要望・機材", messageVal || "なし");
+        payload.append("想定概算金額", `¥${totalEstimated.toLocaleString()}（銀行振込案内予定）`);
+        payload.append("利用規約同意", "同意済み");
         payload.append("_template", "table");
         payload.append("_captcha", "false");
 
@@ -1890,13 +1964,15 @@
         console.warn("Mail forwarding warning:", err);
       }
 
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>送信する（管理者へ自動通知・24h以内返信）</span>`;
+      submitBtn.disabled = true;
+      submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+      submitBtn.classList.remove("hover:bg-[#207cb9]", "cursor-pointer");
+      submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>予約・利用を申し込む（銀行振込・管理者が確認）</span>`;
       lucide.createIcons();
 
       closeModal();
       document.getElementById("contact-form").reset();
-      showToast("お問い合わせ・予約リクエストを送信しました。24時間以内にご案内いたします。");
+      showToast("ご予約・お申込みを受け付けました。折り返しご請求・お振込先をご案内いたします。");
     }
 
     // 7. シェア・お気に入り・トースト機能
