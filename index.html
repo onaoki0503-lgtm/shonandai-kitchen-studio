@@ -520,19 +520,19 @@
           <!-- INTERACTIVE CALENDAR -->
           <div class="mt-8 pt-6 border-t border-neutral-100">
             <h3 class="text-xs sm:text-sm font-bold text-neutral-900 mb-3 flex items-center justify-between">
-              <span>空室カレンダー（2026年9月〜10月）</span>
+              <span id="calendar-range-title">空室カレンダー（今月〜次々月）</span>
               <span class="text-xs font-normal text-neutral-500">※日付をクリックして選択できます</span>
             </h3>
 
             <div class="bg-neutral-50 rounded p-4 border border-neutral-200">
               <!-- Calendar Header -->
               <div class="flex items-center justify-between mb-4">
-                <button onclick="prevMonth()" class="p-1 rounded hover:bg-neutral-200 text-neutral-700 transition">
-                  <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                <button id="calendar-prev-btn" type="button" class="p-1.5 rounded hover:bg-neutral-200 text-neutral-700 transition" aria-label="前月へ">
+                  <i data-lucide="chevron-left" class="w-4 h-4 pointer-events-none"></i>
                 </button>
                 <div id="calendar-month-label" class="font-bold text-neutral-900 text-xs sm:text-sm">2026年 9月</div>
-                <button onclick="nextMonth()" class="p-1 rounded hover:bg-neutral-200 text-neutral-700 transition">
-                  <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                <button id="calendar-next-btn" type="button" class="p-1.5 rounded hover:bg-neutral-200 text-neutral-700 transition" aria-label="次月へ">
+                  <i data-lucide="chevron-right" class="w-4 h-4 pointer-events-none"></i>
                 </button>
               </div>
 
@@ -1488,9 +1488,12 @@
 
 
 
-    // 3. カレンダー描画（空室率と記号の正確な連動）
-    let currentYear = 2026;
-    let currentMonth = 9;
+    // 3. カレンダー描画（今月・次月・次々月の3ヶ月間対応 ＆ 記号連動）
+    const _nowCal = new Date();
+    let currentYear = _nowCal.getFullYear();
+    let currentMonth = _nowCal.getMonth() + 1; // 1〜12
+    const minMonthIndex = currentYear * 12 + (currentMonth - 1); // 今月 (M0)
+    const maxMonthIndex = minMonthIndex + 2; // 次々月 (M2: 3ヶ月目)
     let monthlyBookingsCache = {}; // { 'YYYY-MM-DD': boolean[24] }
 
     async function fetchMonthlyBookings(year, month) {
@@ -1622,24 +1625,79 @@
       }
     }
 
+    function updateMonthNavigationUI() {
+      const currIndex = currentYear * 12 + (currentMonth - 1);
+      const prevBtn = document.getElementById("calendar-prev-btn");
+      const nextBtn = document.getElementById("calendar-next-btn");
+
+      if (prevBtn) {
+        const canPrev = currIndex > minMonthIndex;
+        prevBtn.disabled = !canPrev;
+        if (!canPrev) {
+          prevBtn.classList.add("opacity-25", "cursor-not-allowed");
+          prevBtn.classList.remove("hover:bg-neutral-200");
+        } else {
+          prevBtn.classList.remove("opacity-25", "cursor-not-allowed");
+          prevBtn.classList.add("hover:bg-neutral-200");
+        }
+      }
+
+      if (nextBtn) {
+        const canNext = currIndex < maxMonthIndex;
+        nextBtn.disabled = !canNext;
+        if (!canNext) {
+          nextBtn.classList.add("opacity-25", "cursor-not-allowed");
+          nextBtn.classList.remove("hover:bg-neutral-200");
+        } else {
+          nextBtn.classList.remove("opacity-25", "cursor-not-allowed");
+          nextBtn.classList.add("hover:bg-neutral-200");
+        }
+      }
+
+      // カレンダータイトル期間表示の動的設定（今月〜次々月）
+      const rangeTitle = document.getElementById("calendar-range-title");
+      if (rangeTitle) {
+        const minD = new Date(_nowCal.getFullYear(), _nowCal.getMonth(), 1);
+        const maxD = new Date(_nowCal.getFullYear(), _nowCal.getMonth() + 2, 1);
+        rangeTitle.innerText = `空室カレンダー（${minD.getFullYear()}年${minD.getMonth() + 1}月〜${maxD.getFullYear()}年${maxD.getMonth() + 1}月）`;
+      }
+    }
+
     function renderCalendar() {
       const label = document.getElementById("calendar-month-label");
       if (label) label.innerText = `${currentYear}年 ${currentMonth}月`;
 
+      updateMonthNavigationUI();
       renderCalendarGrid();
       fetchMonthlyBookings(currentYear, currentMonth);
     }
 
     function prevMonth() {
-      if (currentMonth === 9) currentMonth = 8;
-      else if (currentMonth === 10) currentMonth = 9;
-      renderCalendar();
+      const currIndex = currentYear * 12 + (currentMonth - 1);
+      if (currIndex > minMonthIndex) {
+        currentMonth--;
+        if (currentMonth < 1) {
+          currentMonth = 12;
+          currentYear--;
+        }
+        renderCalendar();
+      }
     }
 
     function nextMonth() {
-      if (currentMonth === 9) currentMonth = 10;
-      renderCalendar();
+      const currIndex = currentYear * 12 + (currentMonth - 1);
+      if (currIndex < maxMonthIndex) {
+        currentMonth++;
+        if (currentMonth > 12) {
+          currentMonth = 1;
+          currentYear++;
+        }
+        renderCalendar();
+      }
     }
+
+    window.prevMonth = prevMonth;
+    window.nextMonth = nextMonth;
 
     // ================= 公開用 空き状況タイムライン連動 =================
     let publicSelectedDate = "2026-09-25"; // 初期選択日
@@ -1657,8 +1715,20 @@
       const parts = publicSelectedDate.split('-').map(Number);
       const d = new Date(parts[0], parts[1] - 1, parts[2]);
       d.setDate(d.getDate() + offset);
+
+      const newY = d.getFullYear();
+      const newM = d.getMonth() + 1;
+      const newIdx = newY * 12 + (newM - 1);
+
+      // 今月〜次々月の範囲内の場合はカレンダー月も同期
       publicSelectedDate = formatLocalDate(d);
       publicSelectedHours = []; // 日付変更時は選択リセット
+
+      if (newIdx >= minMonthIndex && newIdx <= maxMonthIndex) {
+        currentYear = newY;
+        currentMonth = newM;
+      }
+
       fetchAndRenderPublicTimeline(publicSelectedDate);
       renderCalendar(); // カレンダーの選択ハイライトも連動
     }
@@ -2576,6 +2646,22 @@
 
       const modalDate = document.getElementById("booking-date");
       if (modalDate) modalDate.value = today;
+
+      // 月送りボタンのクリックイベント冗長化
+      const prevBtn = document.getElementById("calendar-prev-btn");
+      if (prevBtn) {
+        prevBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          prevMonth();
+        });
+      }
+      const nextBtn = document.getElementById("calendar-next-btn");
+      if (nextBtn) {
+        nextBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          nextMonth();
+        });
+      }
 
       renderCalendar();
       fetchAndRenderPublicTimeline(today);
