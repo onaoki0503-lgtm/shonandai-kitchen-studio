@@ -636,9 +636,9 @@
               <!-- Legend -->
               <div class="mt-4 pt-3 border-t border-neutral-200 flex flex-wrap items-center justify-between gap-y-2 text-xs text-neutral-600">
                 <div class="flex items-center gap-3">
-                  <span class="flex items-center gap-1 font-bold text-emerald-600">◎ 空き余裕あり</span>
-                  <span class="flex items-center gap-1 text-[#2892d8] font-medium">◯ 空きあり</span>
-                  <span class="flex items-center gap-1 text-amber-600 font-medium">△ 残りわずか</span>
+                  <span class="flex items-center gap-1 font-bold text-emerald-600">◎ 空き余裕あり（80%以上）</span>
+                  <span class="flex items-center gap-1 text-[#2892d8] font-medium">◯ 空きあり（40〜79%）</span>
+                  <span class="flex items-center gap-1 text-amber-600 font-medium">△ 残りわずか（1〜39%）</span>
                   <span class="flex items-center gap-1 text-neutral-400">× 満室・受付終了</span>
                 </div>
                 <div class="flex items-center gap-2">
@@ -1589,15 +1589,93 @@
       }
     }
 
-    // 3. カレンダー描画
+    // 3. カレンダー描画（空室率と記号の正確な連動）
     let currentYear = 2026;
     let currentMonth = 9;
+    let monthlyBookingsCache = {}; // { 'YYYY-MM-DD': boolean[24] }
 
-    function renderCalendar() {
-      const label = document.getElementById("calendar-month-label");
-      label.innerText = `${currentYear}年 ${currentMonth}月`;
+    async function fetchMonthlyBookings(year, month) {
+      const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+      const lastDay = new Date(year, month, 0).getDate();
+      const endDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
 
+      if (supabaseClient) {
+        try {
+          let res = await supabaseClient
+            .from('public_bookings_calendar')
+            .select('date, start_time, end_time, status')
+            .gte('date', startDate)
+            .lte('date', endDate);
+
+          if (res.error || !res.data) {
+            res = await supabaseClient
+              .from('bookings')
+              .select('reserved_date, start_time, end_time, status')
+              .gte('reserved_date', startDate)
+              .lte('reserved_date', endDate)
+              .neq('status', 'CANCELLED')
+              .neq('status', 'キャンセル');
+          }
+
+          if (res.data) {
+            res.data.forEach(b => {
+              const dStr = b.date || b.reserved_date;
+              if (!dStr) return;
+              if (!monthlyBookingsCache[dStr]) {
+                monthlyBookingsCache[dStr] = new Array(24).fill(false);
+              }
+              if (b.start_time && b.end_time) {
+                const s = parseInt(b.start_time.split(':')[0], 10);
+                const e = parseInt(b.end_time.split(':')[0], 10);
+                for (let h = s; h < e; h++) {
+                  if (h >= 0 && h < 24) monthlyBookingsCache[dStr][h] = true;
+                }
+              }
+            });
+            // 予約データ反映後にカレンダーを再描画
+            renderCalendarGrid();
+          }
+        } catch (err) {
+          console.warn("Monthly bookings fetch fallback:", err);
+        }
+      }
+    }
+
+    // 空室率の計算と記号対応（一番空室率が高い日は◎）
+    function calculateDayVacancy(dateStr, isPast) {
+      if (isPast) {
+        return { symbol: "×", symbolClass: "text-neutral-300 font-bold", freeHours: 0, rate: 0, text: "受付終了" };
+      }
+
+      // 当該日の予約スロット（キャッシュにあれば使用、なければ初期全空き）
+      const bookedSlots = monthlyBookingsCache[dateStr] || new Array(24).fill(false);
+      
+      // 営業時間 9:00〜21:00 (12枠: h=9..20) の予約枠数をカウント
+      let bookedCount = 0;
+      for (let h = 9; h <= 20; h++) {
+        if (bookedSlots[h]) bookedCount++;
+      }
+      const freeHours = 12 - bookedCount;
+      const vacancyRate = Math.round((freeHours / 12) * 100); // 空室率（空き枠の割合 %）
+
+      if (freeHours === 0) {
+        // 満室
+        return { symbol: "×", symbolClass: "text-neutral-400 font-bold", freeHours: 0, rate: 0, text: "満室" };
+      } else if (vacancyRate >= 80) {
+        // 一番空室率が高い日（80%以上空き：10〜12時間空き）
+        return { symbol: "◎", symbolClass: "text-emerald-600 font-black", freeHours, rate: vacancyRate, text: "空き余裕あり" };
+      } else if (vacancyRate >= 40) {
+        // 空室率が中程度（40%〜79%空き：5〜9時間空き）
+        return { symbol: "◯", symbolClass: "text-[#2892d8] font-bold", freeHours, rate: vacancyRate, text: "空きあり" };
+      } else {
+        // 残りわずか（1%〜39%空き：1〜4時間空き）
+        return { symbol: "△", symbolClass: "text-amber-500 font-bold", freeHours, rate: vacancyRate, text: "残りわずか" };
+      }
+    }
+
+    function renderCalendarGrid() {
       const grid = document.getElementById("calendar-grid");
+      if (!grid) return;
       grid.innerHTML = "";
 
       const firstDay = new Date(currentYear, currentMonth - 1, 1).getDay();
@@ -1609,27 +1687,17 @@
         grid.appendChild(emptyCell);
       }
 
-      const todayDay = 24;
+      const todayStr = formatLocalDate(new Date());
+
       for (let day = 1; day <= daysInMonth; day++) {
         const cell = document.createElement("div");
-        const isPast = (currentMonth === 9 && day < todayDay);
-        const isToday = (currentMonth === 9 && day === todayDay);
-        
-        let symbol = "◎"; // 空いている（二重丸）
-        let symbolClass = "text-emerald-600 font-black";
-        if (isPast) {
-          symbol = "×"; // 過去・受付終了（バツ）
-          symbolClass = "text-neutral-300 font-bold";
-        } else if (day % 7 === 5) {
-          symbol = "△"; // 残りわずか（三角）
-          symbolClass = "text-amber-500 font-bold";
-        } else if (day % 3 === 0) {
-          symbol = "◯"; // 軽く空いている（丸）
-          symbolClass = "text-[#2892d8] font-bold";
-        }
-
         const dateStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const isPast = (dateStr < todayStr);
+        const isToday = (dateStr === todayStr);
         const isSelected = (publicSelectedDate === dateStr);
+
+        // 空室率に応じた記号・文字色の取得
+        const { symbol, symbolClass, freeHours, rate, text } = calculateDayVacancy(dateStr, isPast);
 
         cell.className = `p-1.5 rounded border transition cursor-pointer flex flex-col items-center justify-between min-h-[46px] ${
           isSelected 
@@ -1638,6 +1706,10 @@
               ? 'border-[#2892d8] bg-white font-bold' 
               : 'border-neutral-200 hover:border-[#2892d8] bg-white'
         } ${isPast ? 'opacity-40 cursor-not-allowed bg-neutral-100' : ''}`;
+
+        cell.title = isPast 
+          ? `${dateStr} は過去の日付のため予約できません` 
+          : `${dateStr}: 空き ${freeHours}時間 / 空室率 ${rate}% (${text}: ${symbol})`;
 
         cell.innerHTML = `
           <div class="text-[11px] ${isSelected ? 'font-black text-[#2892d8]' : isToday ? 'font-black text-[#2892d8]' : 'text-neutral-700'}">${day}</div>
@@ -1649,6 +1721,14 @@
         }
         grid.appendChild(cell);
       }
+    }
+
+    function renderCalendar() {
+      const label = document.getElementById("calendar-month-label");
+      if (label) label.innerText = `${currentYear}年 ${currentMonth}月`;
+
+      renderCalendarGrid();
+      fetchMonthlyBookings(currentYear, currentMonth);
     }
 
     function prevMonth() {
@@ -1902,6 +1982,10 @@
       if (statText) {
         statText.innerHTML = `営業時間 9:00〜21:00 ｜ 空き枠: <strong class="text-emerald-700">${freeInBusinessHours}時間</strong> / 予約済: <strong class="text-neutral-600">${bookedInBusinessHours}時間</strong>`;
       }
+
+      // キャッシュを更新し、カレンダー上の該当日記号（◎・◯・△・×）も即時同期
+      monthlyBookingsCache[targetDate] = [...currentDayBookedSlots];
+      renderCalendarGrid();
     }
 
 
