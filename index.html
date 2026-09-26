@@ -437,23 +437,12 @@
 
         <!-- CALENDAR & PRICING -->
         <section id="calendar-section" class="bg-white rounded-lg p-6 border border-neutral-200 scroll-mt-24">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-neutral-100 gap-2">
-            <div>
-              <h2 class="text-base font-bold text-neutral-900 flex items-center gap-2">
-                <i data-lucide="calendar-check" class="w-4 h-4 text-[#2892d8]"></i>
-                料金プラン ＆ 空室カレンダー
-              </h2>
-              <p class="text-xs text-neutral-500 mt-0.5">空き状況の確認や、用途に合わせたお得なパックプランをご用意しております。</p>
-            </div>
-            <!-- モード切り替えタブ -->
-            <div class="flex bg-neutral-100 p-1 rounded text-xs font-semibold self-start sm:self-auto border border-neutral-200">
-              <button id="tab-hourly" onclick="switchPriceTab('hourly')" class="px-3.5 py-1.5 rounded bg-[#2892d8] text-white transition shadow-sm">
-                時間単位で利用
-              </button>
-              <button id="tab-pack" onclick="switchPriceTab('pack')" class="px-3.5 py-1.5 rounded text-neutral-600 hover:text-[#2892d8] transition">
-                パック・1日貸切
-              </button>
-            </div>
+          <div class="pb-3 border-b border-neutral-100">
+            <h2 class="text-base font-bold text-neutral-900 flex items-center gap-2">
+              <i data-lucide="calendar-check" class="w-4 h-4 text-[#2892d8]"></i>
+              料金プラン ＆ 空室カレンダー
+            </h2>
+            <p class="text-xs text-neutral-500 mt-0.5">ご希望の利用プランを選択し、カレンダーやタイムラインから日時をお選びいただけます。</p>
           </div>
 
           <!-- PRICING CARDS -->
@@ -525,78 +514,6 @@
                   長時間パック（4h / 6h / 8h / 12h）あり
                 </div>
               </div>
-            </div>
-          </div>
-
-          <!-- PACK PRICING VIEW -->
-          <div id="pricing-pack-view" class="mt-6 hidden space-y-4">
-            <!-- 全館貸切パック -->
-            <div class="bg-neutral-50 rounded p-4 border border-neutral-200">
-              <h4 class="font-bold text-neutral-900 text-xs sm:text-sm mb-3 flex items-center gap-1.5">
-                <i data-lucide="tag" class="w-3.5 h-3.5 text-[#2892d8]"></i>
-                Kitchen & Lounge（全館貸切）長時間パッケージ（営業時間 9:00〜21:00）
-              </h4>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
-                <div class="bg-white p-3 rounded border border-neutral-200">
-                  <div class="text-xs text-neutral-500 font-medium">4時間パック</div>
-                  <div class="text-base font-bold text-neutral-900 mt-1">¥11,000</div>
-                  <div class="text-[10px] text-neutral-400">税込</div>
-                </div>
-                <div class="bg-white p-3 rounded border border-neutral-200">
-                  <div class="text-xs text-neutral-500 font-medium">6時間パック</div>
-                  <div class="text-base font-bold text-neutral-900 mt-1">¥15,400</div>
-                  <div class="text-[10px] text-emerald-600 font-semibold">通常より ¥1,100 OFF</div>
-                </div>
-                <div class="bg-white p-3 rounded border border-neutral-200">
-                  <div class="text-xs text-neutral-500 font-medium">8時間パック</div>
-                  <div class="text-base font-bold text-neutral-900 mt-1">¥19,800</div>
-                  <div class="text-[10px] text-emerald-600 font-semibold">通常より ¥2,200 OFF</div>
-                </div>
-                <div class="bg-[#2892d8] text-white p-3 rounded border border-[#207cb9] shadow-sm">
-                  <div class="text-xs text-white/90 font-bold">12時間 (1Day完全貸切)</div>
-                  <div class="text-base font-black text-white mt-1">¥22,000</div>
-                  <div class="text-[10px] text-amber-300 font-bold">通常より ¥11,000 OFF</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 単独プラン 8時間以上上限パック -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div class="bg-white p-3.5 rounded border border-neutral-200">
-                <div class="flex items-center justify-between mb-1.5">
-                  <h5 class="font-bold text-neutral-900 text-xs flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-[#2892d8]"></span> Kitchen（キッチン）8時間以上パック
-                  </h5>
-                  <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-1.5 py-0.5 rounded border border-emerald-200">何時間でも上限</span>
-                </div>
-                <div class="text-lg font-black text-neutral-900">¥16,500 <span class="text-xs font-normal text-neutral-500">(税込)</span></div>
-                <p class="text-[11px] text-neutral-500 mt-1">1日で8時間以上ご利用の場合は、何時間利用しても一律16,500円（最大12時間利用で通常より9,900円お得）。</p>
-              </div>
-
-              <div class="bg-white p-3.5 rounded border border-neutral-200">
-                <div class="flex items-center justify-between mb-1.5">
-                  <h5 class="font-bold text-neutral-900 text-xs flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-[#2892d8]"></span> Lounge（ラウンジ）8時間以上パック
-                  </h5>
-                  <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-1.5 py-0.5 rounded border border-emerald-200">何時間でも上限</span>
-                </div>
-                <div class="text-lg font-black text-neutral-900">¥13,200 <span class="text-xs font-normal text-neutral-500">(税込)</span></div>
-                <p class="text-[11px] text-neutral-500 mt-1">1日で8時間以上ご利用の場合は、何時間利用しても一律13,200円（最大12時間利用で通常より6,600円お得）。</p>
-              </div>
-            </div>
-
-            <!-- 定期利用プランの案内 -->
-            <div class="bg-white rounded p-4 border border-[#bce0f6] bg-[#f0f7fc]/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <div class="badge-primary-solid mb-1">
-                  <i data-lucide="repeat" class="w-3 h-3"></i> 継続・定期仕込み割引
-                </div>
-                <h4 class="font-bold text-neutral-900 text-xs sm:text-sm mt-1">週1回・月数回の定期的な製造・教室利用をご検討の方へ</h4>
-                <p class="text-xs text-neutral-600 mt-0.5">継続利用枠（格割プラン）をご相談可能です。定期製造枠の確保や材料保管をサポートします。</p>
-              </div>
-              <button onclick="openInquiryModal('定期利用・仕込み枠のご相談')" class="whitespace-nowrap px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white font-semibold text-xs rounded transition shadow-sm self-start sm:self-auto">
-                定期利用を相談する
-              </button>
             </div>
           </div>
 
@@ -1569,25 +1486,7 @@
       document.getElementById("lightbox-counter").innerText = `${currentLightboxIdx + 1} / ${photos.length}`;
     }
 
-    // 2. 料金プランタブ切り替え
-    function switchPriceTab(tab) {
-      const hourlyBtn = document.getElementById("tab-hourly");
-      const packBtn = document.getElementById("tab-pack");
-      const hourlyView = document.getElementById("pricing-hourly-view");
-      const packView = document.getElementById("pricing-pack-view");
 
-      if (tab === 'hourly') {
-        hourlyBtn.className = "px-3.5 py-1.5 rounded bg-[#2892d8] text-white transition shadow-sm";
-        packBtn.className = "px-3.5 py-1.5 rounded text-neutral-600 hover:text-[#2892d8] transition";
-        hourlyView.classList.remove("hidden");
-        packView.classList.add("hidden");
-      } else {
-        packBtn.className = "px-3.5 py-1.5 rounded bg-[#2892d8] text-white transition shadow-sm";
-        hourlyBtn.className = "px-3.5 py-1.5 rounded text-neutral-600 hover:text-[#2892d8] transition";
-        packView.classList.remove("hidden");
-        hourlyView.classList.add("hidden");
-      }
-    }
 
     // 3. カレンダー描画（空室率と記号の正確な連動）
     let currentYear = 2026;
