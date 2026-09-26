@@ -458,60 +458,69 @@
           <!-- PRICING CARDS -->
           <div id="pricing-hourly-view" class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Plan 1 -->
-            <div class="rounded border border-neutral-200 p-4 hover:border-[#2892d8] transition bg-white flex flex-col justify-between">
+            <div id="plan-card-kitchen" onclick="selectPlan('kitchen')" class="rounded border border-neutral-200 p-4 hover:border-[#2892d8] transition-all bg-white flex flex-col justify-between cursor-pointer select-none relative group">
               <div>
-                <div class="badge-mono-subtle mb-2">製造・仕込み向け</div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="badge-mono-subtle">製造・仕込み向け</div>
+                  <span id="plan-check-kitchen" class="hidden text-[10px] font-bold text-[#2892d8] bg-[#f0f7fc] px-1.5 py-0.5 rounded border border-[#bce0f6]">選択中</span>
+                </div>
                 <h3 class="font-bold text-neutral-900 text-sm">Kitchen（キッチン）</h3>
                 <p class="text-xs text-neutral-500 mt-1">菓子製造業・飲食店営業許可完備。調理器具や各種オーブンをご利用いただけます。</p>
               </div>
-              <div class="mt-4 pt-3 border-t border-neutral-100">
+              <div id="plan-border-kitchen" class="mt-4 pt-3 border-t border-neutral-100">
                 <div class="text-[11px] text-neutral-500">1時間あたり</div>
                 <div class="flex items-baseline gap-1">
-                  <span class="text-2xl font-black text-neutral-900">¥2,000</span>
+                  <span id="plan-price-kitchen" class="text-2xl font-black text-neutral-900">¥2,000</span>
                   <span class="text-xs text-neutral-500">(税込 ¥2,200)</span>
                 </div>
-                <div class="mt-2 text-[11px] text-neutral-700 bg-neutral-100 px-2 py-1 rounded border border-neutral-200">
+                <div id="plan-pack-kitchen" class="mt-2 text-[11px] text-neutral-700 bg-neutral-100 px-2 py-1 rounded border border-neutral-200">
                   8時間パック: ¥16,500(税込)
                 </div>
               </div>
             </div>
 
             <!-- Plan 2 -->
-            <div class="rounded border border-neutral-200 p-4 hover:border-[#2892d8] transition bg-white flex flex-col justify-between">
+            <div id="plan-card-lounge" onclick="selectPlan('lounge')" class="rounded border border-neutral-200 p-4 hover:border-[#2892d8] transition-all bg-white flex flex-col justify-between cursor-pointer select-none relative group">
               <div>
-                <div class="badge-mono-subtle mb-2">会議・教室・作業向け</div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="badge-mono-subtle">会議・教室・作業向け</div>
+                  <span id="plan-check-lounge" class="hidden text-[10px] font-bold text-[#2892d8] bg-[#f0f7fc] px-1.5 py-0.5 rounded border border-[#bce0f6]">選択中</span>
+                </div>
                 <h3 class="font-bold text-neutral-900 text-sm">Lounge（ラウンジ）</h3>
                 <p class="text-xs text-neutral-500 mt-1">テーブル席・イス10脚、自然光テラスを望む開放的なワーク＆飲食スペース。</p>
               </div>
-              <div class="mt-4 pt-3 border-t border-neutral-100">
+              <div id="plan-border-lounge" class="mt-4 pt-3 border-t border-neutral-100">
                 <div class="text-[11px] text-neutral-500">1時間あたり</div>
                 <div class="flex items-baseline gap-1">
-                  <span class="text-2xl font-black text-neutral-900">¥1,500</span>
+                  <span id="plan-price-lounge" class="text-2xl font-black text-neutral-900">¥1,500</span>
                   <span class="text-xs text-neutral-500">(税込 ¥1,650)</span>
                 </div>
-                <div class="mt-2 text-[11px] text-neutral-700 bg-neutral-100 px-2 py-1 rounded border border-neutral-200">
+                <div id="plan-pack-lounge" class="mt-2 text-[11px] text-neutral-700 bg-neutral-100 px-2 py-1 rounded border border-neutral-200">
                   8時間パック: ¥13,200(税込)
                 </div>
               </div>
             </div>
 
-            <!-- Plan 3 (Recommended) -->
-            <div class="rounded border-2 border-[#2892d8] p-4 bg-[#f0f7fc]/40 transition flex flex-col justify-between relative shadow-sm">
+            <!-- Plan 3 (Recommended / Default Selected) -->
+            <div id="plan-card-kitchen_lounge" onclick="selectPlan('kitchen_lounge')" class="rounded border-2 border-[#2892d8] p-4 bg-[#f0f7fc]/40 transition-all flex flex-col justify-between relative shadow-sm cursor-pointer select-none group">
               <div class="absolute -top-2.5 right-3 bg-[#2892d8] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">
                 全体完全貸切
               </div>
               <div>
-                <div class="badge-primary-solid mb-2">一番人気</div>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="badge-primary-solid">一番人気</div>
+                  <span id="plan-check-kitchen_lounge" class="text-[10px] font-bold text-[#2892d8] bg-white px-1.5 py-0.5 rounded border border-[#bce0f6]">選択中</span>
+                </div>
                 <h3 class="font-bold text-neutral-900 text-sm">Kitchen & Lounge</h3>
                 <p class="text-xs text-neutral-500 mt-1">調理から試食、撮影、パーティーまで施設全体（36.5㎡）を完全貸切。</p>
               </div>
-              <div class="mt-4 pt-3 border-t border-[#bce0f6]">
+              <div id="plan-border-kitchen_lounge" class="mt-4 pt-3 border-t border-[#bce0f6]">
                 <div class="text-[11px] text-neutral-500">1時間あたり</div>
                 <div class="flex items-baseline gap-1">
-                  <span class="text-2xl font-black text-[#2892d8]">¥2,500</span>
+                  <span id="plan-price-kitchen_lounge" class="text-2xl font-black text-[#2892d8]">¥2,500</span>
                   <span class="text-xs text-neutral-500">(税込 ¥2,750)</span>
                 </div>
-                <div class="mt-2 text-[11px] text-[#2892d8] bg-white px-2 py-1 rounded font-medium border border-[#bce0f6]">
+                <div id="plan-pack-kitchen_lounge" class="mt-2 text-[11px] text-[#2892d8] bg-white px-2 py-1 rounded font-medium border border-[#bce0f6]">
                   長時間ほど割引率UP（1Dayあり）
                 </div>
               </div>
@@ -1068,11 +1077,14 @@
           
           <!-- PRICE SUMMARY & REALTIME ESTIMATE (自動算出統合) -->
           <div>
-            <div class="text-[11px] text-neutral-500 font-medium" id="sidebar-price-label">基本利用料金（1時間あたり）</div>
+            <div class="flex items-center justify-between">
+              <div class="text-[11px] text-neutral-500 font-medium" id="sidebar-price-label">基本利用料金（1時間あたり）</div>
+              <span id="sidebar-selected-plan-badge" class="text-[10px] font-bold text-[#2892d8] bg-[#f0f7fc] px-1.5 py-0.5 rounded border border-[#bce0f6]">Kitchen & Lounge</span>
+            </div>
             <div class="flex items-baseline gap-1.5 mt-1">
               <span class="text-xs text-neutral-500" id="sidebar-unit-label">1時間</span>
-              <span class="text-2xl sm:text-3xl font-black text-neutral-900 tracking-tight transition-colors duration-200" id="sidebar-price-display">¥1,500〜¥2,500</span>
-              <span class="text-xs text-neutral-500" id="sidebar-tax-label">(税別)</span>
+              <span class="text-2xl sm:text-3xl font-black text-neutral-900 tracking-tight transition-colors duration-200" id="sidebar-price-display">¥2,500</span>
+              <span class="text-xs text-neutral-500" id="sidebar-tax-label">(税込 ¥2,750)</span>
             </div>
 
             <!-- 選択中の時間帯＆割引バッジ（枠選択時に自動表示） -->
@@ -1842,6 +1854,116 @@
 
 
 
+    // 料金プラン定義
+    const PLAN_CONFIG = {
+      kitchen: {
+        id: 'kitchen',
+        name: 'Kitchen（キッチン）',
+        shortName: 'Kitchen',
+        modalValue: 'Kitchen（製造・仕込み特化）',
+        hourlyRate: 2000,
+        hourlyTax: 2200,
+        pack8Rate: 16500,
+        calcPrice: (hours) => {
+          if (hours === 8) return 16500;
+          if (hours > 8) return 16500 + (hours - 8) * 2200;
+          return hours * 2200;
+        }
+      },
+      lounge: {
+        id: 'lounge',
+        name: 'Lounge（ラウンジ）',
+        shortName: 'Lounge',
+        modalValue: 'Lounge（ワーク・教室）',
+        hourlyRate: 1500,
+        hourlyTax: 1650,
+        pack8Rate: 13200,
+        calcPrice: (hours) => {
+          if (hours === 8) return 13200;
+          if (hours > 8) return 13200 + (hours - 8) * 1650;
+          return hours * 1650;
+        }
+      },
+      kitchen_lounge: {
+        id: 'kitchen_lounge',
+        name: 'Kitchen & Lounge（全体貸切）',
+        shortName: 'Kitchen & Lounge',
+        modalValue: 'Kitchen & Lounge（全体貸切）',
+        hourlyRate: 2500,
+        hourlyTax: 2750,
+        calcPrice: (hours) => {
+          if (hours === 4) return 11000;
+          if (hours === 6) return 15400;
+          if (hours === 8) return 19800;
+          if (hours >= 12) return 22000;
+          return hours * 2750;
+        }
+      }
+    };
+
+    let selectedPlan = 'kitchen_lounge';
+
+    // プラン選択ハンドラ（クリックで薄青ハイライト切り替え＆料金連動）
+    function selectPlan(planKey) {
+      if (!PLAN_CONFIG[planKey]) return;
+      selectedPlan = planKey;
+
+      const keys = ['kitchen', 'lounge', 'kitchen_lounge'];
+      keys.forEach(k => {
+        const card = document.getElementById(`plan-card-${k}`);
+        const check = document.getElementById(`plan-check-${k}`);
+        const price = document.getElementById(`plan-price-${k}`);
+        const border = document.getElementById(`plan-border-${k}`);
+        const pack = document.getElementById(`plan-pack-${k}`);
+
+        if (k === planKey) {
+          // 選択されたプラン：薄い青色背景（bg-[#f0f7fc]/40）＋青枠（border-2 border-[#2892d8]）
+          if (card) {
+            card.className = "rounded border-2 border-[#2892d8] p-4 bg-[#f0f7fc]/40 transition-all flex flex-col justify-between relative shadow-sm cursor-pointer select-none group";
+          }
+          if (check) {
+            check.classList.remove("hidden");
+            check.className = "text-[10px] font-bold text-[#2892d8] bg-white px-1.5 py-0.5 rounded border border-[#bce0f6]";
+          }
+          if (price) {
+            price.className = "text-2xl font-black text-[#2892d8]";
+          }
+          if (border) {
+            border.className = "mt-4 pt-3 border-t border-[#bce0f6]";
+          }
+          if (pack && k === 'kitchen_lounge') {
+            pack.className = "mt-2 text-[11px] text-[#2892d8] bg-white px-2 py-1 rounded font-medium border border-[#bce0f6]";
+          }
+        } else {
+          // 非選択プラン：通常白背景＋薄いグレー枠
+          if (card) {
+            card.className = "rounded border border-neutral-200 p-4 hover:border-[#2892d8] transition-all bg-white flex flex-col justify-between cursor-pointer select-none relative group";
+          }
+          if (check) {
+            check.classList.add("hidden");
+          }
+          if (price) {
+            price.className = "text-2xl font-black text-neutral-900";
+          }
+          if (border) {
+            border.className = "mt-4 pt-3 border-t border-neutral-100";
+          }
+          if (pack && k === 'kitchen_lounge') {
+            pack.className = "mt-2 text-[11px] text-neutral-600 bg-neutral-100 px-2 py-1 rounded border border-neutral-200";
+          }
+        }
+      });
+
+      // 右側の料金再計算
+      calculateEstimate();
+
+      // モーダル内のプラン選択セレクトボックスも同期
+      const bookingPlanEl = document.getElementById("booking-plan");
+      if (bookingPlanEl) {
+        bookingPlanEl.value = PLAN_CONFIG[selectedPlan].modalValue;
+      }
+    }
+
     // 4. サイドバー料金の自動算出・更新（新UI連動）
     function calculateEstimate() {
       const hours = (publicSelectedHours && publicSelectedHours.length) ? publicSelectedHours.length : 0;
@@ -1849,31 +1971,33 @@
       const priceLabel = document.getElementById("sidebar-price-label");
       const unitLabel = document.getElementById("sidebar-unit-label");
       const taxLabel = document.getElementById("sidebar-tax-label");
+      const planBadge = document.getElementById("sidebar-selected-plan-badge");
       const selectionInfo = document.getElementById("sidebar-selection-info");
       const selectionText = document.getElementById("sidebar-selection-text");
       const discountBadge = document.getElementById("sidebar-discount-badge");
       const bookingBtnText = document.getElementById("sidebar-booking-btn-text");
 
+      const planConfig = PLAN_CONFIG[selectedPlan] || PLAN_CONFIG['kitchen_lounge'];
+
+      if (planBadge) {
+        planBadge.innerText = planConfig.shortName;
+      }
+
       if (hours === 0) {
         if (priceLabel) priceLabel.innerText = "基本利用料金（1時間あたり）";
         if (unitLabel) unitLabel.innerText = "1時間";
         if (priceDisplay) {
-          priceDisplay.innerText = "¥1,500〜¥2,500";
+          priceDisplay.innerText = `¥${planConfig.hourlyRate.toLocaleString()}`;
           priceDisplay.className = "text-2xl sm:text-3xl font-black text-neutral-900 tracking-tight transition-colors duration-200";
         }
-        if (taxLabel) taxLabel.innerText = "(税別)";
+        if (taxLabel) taxLabel.innerText = `(税込 ¥${planConfig.hourlyTax.toLocaleString()})`;
         if (selectionInfo) selectionInfo.classList.add("hidden");
         if (bookingBtnText) bookingBtnText.innerText = "利用予約を申し込む";
         return;
       }
 
-      // 時間枠選択時（全体貸切パックプラン優先自動算出）
-      let price = 0;
-      if (hours === 4) price = 11000;
-      else if (hours === 6) price = 15400;
-      else if (hours === 8) price = 19800;
-      else if (hours >= 12) price = 22000;
-      else price = hours * 2750; // 税込2,750円/h
+      // 時間枠選択時（プランに応じた料金自動算出）
+      let price = planConfig.calcPrice(hours);
 
       // 直前割判定（利用日が0〜7日前）
       let isDiscount = false;
@@ -1900,7 +2024,7 @@
       if (selectionInfo) {
         selectionInfo.classList.remove("hidden");
         const rangeStr = getFormattedTimeRanges(publicSelectedHours);
-        if (selectionText) selectionText.innerText = `${rangeStr}（${hours}時間）`;
+        if (selectionText) selectionText.innerText = `${rangeStr}（${hours}時間 / ${planConfig.shortName}）`;
         if (discountBadge) {
           if (isDiscount) discountBadge.classList.remove("hidden");
           else discountBadge.classList.add("hidden");
@@ -1908,7 +2032,7 @@
       }
 
       if (bookingBtnText) {
-        bookingBtnText.innerText = `この日程（${hours}時間）で予約申し込む`;
+        bookingBtnText.innerText = `この日程（${planConfig.shortName}・${hours}時間）で予約申し込む`;
       }
     }
 
@@ -1926,10 +2050,25 @@
         dateEl.value = targetDate;
       }
 
-      // B. 希望プランの反映（デフォルトKitchen & Lounge）
+      // B. 希望プランの反映（選択中プランを確実に反映）
       const bookingPlanEl = document.getElementById("booking-plan");
-      if (bookingPlanEl && !bookingPlanEl.value) {
-        bookingPlanEl.value = "Kitchen & Lounge（全体貸切）";
+      const planConfig = PLAN_CONFIG[selectedPlan] || PLAN_CONFIG['kitchen_lounge'];
+      if (bookingPlanEl) {
+        bookingPlanEl.value = planConfig.modalValue;
+      }
+
+      // モーダル側でプランを変更した場合の逆同期リスナー設定
+      if (bookingPlanEl && !bookingPlanEl.dataset.hasListener) {
+        bookingPlanEl.dataset.hasListener = "true";
+        bookingPlanEl.addEventListener("change", (e) => {
+          const val = e.target.value;
+          for (const key of Object.keys(PLAN_CONFIG)) {
+            if (PLAN_CONFIG[key].modalValue === val) {
+              selectPlan(key);
+              break;
+            }
+          }
+        });
       }
 
       // C. 選択時間帯のバナー表示＆メッセージ欄自動差し込み
