@@ -20,7 +20,8 @@
 | **営業時間・枠** | 9:00 〜 21:00（1時間単位・1日最大12スロット） |
 | **公式Webサイト** | [https://onaoki0503-lgtm.github.io/shonandai-kitchen-studio/](https://onaoki0503-lgtm.github.io/shonandai-kitchen-studio/) |
 | **管理者ポータル** | [https://onaoki0503-lgtm.github.io/shonandai-kitchen-studio/dashboard.html](https://onaoki0503-lgtm.github.io/shonandai-kitchen-studio/dashboard.html)<br>*(旧URL `admin.html` も完全同期)* |
-| **認証パスコード** | **`shonandai2026`** |
+| **初期管理者アカウント** | ・板倉社長（APRECIO）: `apreci2020@gmail.com`<br>・栫役員（APRECIO）: `kakoi.masaaki@aprecio-life.co.jp`<br>・岡本代表: `o.naoki0503@intakingresources.com` |
+| **初期パスワード** | **`shonandai2026`** |
 | **GitHubリポジトリ** | [https://github.com/onaoki0503-lgtm/shonandai-kitchen-studio](https://github.com/onaoki0503-lgtm/shonandai-kitchen-studio)（`main` ブランチ） |
 | **通知先メール** | `o.naoki0503@intakingresources.com`（FormSubmit連携） |
 
@@ -182,6 +183,7 @@ interface Holiday {
 
 | 日時 | コミット | 指示概要（ユーザーリクエスト） | 実装・改修内容 |
 | :--- | :--- | :--- | :--- |
+| **2026-09-26 13:38** | `a75f374` | APRECIOの方がメインで使用するので、関係者2人を管理者として登録して | 株式会社APRECIOの板倉社長・栫役員の2名を管理者（admin）としてSupabaseに本登録。旧架空アドレス削除、ログイン画面のアカウント案内を更新。 |
 | **2026-09-26 12:55** | `e52f17f` | スマホ表示にすると崩れる。綺麗に整えて | ヘッダーのレスポンシブ最適化。スマホ時の文字縦折れを完全解消、テキスト短縮表示、`whitespace-nowrap` 徹底。 |
 | **2026-09-26 12:49** | `7808d7a` | お知らせと口コミのタブを横並びから縦並びにして開くようにして | 2列グリッドを解除し、縦並びのアコーディオンカードに配置変更。クリックで全幅展開。 |
 | **2026-09-26 12:41** | `19ed336` | 文字改行修正、上下余白削減、2枚目不要削除、3枚目タブ縮小して四角タップ開閉にして | 空室パネルの改行解消＆余白削減、不要な台帳フィルターバー削除、ご報告・口コミ管理を四角いアコーディオンカードに刷新。 |
