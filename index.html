@@ -1196,9 +1196,9 @@
   </div>
 
   <!-- 2. BOOKING MODAL (利用予約申込専用フォーム) -->
-  <div id="booking-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl relative my-8 border border-neutral-300">
-      <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1.5 rounded hover:bg-neutral-100 transition">
+  <div id="booking-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto cursor-pointer" onclick="if(event.target === this) closeBookingModal()">
+    <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl relative my-8 border border-neutral-300 cursor-default">
+      <button type="button" onclick="closeBookingModal()" aria-label="閉じる" class="absolute top-3.5 right-3.5 text-neutral-500 hover:text-black p-2 rounded-full hover:bg-neutral-100 bg-neutral-50 sm:bg-transparent transition shadow-sm sm:shadow-none cursor-pointer">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
@@ -1368,13 +1368,21 @@
           </p>
         </div>
       </form>
+
+      <!-- 下部中央の閉じるボタン（スマホ操作性向上） -->
+      <div class="mt-4 pt-3 border-t border-neutral-200 flex justify-center">
+        <button type="button" onclick="closeBookingModal()" class="px-6 py-2 rounded-full border border-neutral-300 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold flex items-center gap-1.5 transition shadow-sm active:scale-95 cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+          <span>閉じる</span>
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- 3. INQUIRY MODAL (お問い合わせ・ご相談専用フォーム：規約同意不要) -->
-  <div id="inquiry-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl relative my-8 border border-neutral-300">
-      <button onclick="closeInquiryModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1.5 rounded hover:bg-neutral-100 transition">
+  <div id="inquiry-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto cursor-pointer" onclick="if(event.target === this) closeInquiryModal()">
+    <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl relative my-8 border border-neutral-300 cursor-default">
+      <button type="button" onclick="closeInquiryModal()" aria-label="閉じる" class="absolute top-3.5 right-3.5 text-neutral-500 hover:text-black p-2 rounded-full hover:bg-neutral-100 bg-neutral-50 sm:bg-transparent transition shadow-sm sm:shadow-none cursor-pointer">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
@@ -1434,12 +1442,20 @@
           </p>
         </div>
       </form>
+
+      <!-- 下部中央の閉じるボタン（スマホ操作性向上） -->
+      <div class="mt-4 pt-3 border-t border-neutral-200 flex justify-center">
+        <button type="button" onclick="closeInquiryModal()" class="px-6 py-2 rounded-full border border-neutral-300 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold flex items-center gap-1.5 transition shadow-sm active:scale-95 cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+          <span>閉じる</span>
+        </button>
+      </div>
     </div>
   </div>
   <!-- 4. REVIEW MODAL (口コミ・レビュー投稿専用フォーム) -->
-  <div id="review-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl relative my-8 border border-neutral-300">
-      <button onclick="closeReviewModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1.5 rounded hover:bg-neutral-100 transition">
+  <div id="review-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto cursor-pointer" onclick="if(event.target === this) closeReviewModal()">
+    <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl relative my-8 border border-neutral-300 cursor-default">
+      <button type="button" onclick="closeReviewModal()" aria-label="閉じる" class="absolute top-3.5 right-3.5 text-neutral-500 hover:text-black p-2 rounded-full hover:bg-neutral-100 bg-neutral-50 sm:bg-transparent transition shadow-sm sm:shadow-none cursor-pointer">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
@@ -1497,6 +1513,14 @@
           </p>
         </div>
       </form>
+
+      <!-- 下部中央の閉じるボタン（スマホ操作性向上） -->
+      <div class="mt-4 pt-3 border-t border-neutral-200 flex justify-center">
+        <button type="button" onclick="closeReviewModal()" class="px-6 py-2 rounded-full border border-neutral-300 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold flex items-center gap-1.5 transition shadow-sm active:scale-95 cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+          <span>閉じる</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -3005,6 +3029,15 @@
       calculateEstimate();
       renderAnnouncements();
       renderReviews();
+
+      // Escapeキーで開いているモーダルを閉じる
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeBookingModal();
+          closeInquiryModal();
+          closeReviewModal();
+        }
+      });
     });
   </script>
 </body>
