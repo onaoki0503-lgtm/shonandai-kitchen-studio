@@ -442,45 +442,6 @@
 
       </section>
 
-      <!-- 5. スタジオ休業日 設定・管理セクション -->
-      <section id="closed-days-section" class="bg-white rounded-lg border border-neutral-200 shadow-sm p-5 space-y-4 scroll-mt-20">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-neutral-100 gap-3">
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 class="font-bold text-neutral-900 text-sm sm:text-base flex items-center gap-2">
-                <i data-lucide="calendar-x" class="w-4 h-4 text-rose-600"></i>
-                スタジオ休業日 設定・管理
-              </h3>
-              <span id="closed-days-count-badge" class="text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 rounded">0件設定中</span>
-            </div>
-            <p class="text-xs text-neutral-500 mt-0.5">
-              定休日や設備メンテナンス等の休業日を設定します。登録された日はWebサイトのカレンダーで「休」となり、予約受付が自動停止します。
-            </p>
-          </div>
-
-          <button onclick="openClosedDayModal()" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded transition shadow-sm flex items-center gap-1 self-start sm:self-auto">
-            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-            <span>＋休業日を登録する</span>
-          </button>
-        </div>
-
-        <!-- 休業日一覧テーブル -->
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs text-neutral-700 border border-neutral-200 rounded">
-            <thead class="bg-neutral-50 text-neutral-500 font-semibold border-b border-neutral-200">
-              <tr>
-                <th class="p-2.5">休業日</th>
-                <th class="p-2.5">休業理由 / 用途</th>
-                <th class="p-2.5">Webサイト表示状態</th>
-                <th class="p-2.5 text-right">操作</th>
-              </tr>
-            </thead>
-            <tbody id="closed-days-table-body" class="divide-y divide-neutral-100 font-medium">
-              <!-- JSで描画 -->
-            </tbody>
-          </table>
-        </div>
-      </section>
 
       <!-- 6. 運営からのご報告 ＆ お知らせ投稿管理セクション -->
       <section id="announcements-mgmt-section" class="bg-white rounded-lg border border-neutral-200 shadow-sm p-5 space-y-4 scroll-mt-20">
@@ -1742,11 +1703,7 @@
             <div class="text-[11px] font-bold">${day}</div>
             <div class="text-[9px] bg-rose-600 text-white px-1 rounded font-bold">休業日</div>
           `;
-          cell.onclick = () => {
-            if (confirm(`【休業日設定】\n日付: ${dateStr}\n理由: ${closedInfo.reason || '休業日'}\n\nこの日の休業日設定を解除しますか？`)) {
-              deleteClosedDay(dateStr);
-            }
-          };
+          cell.onclick = () => handleCalendarDateClick(dateStr, false);
         } else if (isBooked) {
           // 予約ありマス
           cell.className = `p-2 rounded bg-[#2892d8] text-white font-bold flex flex-col items-center justify-between min-h-[50px] shadow-sm cursor-pointer hover:bg-[#207cb9] transition ${
@@ -1921,35 +1878,64 @@
         paginationBar.classList.add("hidden");
         emptyState.classList.remove("hidden");
 
-        // ★ 空室（特定日付で絞り込んだ結果0件）の場合のリッチなエンプティパネル
+        // ★ 空室または休業日（特定日付で絞り込んだ結果0件）の場合のリッチなパネル
         if (selectedCalendarDate) {
-          emptyState.innerHTML = `
-            <div class="max-w-md mx-auto bg-[#f0f7fc]/60 border-2 border-dashed border-[#bce0f6] rounded-xl p-6 sm:p-8 text-center shadow-sm">
-              <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white border border-[#bce0f6] text-[#2892d8] mb-3 shadow-sm">
-                <i data-lucide="check" class="w-6 h-6 stroke-[3]"></i>
+          const closedInfo = isClosedDay(selectedCalendarDate);
+          if (closedInfo) {
+            emptyState.innerHTML = `
+              <div class="max-w-md mx-auto bg-rose-50/70 border-2 border-dashed border-rose-300 rounded-xl p-6 sm:p-8 text-center shadow-sm">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white border border-rose-300 text-rose-600 mb-3 shadow-sm">
+                  <i data-lucide="calendar-x" class="w-6 h-6 stroke-[2.5]"></i>
+                </div>
+                <h4 class="text-base font-bold text-rose-800 mb-1">【 休 休業日（予約停止中） 】</h4>
+                <p class="text-xs text-neutral-600 mb-5 leading-relaxed font-mono">
+                  <strong class="text-neutral-900">${selectedCalendarDate}</strong> は休業日に設定されています。<br>
+                  理由: <span class="font-bold text-rose-700">${escapeHtml(closedInfo.reason || 'スタジオ休業日')}</span>
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5">
+                  <button onclick="openManualBookingModal('${selectedCalendarDate}')" class="w-full sm:w-auto px-4 py-2.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>＋ この日に手動で予約を追加する</span>
+                  </button>
+                  <button onclick="deleteClosedDay('${selectedCalendarDate}')" class="w-full sm:w-auto px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                    <span>休業日設定を解除する</span>
+                  </button>
+                </div>
               </div>
-              <h4 class="text-base font-bold text-neutral-900 mb-1">【 ◯ 終日 空室（予約可能） 】</h4>
-              <p class="text-xs text-neutral-600 mb-5 leading-relaxed font-mono">
-                <strong class="text-neutral-900">${selectedCalendarDate}</strong> は現在予約が入っておりません。<br>
-                電話や口頭で受けた予約をこの日程に直接登録できます。
-              </p>
-              <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5">
-                <button onclick="openManualBookingModal('${selectedCalendarDate}')" class="w-full sm:w-auto px-4 py-2.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow flex items-center justify-center gap-1.5">
-                  <i data-lucide="plus" class="w-4 h-4"></i>
-                  <span>＋ この日に手動で予約を追加する</span>
-                </button>
-                <button onclick="clearDateFilter()" class="w-full sm:w-auto px-3.5 py-2.5 bg-white border border-neutral-300 hover:bg-neutral-100 text-neutral-700 text-xs rounded transition font-medium">
-                  すべての予約を表示
-                </button>
+            `;
+          } else {
+            emptyState.innerHTML = `
+              <div class="max-w-md mx-auto bg-[#f0f7fc]/60 border-2 border-dashed border-[#bce0f6] rounded-xl p-6 sm:p-8 text-center shadow-sm">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white border border-[#bce0f6] text-[#2892d8] mb-3 shadow-sm">
+                  <i data-lucide="check" class="w-6 h-6 stroke-[3]"></i>
+                </div>
+                <h4 class="text-base font-bold text-neutral-900 mb-1">【 ◯ 終日 空室（予約可能） 】</h4>
+                <p class="text-xs text-neutral-600 mb-5 leading-relaxed font-mono">
+                  <strong class="text-neutral-900">${selectedCalendarDate}</strong> は現在予約が入っておりません。<br>
+                  電話や口頭で受けた予約をこの日程に直接登録できます。
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5">
+                  <button onclick="openManualBookingModal('${selectedCalendarDate}')" class="w-full sm:w-auto px-4 py-2.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>＋ この日に手動で予約を追加する</span>
+                  </button>
+                  <button onclick="openClosedDayModal('${selectedCalendarDate}')" class="w-full sm:w-auto px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i data-lucide="calendar-x" class="w-4 h-4"></i>
+                    <span>＋ 休業日を追加する</span>
+                  </button>
+                </div>
               </div>
-            </div>
-          `;
+            `;
+          }
+          if (window.lucide) lucide.createIcons();
         } else {
           emptyState.innerHTML = `
             <i data-lucide="folder-open" class="w-8 h-8 mx-auto mb-2 text-neutral-300"></i>
             <p class="text-xs text-neutral-500">条件に一致する予約・問い合わせはありません。</p>
             <button onclick="clearDateFilter()" class="mt-3 text-xs text-[#2892d8] hover:underline font-semibold">すべての予約を表示する</button>
           `;
+          if (window.lucide) lucide.createIcons();
         }
       } else {
         table.classList.remove("hidden");
@@ -1957,7 +1943,12 @@
         emptyState.classList.add("hidden");
 
         if (selectedCalendarDate) {
-          document.getElementById("ledger-subtext").innerHTML = `<strong class="text-[#2892d8] font-mono">${selectedCalendarDate}</strong> の予約（${total}件）を表示しています。`;
+          const closedInfo = isClosedDay(selectedCalendarDate);
+          if (closedInfo) {
+            document.getElementById("ledger-subtext").innerHTML = `<strong class="text-rose-600 font-mono">${selectedCalendarDate}</strong> は休業日設定中ですが、既存の予約が（${total}件）あります。<button onclick="deleteClosedDay('${selectedCalendarDate}')" class="ml-2 text-[11px] text-rose-600 hover:underline font-bold">休業設定を解除</button>`;
+          } else {
+            document.getElementById("ledger-subtext").innerHTML = `<strong class="text-[#2892d8] font-mono">${selectedCalendarDate}</strong> の予約（${total}件）を表示しています。<button onclick="openClosedDayModal('${selectedCalendarDate}')" class="ml-2 text-[11px] text-rose-600 hover:underline font-semibold">＋この日を休業日に設定する</button>`;
+          }
         } else {
           document.getElementById("ledger-subtext").innerText = "ステータスはその場で直接変更できます。即時反映・自動保存されます。";
         }
@@ -2790,6 +2781,7 @@ ${signature}`;
       document.getElementById("closed-day-form").reset();
       renderClosedDaysTable();
       renderMonthCalendar();
+      renderRequestsTable();
       showToast(`${date} を休業日に設定しました（Webサイト連動済）`);
     }
 
@@ -2799,6 +2791,7 @@ ${signature}`;
       localStorage.setItem("sks_closed_days", JSON.stringify(list));
       renderClosedDaysTable();
       renderMonthCalendar();
+      renderRequestsTable();
       showToast(`${dateStr} の休業日設定を解除しました`);
     }
 
