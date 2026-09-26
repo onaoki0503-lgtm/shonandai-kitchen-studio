@@ -93,61 +93,37 @@
     <!-- 1. TOP HEADER -->
     <header class="bg-white border-b border-neutral-200 sticky top-0 z-30">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded bg-[#2892d8] text-white font-black text-base flex items-center justify-center shadow-sm">S</div>
-          <div>
-            <div class="font-bold text-sm sm:text-base text-neutral-900 flex items-center gap-2">
-              Shonandai Kitchen Studio
-              <span class="text-[10px] font-semibold bg-neutral-100 text-neutral-700 border border-neutral-300 px-1.5 py-0.5 rounded">管理ポータル</span>
-              <span class="text-[10px] font-bold bg-[#2892d8] text-white px-2 py-0.5 rounded shadow-sm">v2.8.3 (タイムライン日付修正)</span>
-            </div>
-            <div class="text-[10px] text-neutral-500">株式会社APRECIO ｜ 湘南台スタジオ管理 (Supabase実データ・スタッフ認証稼働中)</div>
-          </div>
+        <!-- ロゴ ＆ タイトル -->
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded bg-[#2892d8] text-white font-black text-base flex items-center justify-center shadow-xs">S</div>
+          <span class="font-bold text-base sm:text-lg text-neutral-900 tracking-tight">Shonandai Kitchen Studio</span>
         </div>
 
+        <!-- 右側アクション: スタッフ管理・Webサイト・ログアウト -->
         <div class="flex items-center gap-2.5">
-          <!-- ログイン中の担当者情報バッジ -->
-          <div class="flex items-center gap-1.5 text-xs text-neutral-700 bg-neutral-100 border border-neutral-200 px-2.5 py-1.5 rounded shadow-sm">
+          <!-- ログイン中の担当者情報バッジ（管理者/スタッフ判別） -->
+          <div class="flex items-center gap-1.5 text-xs text-neutral-700 bg-neutral-100 border border-neutral-200 px-2.5 py-1.5 rounded shadow-xs">
             <i data-lucide="user-check" class="w-3.5 h-3.5 text-[#2892d8]"></i>
             <span id="header-user-name" class="font-bold text-neutral-900">--</span>
             <span id="header-user-role" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-neutral-200 text-neutral-700">--</span>
           </div>
 
           <!-- 管理者（admin）専用: スタッフ管理ボタン -->
-          <button id="btn-staff-mgmt" onclick="openStaffMgmtModal()" class="hidden items-center gap-1.5 text-xs font-bold text-[#2892d8] bg-[#f0f7fc] border border-[#2892d8]/40 hover:bg-[#2892d8] hover:text-white px-3 py-1.5 rounded transition shadow-sm">
+          <button id="btn-staff-mgmt" onclick="openStaffMgmtModal()" class="hidden items-center gap-1.5 text-xs font-bold text-[#2892d8] bg-[#f0f7fc] border border-[#2892d8]/40 hover:bg-[#2892d8] hover:text-white px-3 py-1.5 rounded transition shadow-xs">
             <i data-lucide="users" class="w-3.5 h-3.5"></i>
             <span>スタッフ管理</span>
           </button>
 
-          <!-- リアルタイム自動同期ステータス -->
-          <div class="hidden lg:flex items-center gap-1.5 text-xs text-neutral-600 bg-neutral-50 border border-neutral-200 px-2.5 py-1 rounded">
-            <span id="sync-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span id="sync-label">クラウド同期中 (<span id="sync-time" class="font-mono font-medium">--:--:--</span>)</span>
-          </div>
-
-          <!-- 未対応アラートバッジ -->
-          <div id="header-alert-badge" class="flex items-center gap-1.5 text-xs font-bold text-white bg-[#2892d8] px-3 py-1 rounded shadow-sm">
-            <i data-lucide="bell" class="w-3.5 h-3.5"></i>
-            <span id="header-alert-text">0件</span>
-          </div>
-
-          <div class="hidden xl:flex items-center gap-1.5 text-xs text-neutral-600">
-            <a href="#closed-days-section" class="hover:text-rose-600 px-2 py-1 rounded hover:bg-neutral-100 flex items-center gap-1">
-              <i data-lucide="calendar-x" class="w-3.5 h-3.5 text-rose-500"></i> 休業日設定
-            </a>
-            <a href="#announcements-mgmt-section" class="hover:text-[#2892d8] px-2 py-1 rounded hover:bg-neutral-100 flex items-center gap-1">
-              <i data-lucide="megaphone" class="w-3.5 h-3.5 text-[#2892d8]"></i> ご報告投稿
-            </a>
-            <a href="#reviews-mgmt-section" class="hover:text-amber-600 px-2 py-1 rounded hover:bg-neutral-100 flex items-center gap-1">
-              <i data-lucide="message-square" class="w-3.5 h-3.5 text-amber-500"></i> レビュー審査
-            </a>
-          </div>
-
-          <a href="index.html" target="_blank" class="hidden sm:inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-[#2892d8] font-medium border border-neutral-200 px-3 py-1.5 rounded hover:bg-neutral-50 transition">
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Webサイト
+          <!-- Webサイト -->
+          <a href="index.html" target="_blank" class="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-[#2892d8] font-medium border border-neutral-200 px-3 py-1.5 rounded hover:bg-neutral-50 transition">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span>Webサイト</span>
           </a>
+
+          <!-- ログアウト -->
           <button onclick="handleLogout()" class="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-rose-600 font-medium px-2 py-1.5 rounded hover:bg-neutral-100 transition" title="ログアウト">
-            <i data-lucide="log-out" class="w-3.5 h-3.5"></i> ログアウト
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>ログアウト</span>
           </button>
         </div>
       </div>
@@ -173,7 +149,7 @@
             </div>
             <!-- スパークライン -->
             <div class="mt-1">
-              <div class="text-[10px] text-neutral-400 mb-1">直近14日間の受信推移</div>
+              <div class="text-[10px] text-neutral-400 mb-1" id="sparkline-pending-label">直近2週間の受信推移</div>
               <svg class="sparkline-svg" viewBox="0 0 100 25" preserveAspectRatio="none">
                 <polyline fill="none" stroke="#2892d8" stroke-width="2" points="0,20 15,18 30,22 45,15 60,18 75,8 90,12 100,4" />
                 <circle cx="100" cy="4" r="3" fill="#2892d8" />
@@ -204,17 +180,29 @@
 
         <!-- 右側: PV数 × 予約発生数 相関グラフエリア（8 cols） -->
         <div class="lg:col-span-8 bg-white p-5 rounded-lg border border-neutral-200 shadow-sm flex flex-col justify-between">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-neutral-100 gap-2">
+          <div class="flex flex-col md:flex-row md:items-center justify-between pb-3 border-b border-neutral-100 gap-2.5">
             <div>
               <h3 class="text-xs sm:text-sm font-bold text-neutral-900 flex items-center gap-1.5">
                 <i data-lucide="trending-up" class="w-4 h-4 text-[#2892d8]"></i>
-                日別アクセス推移（PV） × 予約・問い合わせ発生相関
+                <span id="chart-main-title">日別アクセス推移（PV） × 予約・問い合わせ発生相関</span>
               </h3>
-              <p class="text-[11px] text-neutral-500 mt-0.5">Webサイト閲覧数と、実際の反響発生タイミングを比較・分析できます。</p>
+              <p class="text-[11px] text-neutral-500 mt-0.5" id="chart-sub-title">Webサイト閲覧数と、実際の反響発生タイミングを比較・分析できます。</p>
             </div>
-            <div class="flex items-center gap-3 text-[11px] text-neutral-600">
-              <span class="flex items-center gap-1"><span class="w-3 h-0.5 bg-[#2892d8] inline-block"></span> PV数（折れ線）</span>
-              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-neutral-800 inline-block rounded-sm"></span> 予約・問合せ（棒）</span>
+            <div class="flex flex-wrap items-center gap-3">
+              <!-- 期間切り替え（1週間, 2週間, 1ヶ月, 半年, 1年） -->
+              <div class="flex items-center bg-neutral-100 p-0.5 rounded text-[11px] font-semibold border border-neutral-200">
+                <button type="button" onclick="setChartRange('1w')" id="chart-btn-1w" class="px-2 py-0.5 rounded text-neutral-600 hover:text-black transition">1週間</button>
+                <button type="button" onclick="setChartRange('2w')" id="chart-btn-2w" class="px-2 py-0.5 rounded bg-[#2892d8] text-white shadow-xs font-bold transition">2週間</button>
+                <button type="button" onclick="setChartRange('1m')" id="chart-btn-1m" class="px-2 py-0.5 rounded text-neutral-600 hover:text-black transition">1ヶ月</button>
+                <button type="button" onclick="setChartRange('6m')" id="chart-btn-6m" class="px-2 py-0.5 rounded text-neutral-600 hover:text-black transition">半年</button>
+                <button type="button" onclick="setChartRange('1y')" id="chart-btn-1y" class="px-2 py-0.5 rounded text-neutral-600 hover:text-black transition">1年</button>
+              </div>
+
+              <!-- 凡例 -->
+              <div class="flex items-center gap-2.5 text-[11px] text-neutral-600">
+                <span class="flex items-center gap-1"><span class="w-3 h-0.5 bg-[#2892d8] inline-block"></span> PV数（折れ線）</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-neutral-800 inline-block rounded-xs"></span> 予約・問合せ（棒）</span>
+              </div>
             </div>
           </div>
 
@@ -1335,7 +1323,8 @@
       const pendingCount = requestsData.filter(r => r.status === "新規受付").length;
       document.getElementById("kpi-pending-count").innerText = pendingCount;
       document.getElementById("kpi-total-count").innerText = requestsData.length;
-      document.getElementById("header-alert-text").innerText = `${pendingCount}件の未対応`;
+      const headerAlertEl = document.getElementById("header-alert-text");
+      if (headerAlertEl) headerAlertEl.innerText = `${pendingCount}件の未対応`;
 
       // 想定稼働売上（承認済み + 完了）
       const projectedRevenue = requestsData
@@ -1536,21 +1525,114 @@
       if (endEl) endEl.value = endStr;
     }
 
-    // 3. PV × 予約相関グラフ描画 (Chart.js)
-    function initCorrelationChart() {
-      const ctx = document.getElementById('correlationChart').getContext('2d');
-      const labels = ['9/1', '9/4', '9/7', '9/10', '9/13', '9/16', '9/19', '9/22', '9/24'];
-      const pvData = [45, 62, 78, 55, 95, 120, 85, 110, 148];
-      const bookingsData = [0, 1, 0, 1, 0, 2, 1, 1, 2];
+    // 3. PV × 予約相関グラフ描画 (Chart.js) ＆ 期間切り替え
+    let correlationChartInstance = null;
+    let currentChartRange = '2w';
 
-      new Chart(ctx, {
+    const chartRangeData = {
+      '1w': {
+        labels: ['9/20', '9/21', '9/22', '9/23', '9/24', '9/25', '9/26'],
+        pv: [92, 105, 110, 125, 148, 132, 120],
+        bookings: [1, 0, 1, 0, 2, 1, 1],
+        maxPV: 180,
+        maxBookings: 4,
+        barThickness: 16,
+        stepSize: 1
+      },
+      '2w': {
+        labels: ['9/13', '9/15', '9/17', '9/19', '9/21', '9/23', '9/25', '9/26'],
+        pv: [95, 120, 85, 78, 110, 95, 148, 120],
+        bookings: [0, 2, 1, 0, 1, 0, 2, 1],
+        maxPV: 180,
+        maxBookings: 4,
+        barThickness: 12,
+        stepSize: 1
+      },
+      '1m': {
+        labels: ['8/28', '9/1', '9/5', '9/9', '9/13', '9/17', '9/21', '9/25'],
+        pv: [42, 45, 62, 55, 95, 85, 110, 148],
+        bookings: [0, 0, 1, 1, 0, 1, 1, 2],
+        maxPV: 180,
+        maxBookings: 4,
+        barThickness: 10,
+        stepSize: 1
+      },
+      '6m': {
+        labels: ['2026年4月', '5月', '6月', '7月', '8月', '9月'],
+        pv: [620, 850, 1120, 1450, 1980, 2450],
+        bookings: [6, 9, 12, 16, 21, 28],
+        maxPV: 2800,
+        maxBookings: 35,
+        barThickness: 20,
+        stepSize: 5
+      },
+      '1y': {
+        labels: ['25/10', '11', '12', '26/1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        pv: [280, 340, 520, 480, 550, 690, 620, 850, 1120, 1450, 1980, 2450],
+        bookings: [2, 3, 5, 4, 5, 7, 6, 9, 12, 16, 21, 28],
+        maxPV: 2800,
+        maxBookings: 35,
+        barThickness: 14,
+        stepSize: 5
+      }
+    };
+
+    function setChartRange(range) {
+      if (!chartRangeData[range]) return;
+      currentChartRange = range;
+
+      // ボタンUIの切り替え
+      ['1w', '2w', '1m', '6m', '1y'].forEach(r => {
+        const btn = document.getElementById(`chart-btn-${r}`);
+        if (!btn) return;
+        if (r === range) {
+          btn.className = "px-2 py-0.5 rounded bg-[#2892d8] text-white shadow-xs font-bold transition";
+        } else {
+          btn.className = "px-2 py-0.5 rounded text-neutral-600 hover:text-black transition";
+        }
+      });
+
+      // スパークライン・カードのラベル連動
+      const sparklineLabel = document.getElementById("sparkline-pending-label");
+      if (sparklineLabel) {
+        const labelMap = {
+          '1w': '直近1週間の受信推移',
+          '2w': '直近2週間の受信推移',
+          '1m': '直近1ヶ月の受信推移',
+          '6m': '直近半年の受信推移',
+          '1y': '直近1年間の受信推移'
+        };
+        sparklineLabel.innerText = labelMap[range] || '直近2週間の受信推移';
+      }
+
+      if (!correlationChartInstance) return;
+      const d = chartRangeData[range];
+      correlationChartInstance.data.labels = d.labels;
+      correlationChartInstance.data.datasets[0].data = d.pv;
+      correlationChartInstance.data.datasets[1].data = d.bookings;
+      correlationChartInstance.data.datasets[1].barThickness = d.barThickness;
+
+      correlationChartInstance.options.scales.yPV.suggestedMax = d.maxPV;
+      correlationChartInstance.options.scales.yBookings.suggestedMax = d.maxBookings;
+      correlationChartInstance.options.scales.yBookings.ticks.stepSize = d.stepSize;
+
+      correlationChartInstance.update();
+    }
+
+    function initCorrelationChart() {
+      const canvas = document.getElementById('correlationChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const d = chartRangeData[currentChartRange] || chartRangeData['2w'];
+
+      correlationChartInstance = new Chart(ctx, {
         data: {
-          labels: labels,
+          labels: d.labels,
           datasets: [
             {
               type: 'line',
               label: 'PV数',
-              data: pvData,
+              data: d.pv,
               borderColor: '#2892d8',
               backgroundColor: 'rgba(40, 146, 216, 0.08)',
               borderWidth: 2.5,
@@ -1561,10 +1643,10 @@
             {
               type: 'bar',
               label: '予約・問合せ数',
-              data: bookingsData,
+              data: d.bookings,
               backgroundColor: '#18181b',
               borderRadius: 3,
-              barThickness: 12,
+              barThickness: d.barThickness,
               yAxisID: 'yBookings'
             }
           ]
@@ -1585,15 +1667,16 @@
               type: 'linear',
               position: 'left',
               grid: { color: '#f4f4f5' },
-              ticks: { font: { size: 10 }, color: '#71717a' }
+              ticks: { font: { size: 10 }, color: '#71717a' },
+              suggestedMax: d.maxPV
             },
             yBookings: {
               type: 'linear',
               position: 'right',
               grid: { display: false },
-              ticks: { stepSize: 1, font: { size: 10 }, color: '#71717a' },
+              ticks: { stepSize: d.stepSize, font: { size: 10 }, color: '#71717a' },
               min: 0,
-              max: 4
+              suggestedMax: d.maxBookings
             }
           }
         }
