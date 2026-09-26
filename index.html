@@ -1061,8 +1061,17 @@
           </div>
 
           <div class="border-t border-neutral-200 pt-4 space-y-3">
+            <!-- 未選択時の注釈アラート表示エリア -->
+            <div id="booking-datetime-alert" class="hidden p-2.5 bg-rose-50 border border-rose-300 rounded text-xs text-rose-700 leading-snug flex items-start gap-2 shadow-sm animate-pulse">
+              <i data-lucide="alert-circle" class="w-4 h-4 text-rose-600 shrink-0 mt-0.5"></i>
+              <div>
+                <strong class="font-bold block text-rose-800">日時が未指定です</strong>
+                <span class="text-[11px]">カレンダーでご希望の日時・利用時間帯（1時間〜）を指定してから選択してください。</span>
+              </div>
+            </div>
+
             <!-- CTA BUTTONS（厳選2本：利用予約を申し込む / お問い合わせ・ご相談） -->
-            <button onclick="openBookingModal()" class="w-full py-3 px-4 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs sm:text-sm rounded transition shadow flex items-center justify-center gap-2">
+            <button onclick="openBookingModal()" id="sidebar-booking-btn" class="w-full py-3 px-4 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs sm:text-sm rounded transition shadow flex items-center justify-center gap-2 cursor-pointer">
               <i data-lucide="calendar" class="w-4 h-4"></i>
               <span id="sidebar-booking-btn-text">利用予約を申し込む</span>
             </button>
@@ -1525,9 +1534,9 @@
   </div>
 
   <!-- TOAST NOTIFICATION -->
-  <div id="toast" class="fixed top-5 right-5 z-50 bg-[#2892d8] text-white px-4 py-3 rounded shadow-2xl flex items-center gap-2 text-xs transform transition-all duration-300 translate-y-[-100px] opacity-0 pointer-events-none">
-    <i data-lucide="check" class="w-4 h-4 text-white"></i>
-    <span id="toast-text">リンクをコピーしました</span>
+  <div id="toast" class="fixed top-5 right-5 z-50 bg-[#2892d8] text-white px-4 py-3 rounded shadow-2xl flex items-center gap-2 text-xs transform transition-all duration-300 translate-y-[-100px] opacity-0 pointer-events-none max-w-sm">
+    <span id="toast-icon"><i data-lucide="check" class="w-4 h-4 text-white"></i></span>
+    <span id="toast-text" class="font-medium">リンクをコピーしました</span>
   </div>
 
   <!-- ================= JAVASCRIPT ================= -->
@@ -1933,6 +1942,10 @@
         const rangeStr = getFormattedTimeRanges(publicSelectedHours);
         if (summaryEl) summaryEl.innerHTML = `<span class="font-bold text-[#207cb9] text-xs">${rangeStr}</span> <span class="text-neutral-500 font-normal">（合計 ${count}時間）</span>`;
         if (clearBtn) clearBtn.classList.remove("hidden");
+
+        // 日時指定されたら注釈アラートを即時解除
+        const alertEl = document.getElementById("booking-datetime-alert");
+        if (alertEl) alertEl.classList.add("hidden");
       }
 
       // 右側サイドバーの料金を即座に自動算出・更新
@@ -2292,6 +2305,36 @@
     // 5. モーダル操作（完全2系統分離）
     // 5.1 【利用予約を申し込む】モーダル操作（左側タイムラインの選択状態を完全統合）
     function openBookingModal(defaultMessage = "") {
+      // 0. カレンダーからの日時指定（希望日・時間帯）がされているかを検証
+      const hasSelectedTime = publicSelectedHours && publicSelectedHours.length > 0;
+      if (!hasSelectedTime) {
+        // A. サイドバーの予約ボタン上に赤枠の注釈アラートを表示
+        const alertEl = document.getElementById("booking-datetime-alert");
+        if (alertEl) {
+          alertEl.classList.remove("hidden");
+          clearTimeout(window._alertTimeout);
+          window._alertTimeout = setTimeout(() => {
+            alertEl.classList.add("hidden");
+          }, 8000);
+        }
+
+        // B. 警告トースト通知を表示
+        showToast("⚠️ カレンダーで日時指定（希望日・時間帯）を行ってから選択してください", true);
+
+        // C. カレンダーセクションへスムーズスクロールしてハイライト
+        const calSection = document.getElementById("calendar-section");
+        if (calSection) {
+          calSection.scrollIntoView({ behavior: "smooth", block: "start" });
+          calSection.classList.add("ring-2", "ring-rose-400", "transition-all", "duration-500");
+          setTimeout(() => {
+            calSection.classList.remove("ring-2", "ring-rose-400");
+          }, 2000);
+        }
+
+        // ★ タブ（モーダル）を開かずに終了
+        return;
+      }
+
       const modal = document.getElementById("booking-modal");
       if (!modal) return;
 
@@ -2987,17 +3030,28 @@
       }, 500);
     }
 
-    function showToast(msg) {
+    function showToast(msg, isWarning = false) {
       const toast = document.getElementById("toast");
       const toastText = document.getElementById("toast-text");
+      const toastIcon = document.getElementById("toast-icon");
       if (!toast || !toastText) return;
+
       toastText.innerText = msg;
-      toast.classList.remove("translate-y-[-100px]", "opacity-0", "pointer-events-none");
-      toast.classList.add("translate-y-0", "opacity-100");
-      setTimeout(() => {
+
+      if (isWarning) {
+        toast.className = "fixed top-5 right-5 z-50 bg-rose-600 text-white px-4 py-3 rounded shadow-2xl flex items-center gap-2 text-xs transform transition-all duration-300 translate-y-0 opacity-100 max-w-sm";
+        if (toastIcon) toastIcon.innerHTML = "<i data-lucide='alert-circle' class='w-4 h-4 text-white shrink-0'></i>";
+      } else {
+        toast.className = "fixed top-5 right-5 z-50 bg-[#2892d8] text-white px-4 py-3 rounded shadow-2xl flex items-center gap-2 text-xs transform transition-all duration-300 translate-y-0 opacity-100 max-w-sm";
+        if (toastIcon) toastIcon.innerHTML = "<i data-lucide='check' class='w-4 h-4 text-white shrink-0'></i>";
+      }
+      if (window.lucide) lucide.createIcons();
+
+      clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => {
         toast.classList.add("translate-y-[-100px]", "opacity-0", "pointer-events-none");
         toast.classList.remove("translate-y-0", "opacity-100");
-      }, 3500);
+      }, 4000);
     }
 
     // 初期化
