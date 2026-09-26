@@ -371,32 +371,6 @@
             </div>
           </div>
 
-          <!-- フィルター行 -->
-          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 pt-1">
-            <!-- フリーワード検索窓 -->
-            <div class="sm:col-span-5 relative">
-              <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-400"></i>
-              <input type="text" id="search-input" oninput="handleFilterChange()" placeholder="お名前・会社名・用途・プランで検索..." class="w-full text-xs pl-8 pr-3 py-2 bg-neutral-50 border border-neutral-300 rounded focus:outline-none focus:border-[#2892d8] focus:bg-white font-medium">
-            </div>
-
-            <!-- 期間絞り込み（カレンダーピッカー） -->
-            <div class="sm:col-span-4 flex items-center gap-1">
-              <input type="date" id="date-from" onchange="handleFilterChange()" class="w-1/2 text-xs py-1.5 px-2 bg-neutral-50 border border-neutral-300 rounded text-neutral-700 focus:outline-none focus:border-[#2892d8]">
-              <span class="text-neutral-400 text-xs">〜</span>
-              <input type="date" id="date-to" onchange="handleFilterChange()" class="w-1/2 text-xs py-1.5 px-2 bg-neutral-50 border border-neutral-300 rounded text-neutral-700 focus:outline-none focus:border-[#2892d8]">
-            </div>
-
-            <!-- ステータスフィルター -->
-            <div class="sm:col-span-3">
-              <select id="status-filter" onchange="handleFilterChange()" class="w-full text-xs py-2 px-2.5 bg-neutral-50 border border-neutral-300 rounded text-neutral-800 focus:outline-none focus:border-[#2892d8]">
-                <option value="all">すべてのステータス</option>
-                <option value="新規受付">新規受付（未対応のみ）</option>
-                <option value="承認済み">承認済み</option>
-                <option value="完了">利用完了</option>
-                <option value="キャンセル">キャンセル</option>
-              </select>
-            </div>
-          </div>
         </div>
 
         <!-- テーブル -->
@@ -443,86 +417,107 @@
       </section>
 
 
-      <!-- 6. 運営からのご報告 ＆ お知らせ投稿管理セクション -->
-      <section id="announcements-mgmt-section" class="bg-white rounded-lg border border-neutral-200 shadow-sm p-5 space-y-4 scroll-mt-20">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-neutral-100 gap-3">
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 class="font-bold text-neutral-900 text-sm sm:text-base flex items-center gap-2">
-                <i data-lucide="megaphone" class="w-4 h-4 text-[#2892d8]"></i>
-                運営からのご報告 ＆ お知らせ投稿管理
-              </h3>
-              <span id="announcements-count-badge" class="text-[10px] font-bold bg-[#f0f7fc] text-[#2892d8] border border-[#bce0f6] px-2 py-0.5 rounded">0件公開中</span>
-            </div>
-            <p class="text-xs text-neutral-500 mt-0.5">
-              Webサイトのトップに掲載される公式アナウンス・ご報告を投稿・編集します。
-            </p>
-          </div>
+      <!-- 6 & 7. 運営ご報告 ＆ レビュー管理（横並び四角・タップで開閉） -->
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
 
-          <button onclick="openAnnouncementModal()" class="px-3.5 py-1.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow-sm flex items-center gap-1 self-start sm:self-auto">
-            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-            <span>＋新しいご報告を投稿</span>
+        <!-- A. 運営からのご報告 ＆ お知らせ投稿管理 -->
+        <div id="card-announcements" class="bg-white rounded-lg border border-neutral-200 shadow-sm overflow-hidden transition-all duration-200">
+          <button type="button" onclick="toggleAdminCard('announcements')" class="w-full p-4 flex items-center justify-between text-left hover:bg-neutral-50 transition cursor-pointer select-none">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-[#f0f7fc] text-[#2892d8] flex items-center justify-center flex-shrink-0">
+                <i data-lucide="megaphone" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="font-bold text-neutral-900 text-sm">運営からのご報告 ＆ お知らせ管理</h3>
+                  <span id="announcements-count-badge" class="text-[10px] font-bold bg-[#f0f7fc] text-[#2892d8] border border-[#bce0f6] px-1.5 py-0.5 rounded">0件公開中</span>
+                </div>
+                <p class="text-[11px] text-neutral-400 mt-0.5">クリック / タップして開く</p>
+              </div>
+            </div>
+            <i data-lucide="chevron-down" id="announcements-toggle-icon" class="w-4 h-4 text-neutral-400 transition-transform duration-200"></i>
           </button>
-        </div>
 
-        <!-- お知らせ一覧テーブル -->
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs text-neutral-700 border border-neutral-200 rounded">
-            <thead class="bg-neutral-50 text-neutral-500 font-semibold border-b border-neutral-200">
-              <tr>
-                <th class="p-2.5">公開日</th>
-                <th class="p-2.5">カテゴリ</th>
-                <th class="p-2.5">タイトル</th>
-                <th class="p-2.5">ステータス</th>
-                <th class="p-2.5 text-right">操作</th>
-              </tr>
-            </thead>
-            <tbody id="announcements-table-body" class="divide-y divide-neutral-100 font-medium">
-              <!-- JSで描画 -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- 7. ご利用者様レビュー・口コミ管理（承認制）セクション -->
-      <section id="reviews-mgmt-section" class="bg-white rounded-lg border border-neutral-200 shadow-sm p-5 space-y-4 scroll-mt-20">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-neutral-100 gap-3">
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 class="font-bold text-neutral-900 text-sm sm:text-base flex items-center gap-2">
-                <i data-lucide="message-square" class="w-4 h-4 text-amber-500"></i>
-                ご利用者様レビュー・口コミ管理（承認制）
-              </h3>
-              <span id="reviews-pending-badge" class="text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded">未承認 0件</span>
+          <!-- 展開コンテンツ（初期非表示） -->
+          <div id="announcements-content" class="hidden p-4 sm:p-5 border-t border-neutral-100 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <p class="text-xs text-neutral-500">
+                Webサイトのトップに掲載される公式アナウンス・ご報告を投稿・編集します。
+              </p>
+              <button onclick="openAnnouncementModal()" class="px-3.5 py-1.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow-sm flex items-center gap-1 self-start sm:self-auto cursor-pointer">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                <span>＋新しいご報告を投稿</span>
+              </button>
             </div>
-            <p class="text-xs text-neutral-500 mt-0.5">
-              Webサイトから投稿されたお客様の声を審査します。運営が「掲載許可」を押したレビューのみがWebサイトに表示されます。
-            </p>
-          </div>
 
-          <div class="flex items-center gap-2">
-            <span class="text-xs text-neutral-500">※ 承認されたレビューのみ一般公開されます</span>
+            <!-- お知らせ一覧テーブル -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs text-neutral-700 border border-neutral-200 rounded">
+                <thead class="bg-neutral-50 text-neutral-500 font-semibold border-b border-neutral-200">
+                  <tr>
+                    <th class="p-2.5">公開日</th>
+                    <th class="p-2.5">カテゴリ</th>
+                    <th class="p-2.5">タイトル</th>
+                    <th class="p-2.5">ステータス</th>
+                    <th class="p-2.5 text-right">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="announcements-table-body" class="divide-y divide-neutral-100 font-medium">
+                  <!-- JSで描画 -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        <!-- レビュー一覧テーブル -->
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs text-neutral-700 border border-neutral-200 rounded">
-            <thead class="bg-neutral-50 text-neutral-500 font-semibold border-b border-neutral-200">
-              <tr>
-                <th class="p-2.5">投稿者 / 用途</th>
-                <th class="p-2.5">評価</th>
-                <th class="p-2.5">利用時期</th>
-                <th class="p-2.5">レビュー本文</th>
-                <th class="p-2.5">掲載ステータス</th>
-                <th class="p-2.5 text-right">審査・操作</th>
-              </tr>
-            </thead>
-            <tbody id="reviews-table-body" class="divide-y divide-neutral-100 font-medium">
-              <!-- JSで描画 -->
-            </tbody>
-          </table>
+        <!-- B. ご利用者様レビュー・口コミ管理（承認制） -->
+        <div id="card-reviews" class="bg-white rounded-lg border border-neutral-200 shadow-sm overflow-hidden transition-all duration-200">
+          <button type="button" onclick="toggleAdminCard('reviews')" class="w-full p-4 flex items-center justify-between text-left hover:bg-neutral-50 transition cursor-pointer select-none">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="message-square" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="font-bold text-neutral-900 text-sm">ご利用者様レビュー・口コミ管理</h3>
+                  <span id="reviews-pending-badge" class="text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded">未承認 0件</span>
+                </div>
+                <p class="text-[11px] text-neutral-400 mt-0.5">クリック / タップして開く</p>
+              </div>
+            </div>
+            <i data-lucide="chevron-down" id="reviews-toggle-icon" class="w-4 h-4 text-neutral-400 transition-transform duration-200"></i>
+          </button>
+
+          <!-- 展開コンテンツ（初期非表示） -->
+          <div id="reviews-content" class="hidden p-4 sm:p-5 border-t border-neutral-100 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <p class="text-xs text-neutral-500">
+                Webサイトから投稿されたお客様の声を審査します。運営が「掲載許可」を押したレビューのみがWebサイトに表示されます。
+              </p>
+              <span class="text-xs text-neutral-400">※ 承認されたレビューのみ一般公開</span>
+            </div>
+
+            <!-- レビュー一覧テーブル -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs text-neutral-700 border border-neutral-200 rounded">
+                <thead class="bg-neutral-50 text-neutral-500 font-semibold border-b border-neutral-200">
+                  <tr>
+                    <th class="p-2.5">投稿者 / 用途</th>
+                    <th class="p-2.5">評価</th>
+                    <th class="p-2.5">利用時期</th>
+                    <th class="p-2.5">レビュー本文</th>
+                    <th class="p-2.5">掲載ステータス</th>
+                    <th class="p-2.5 text-right">審査・操作</th>
+                  </tr>
+                </thead>
+                <tbody id="reviews-table-body" class="divide-y divide-neutral-100 font-medium">
+                  <!-- JSで描画 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
+
       </section>
 
     </main>
@@ -1789,7 +1784,6 @@
       selectedTimelineDate = dateStr;
       renderTimeline();
 
-      document.getElementById("search-input").value = dateStr;
       handleFilterChange();
 
       // カレンダーの再描画（選択枠ハイライト）
@@ -1807,48 +1801,28 @@
 
     function clearDateFilter() {
       selectedCalendarDate = "";
-      document.getElementById("search-input").value = "";
-      document.getElementById("date-from").value = "";
-      document.getElementById("date-to").value = "";
-      document.getElementById("status-filter").value = "all";
-      document.getElementById("clear-filter-btn").classList.add("hidden");
+      const clearBtn = document.getElementById("clear-filter-btn");
+      if (clearBtn) clearBtn.classList.add("hidden");
       document.getElementById("ledger-subtext").innerText = "ステータスはその場で直接変更できます。即時反映・自動保存されます。";
       handleFilterChange();
       if (calendarMode === 'month') renderMonthCalendar();
-      showToast("フィルターを解除しました");
+      showToast("すべての予約を表示しました");
     }
 
-    // 5. テーブル検索・期間絞り込み・インライン編集・ページネーション
+    // 5. テーブル絞り込み・インライン編集・ページネーション
     function handleFilterChange() {
-      const q = document.getElementById("search-input").value.trim().toLowerCase();
-      const from = document.getElementById("date-from").value;
-      const to = document.getElementById("date-to").value;
-      const status = document.getElementById("status-filter").value;
-
       const clearBtn = document.getElementById("clear-filter-btn");
-      if (q || from || to || status !== 'all') {
-        clearBtn.classList.remove("hidden");
+      if (selectedCalendarDate) {
+        if (clearBtn) clearBtn.classList.remove("hidden");
       } else {
-        clearBtn.classList.add("hidden");
+        if (clearBtn) clearBtn.classList.add("hidden");
       }
 
       filteredData = requestsData.filter(r => {
-        const matchQ = !q || (
-          (r.name && r.name.toLowerCase().includes(q)) ||
-          (r.company && r.company.toLowerCase().includes(q)) ||
-          (r.usage && r.usage.toLowerCase().includes(q)) ||
-          (r.plan && r.plan.toLowerCase().includes(q)) ||
-          (r.date && r.date.includes(q)) ||
-          (r.id && r.id.toLowerCase().includes(q))
-        );
-
-        let matchDate = true;
-        if (from && r.date && r.date < from) matchDate = false;
-        if (to && r.date && r.date > to) matchDate = false;
-
-        const matchStatus = (status === 'all') || (r.status === status);
-
-        return matchQ && matchDate && matchStatus;
+        if (selectedCalendarDate) {
+          return r.date === selectedCalendarDate;
+        }
+        return true;
       });
 
       currentPage = 1;
@@ -1883,22 +1857,22 @@
           const closedInfo = isClosedDay(selectedCalendarDate);
           if (closedInfo) {
             emptyState.innerHTML = `
-              <div class="max-w-md mx-auto bg-rose-50/70 border-2 border-dashed border-rose-300 rounded-xl p-6 sm:p-8 text-center shadow-sm">
-                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white border border-rose-300 text-rose-600 mb-3 shadow-sm">
-                  <i data-lucide="calendar-x" class="w-6 h-6 stroke-[2.5]"></i>
+              <div class="max-w-xl mx-auto bg-rose-50/70 border-2 border-dashed border-rose-300 rounded-xl p-4 sm:p-5 text-center shadow-sm">
+                <div class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white border border-rose-300 text-rose-600 mb-2 shadow-xs">
+                  <i data-lucide="calendar-x" class="w-5 h-5 stroke-[2.5]"></i>
                 </div>
-                <h4 class="text-base font-bold text-rose-800 mb-1">【 休 休業日（予約停止中） 】</h4>
-                <p class="text-xs text-neutral-600 mb-5 leading-relaxed font-mono">
+                <h4 class="text-sm sm:text-base font-bold text-rose-800 mb-1">【 休 休業日（予約停止中） 】</h4>
+                <p class="text-xs text-neutral-600 mb-3 leading-relaxed font-mono">
                   <strong class="text-neutral-900">${selectedCalendarDate}</strong> は休業日に設定されています。<br>
                   理由: <span class="font-bold text-rose-700">${escapeHtml(closedInfo.reason || 'スタジオ休業日')}</span>
                 </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5">
-                  <button onclick="openManualBookingModal('${selectedCalendarDate}')" class="w-full sm:w-auto px-4 py-2.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
+                <div class="flex flex-wrap items-center justify-center gap-2">
+                  <button onclick="openManualBookingModal('${selectedCalendarDate}')" class="whitespace-nowrap px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                     <span>＋ この日に手動で予約を追加する</span>
                   </button>
-                  <button onclick="deleteClosedDay('${selectedCalendarDate}')" class="w-full sm:w-auto px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
-                    <i data-lucide="x" class="w-4 h-4"></i>
+                  <button onclick="deleteClosedDay('${selectedCalendarDate}')" class="whitespace-nowrap px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
                     <span>休業日設定を解除する</span>
                   </button>
                 </div>
@@ -1906,22 +1880,22 @@
             `;
           } else {
             emptyState.innerHTML = `
-              <div class="max-w-md mx-auto bg-[#f0f7fc]/60 border-2 border-dashed border-[#bce0f6] rounded-xl p-6 sm:p-8 text-center shadow-sm">
-                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white border border-[#bce0f6] text-[#2892d8] mb-3 shadow-sm">
-                  <i data-lucide="check" class="w-6 h-6 stroke-[3]"></i>
+              <div class="max-w-xl mx-auto bg-[#f0f7fc]/60 border-2 border-dashed border-[#bce0f6] rounded-xl p-4 sm:p-5 text-center shadow-sm">
+                <div class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#bce0f6] text-[#2892d8] mb-2 shadow-xs">
+                  <i data-lucide="check" class="w-5 h-5 stroke-[3]"></i>
                 </div>
-                <h4 class="text-base font-bold text-neutral-900 mb-1">【 ◯ 終日 空室（予約可能） 】</h4>
-                <p class="text-xs text-neutral-600 mb-5 leading-relaxed font-mono">
+                <h4 class="text-sm sm:text-base font-bold text-neutral-900 mb-1">【 ◯ 終日 空室（予約可能） 】</h4>
+                <p class="text-xs text-neutral-600 mb-3 leading-relaxed font-mono">
                   <strong class="text-neutral-900">${selectedCalendarDate}</strong> は現在予約が入っておりません。<br>
                   電話や口頭で受けた予約をこの日程に直接登録できます。
                 </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5">
-                  <button onclick="openManualBookingModal('${selectedCalendarDate}')" class="w-full sm:w-auto px-4 py-2.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
+                <div class="flex flex-wrap items-center justify-center gap-2">
+                  <button onclick="openManualBookingModal('${selectedCalendarDate}')" class="whitespace-nowrap px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                     <span>＋ この日に手動で予約を追加する</span>
                   </button>
-                  <button onclick="openClosedDayModal('${selectedCalendarDate}')" class="w-full sm:w-auto px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
-                    <i data-lucide="calendar-x" class="w-4 h-4"></i>
+                  <button onclick="openClosedDayModal('${selectedCalendarDate}')" class="whitespace-nowrap px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i data-lucide="calendar-x" class="w-3.5 h-3.5"></i>
                     <span>＋ 休業日を追加する</span>
                   </button>
                 </div>
@@ -2871,6 +2845,22 @@ ${signature}`;
           </tr>
         `;
       }).join('');
+    }
+
+    // 運営ご報告 / レビュー管理カードの開閉トグル
+    function toggleAdminCard(type) {
+      const content = document.getElementById(`${type}-content`);
+      const icon = document.getElementById(`${type}-toggle-icon`);
+      if (!content) return;
+      const isHidden = content.classList.contains("hidden");
+      if (isHidden) {
+        content.classList.remove("hidden");
+        if (icon) icon.classList.add("rotate-180");
+        if (window.lucide) lucide.createIcons();
+      } else {
+        content.classList.add("hidden");
+        if (icon) icon.classList.remove("rotate-180");
+      }
     }
 
     function openAnnouncementModal() {
