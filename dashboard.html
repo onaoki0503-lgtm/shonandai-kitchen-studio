@@ -131,6 +131,18 @@
             <span id="header-alert-text">0件</span>
           </div>
 
+          <div class="hidden xl:flex items-center gap-1.5 text-xs text-neutral-600">
+            <a href="#closed-days-section" class="hover:text-rose-600 px-2 py-1 rounded hover:bg-neutral-100 flex items-center gap-1">
+              <i data-lucide="calendar-x" class="w-3.5 h-3.5 text-rose-500"></i> 休業日設定
+            </a>
+            <a href="#announcements-mgmt-section" class="hover:text-[#2892d8] px-2 py-1 rounded hover:bg-neutral-100 flex items-center gap-1">
+              <i data-lucide="megaphone" class="w-3.5 h-3.5 text-[#2892d8]"></i> ご報告投稿
+            </a>
+            <a href="#reviews-mgmt-section" class="hover:text-amber-600 px-2 py-1 rounded hover:bg-neutral-100 flex items-center gap-1">
+              <i data-lucide="message-square" class="w-3.5 h-3.5 text-amber-500"></i> レビュー審査
+            </a>
+          </div>
+
           <a href="index.html" target="_blank" class="hidden sm:inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-[#2892d8] font-medium border border-neutral-200 px-3 py-1.5 rounded hover:bg-neutral-50 transition">
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Webサイト
           </a>
@@ -440,6 +452,128 @@
           <div class="flex items-center gap-1" id="pagination-controls"></div>
         </div>
 
+      </section>
+
+      <!-- 5. スタジオ休業日 設定・管理セクション -->
+      <section id="closed-days-section" class="bg-white rounded-lg border border-neutral-200 shadow-sm p-5 space-y-4 scroll-mt-20">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-neutral-100 gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-neutral-900 text-sm sm:text-base flex items-center gap-2">
+                <i data-lucide="calendar-x" class="w-4 h-4 text-rose-600"></i>
+                スタジオ休業日 設定・管理
+              </h3>
+              <span id="closed-days-count-badge" class="text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 rounded">0件設定中</span>
+            </div>
+            <p class="text-xs text-neutral-500 mt-0.5">
+              定休日や設備メンテナンス等の休業日を設定します。登録された日はWebサイトのカレンダーで「休」となり、予約受付が自動停止します。
+            </p>
+          </div>
+
+          <button onclick="openClosedDayModal()" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded transition shadow-sm flex items-center gap-1 self-start sm:self-auto">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>＋休業日を登録する</span>
+          </button>
+        </div>
+
+        <!-- 休業日一覧テーブル -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-neutral-700 border border-neutral-200 rounded">
+            <thead class="bg-neutral-50 text-neutral-500 font-semibold border-b border-neutral-200">
+              <tr>
+                <th class="p-2.5">休業日</th>
+                <th class="p-2.5">休業理由 / 用途</th>
+                <th class="p-2.5">Webサイト表示状態</th>
+                <th class="p-2.5 text-right">操作</th>
+              </tr>
+            </thead>
+            <tbody id="closed-days-table-body" class="divide-y divide-neutral-100 font-medium">
+              <!-- JSで描画 -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 6. 運営からのご報告 ＆ お知らせ投稿管理セクション -->
+      <section id="announcements-mgmt-section" class="bg-white rounded-lg border border-neutral-200 shadow-sm p-5 space-y-4 scroll-mt-20">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-neutral-100 gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-neutral-900 text-sm sm:text-base flex items-center gap-2">
+                <i data-lucide="megaphone" class="w-4 h-4 text-[#2892d8]"></i>
+                運営からのご報告 ＆ お知らせ投稿管理
+              </h3>
+              <span id="announcements-count-badge" class="text-[10px] font-bold bg-[#f0f7fc] text-[#2892d8] border border-[#bce0f6] px-2 py-0.5 rounded">0件公開中</span>
+            </div>
+            <p class="text-xs text-neutral-500 mt-0.5">
+              Webサイトのトップに掲載される公式アナウンス・ご報告を投稿・編集します。
+            </p>
+          </div>
+
+          <button onclick="openAnnouncementModal()" class="px-3.5 py-1.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow-sm flex items-center gap-1 self-start sm:self-auto">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>＋新しいご報告を投稿</span>
+          </button>
+        </div>
+
+        <!-- お知らせ一覧テーブル -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-neutral-700 border border-neutral-200 rounded">
+            <thead class="bg-neutral-50 text-neutral-500 font-semibold border-b border-neutral-200">
+              <tr>
+                <th class="p-2.5">公開日</th>
+                <th class="p-2.5">カテゴリ</th>
+                <th class="p-2.5">タイトル</th>
+                <th class="p-2.5">ステータス</th>
+                <th class="p-2.5 text-right">操作</th>
+              </tr>
+            </thead>
+            <tbody id="announcements-table-body" class="divide-y divide-neutral-100 font-medium">
+              <!-- JSで描画 -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 7. ご利用者様レビュー・口コミ管理（承認制）セクション -->
+      <section id="reviews-mgmt-section" class="bg-white rounded-lg border border-neutral-200 shadow-sm p-5 space-y-4 scroll-mt-20">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-neutral-100 gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-neutral-900 text-sm sm:text-base flex items-center gap-2">
+                <i data-lucide="message-square" class="w-4 h-4 text-amber-500"></i>
+                ご利用者様レビュー・口コミ管理（承認制）
+              </h3>
+              <span id="reviews-pending-badge" class="text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded">未承認 0件</span>
+            </div>
+            <p class="text-xs text-neutral-500 mt-0.5">
+              Webサイトから投稿されたお客様の声を審査します。運営が「掲載許可」を押したレビューのみがWebサイトに表示されます。
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-neutral-500">※ 承認されたレビューのみ一般公開されます</span>
+          </div>
+        </div>
+
+        <!-- レビュー一覧テーブル -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-neutral-700 border border-neutral-200 rounded">
+            <thead class="bg-neutral-50 text-neutral-500 font-semibold border-b border-neutral-200">
+              <tr>
+                <th class="p-2.5">投稿者 / 用途</th>
+                <th class="p-2.5">評価</th>
+                <th class="p-2.5">利用時期</th>
+                <th class="p-2.5">レビュー本文</th>
+                <th class="p-2.5">掲載ステータス</th>
+                <th class="p-2.5 text-right">審査・操作</th>
+              </tr>
+            </thead>
+            <tbody id="reviews-table-body" class="divide-y divide-neutral-100 font-medium">
+              <!-- JSで描画 -->
+            </tbody>
+          </table>
+        </div>
       </section>
 
     </main>
@@ -803,6 +937,98 @@
           Web版 Gmail で開く
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ================= CLOSED DAY MODAL (休業日登録モーダル) ================= -->
+  <div id="closed-day-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-lg max-w-md w-full p-6 shadow-2xl border border-neutral-300 relative my-8">
+      <button onclick="closeClosedDayModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1.5 rounded hover:bg-neutral-100 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-4 pb-3 border-b border-neutral-100">
+        <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider block">STUDIO CLOSED SETTING</span>
+        <h3 class="text-base font-bold text-neutral-900 flex items-center gap-1.5">
+          <i data-lucide="calendar-x" class="w-4 h-4 text-rose-600"></i>
+          ＋ 休業日の設定・登録
+        </h3>
+        <p class="text-xs text-neutral-500 mt-0.5">指定した日はWebサイトのカレンダーで「休」となり、一般予約の受付が停止されます。</p>
+      </div>
+
+      <form id="closed-day-form" onsubmit="handleClosedDaySubmit(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-semibold text-neutral-800 mb-1">休業日 <span class="text-rose-600 font-bold">*</span></label>
+          <input type="date" id="closed-date-input" required class="w-full border border-neutral-300 rounded p-2 text-xs font-mono font-bold text-neutral-900 focus:outline-none focus:border-rose-600">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-neutral-800 mb-1">休業理由 / タイトル <span class="text-rose-600 font-bold">*</span></label>
+          <input type="text" id="closed-reason-input" required placeholder="例：設備・換気ダクト定期メンテナンス、定休日、年末年始休業" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-rose-600">
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded transition shadow text-xs flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>この日を休業日に設定する</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= ANNOUNCEMENT MODAL (ご報告・お知らせ投稿モーダル) ================= -->
+  <div id="announcement-modal" class="fixed inset-0 z-50 bg-black/70 hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl border border-neutral-300 relative my-8">
+      <button onclick="closeAnnouncementModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1.5 rounded hover:bg-neutral-100 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-4 pb-3 border-b border-neutral-100">
+        <span class="text-[10px] font-bold text-[#2892d8] uppercase tracking-wider block">ANNOUNCEMENT PUBLISHER</span>
+        <h3 class="text-base font-bold text-neutral-900 flex items-center gap-1.5">
+          <i data-lucide="megaphone" class="w-4 h-4 text-[#2892d8]"></i>
+          ＋ 運営からのご報告・お知らせ投稿
+        </h3>
+        <p class="text-xs text-neutral-500 mt-0.5">Webサイトのトップに公式アナウンスとして即時掲載されます。</p>
+      </div>
+
+      <form id="announcement-form" onsubmit="handleAnnouncementSubmit(event)" class="space-y-3 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label class="block font-semibold text-neutral-800 mb-1">公開日付 <span class="text-[#2892d8] font-bold">*</span></label>
+            <input type="date" id="ann-date-input" required class="w-full border border-neutral-300 rounded p-2 text-xs font-mono font-bold text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+          </div>
+          <div>
+            <label class="block font-semibold text-neutral-800 mb-1">カテゴリ種別 <span class="text-[#2892d8] font-bold">*</span></label>
+            <select id="ann-category-input" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+              <option value="お知らせ">お知らせ</option>
+              <option value="重要">重要</option>
+              <option value="設備保守">設備保守・メンテナンス</option>
+              <option value="料金プラン">料金プラン</option>
+              <option value="キャンペーン">キャンペーン</option>
+              <option value="ご報告">運営のご報告</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-neutral-800 mb-1">タイトル <span class="text-[#2892d8] font-bold">*</span></label>
+          <input type="text" id="ann-title-input" required placeholder="例：大型スチームコンベクションオーブンの点検完了のご報告" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-neutral-800 mb-1">ご報告・お知らせ本文 <span class="text-[#2892d8] font-bold">*</span></label>
+          <textarea id="ann-content-input" rows="5" required placeholder="詳細内容をご記入ください。" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8] leading-relaxed"></textarea>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full py-2.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold rounded transition shadow text-xs flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>この内容でWebサイトに公開する</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -1419,10 +1645,26 @@
       for (let day = 1; day <= daysInMonth; day++) {
         const dateStr = `${calYear}-${String(calMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const isBooked = bookedDates.includes(dateStr);
+        const closedInfo = isClosedDay(dateStr);
         const isSelected = (selectedCalendarDate === dateStr);
         const cell = document.createElement("div");
 
-        if (isBooked) {
+        if (closedInfo) {
+          // 休業日マス
+          cell.className = `p-2 rounded bg-rose-50 border-2 border-rose-300 text-rose-700 flex flex-col items-center justify-between min-h-[50px] shadow-sm cursor-pointer hover:bg-rose-100 transition ${
+            isSelected ? 'ring-4 ring-rose-500/40' : ''
+          }`;
+          cell.title = `休業日: ${closedInfo.reason || 'スタジオ休業日'}`;
+          cell.innerHTML = `
+            <div class="text-[11px] font-bold">${day}</div>
+            <div class="text-[9px] bg-rose-600 text-white px-1 rounded font-bold">休業日</div>
+          `;
+          cell.onclick = () => {
+            if (confirm(`【休業日設定】\n日付: ${dateStr}\n理由: ${closedInfo.reason || '休業日'}\n\nこの日の休業日設定を解除しますか？`)) {
+              deleteClosedDay(dateStr);
+            }
+          };
+        } else if (isBooked) {
           // 予約ありマス
           cell.className = `p-2 rounded bg-[#2892d8] text-white font-bold flex flex-col items-center justify-between min-h-[50px] shadow-sm cursor-pointer hover:bg-[#207cb9] transition ${
             isSelected ? 'ring-4 ring-black/40' : ''
@@ -1433,7 +1675,7 @@
           `;
           cell.onclick = () => handleCalendarDateClick(dateStr, true);
         } else {
-          // 空室マス（★重要: 空室もクリック可能にし、下部にフィードバックと手動追加導線を提供）
+          // 空室マス
           cell.className = `p-2 rounded border border-neutral-200 bg-white text-neutral-700 flex flex-col items-center justify-between min-h-[50px] hover:border-[#2892d8] hover:bg-[#f0f7fc]/50 transition cursor-pointer ${
             isSelected ? 'border-2 border-[#2892d8] bg-[#f0f7fc]' : ''
           }`;
@@ -2371,6 +2613,374 @@ ${signature}`;
       }, 3000);
     }
 
+    // ================= 休業日データ管理 =================
+    function getClosedDays() {
+      try {
+        const raw = localStorage.getItem("sks_closed_days");
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return [
+        { date: "2026-10-14", reason: "設備・換気ダクト定期点検のため終日休業" }
+      ];
+    }
+
+    function isClosedDay(dateStr) {
+      const list = getClosedDays();
+      return list.find(item => (typeof item === 'string' ? item === dateStr : item.date === dateStr));
+    }
+
+    function renderClosedDaysTable() {
+      const tbody = document.getElementById("closed-days-table-body");
+      const badge = document.getElementById("closed-days-count-badge");
+      if (!tbody) return;
+
+      const list = getClosedDays();
+      if (badge) badge.innerText = `${list.length}件設定中`;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-neutral-400">現在、設定された休業日はありません。「＋休業日を登録する」から追加できます。</td></tr>`;
+        return;
+      }
+
+      // 日付順にソート
+      list.sort((a, b) => (a.date || a).localeCompare(b.date || b));
+
+      tbody.innerHTML = list.map(item => {
+        const d = typeof item === 'object' ? item.date : item;
+        const r = typeof item === 'object' ? item.reason : "スタジオ休業日";
+        return `
+          <tr class="hover:bg-neutral-50 transition">
+            <td class="p-2.5 font-mono font-bold text-neutral-900">${d}</td>
+            <td class="p-2.5 text-neutral-700">${escapeHtml(r)}</td>
+            <td class="p-2.5">
+              <span class="text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 rounded">
+                予約受付停止（休）
+              </span>
+            </td>
+            <td class="p-2.5 text-right">
+              <button onclick="deleteClosedDay('${d}')" class="px-2.5 py-1 text-xs text-rose-600 hover:text-white hover:bg-rose-600 border border-rose-300 rounded transition font-medium">
+                休業を解除
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openClosedDayModal(prefillDate) {
+      const modal = document.getElementById("closed-day-modal");
+      const dateInput = document.getElementById("closed-date-input");
+      if (dateInput) {
+        dateInput.value = prefillDate || "";
+      }
+      if (modal) {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+      }
+    }
+
+    function closeClosedDayModal() {
+      const modal = document.getElementById("closed-day-modal");
+      if (modal) {
+        modal.classList.remove("flex");
+        modal.classList.add("hidden");
+      }
+    }
+
+    function handleClosedDaySubmit(e) {
+      e.preventDefault();
+      const date = document.getElementById("closed-date-input").value;
+      const reason = document.getElementById("closed-reason-input").value.trim();
+      if (!date) return;
+
+      const list = getClosedDays();
+      // 重複チェック
+      const existingIdx = list.findIndex(item => (typeof item === 'object' ? item.date === date : item === date));
+      if (existingIdx > -1) {
+        list[existingIdx] = { date, reason: reason || "スタジオ休業日" };
+      } else {
+        list.push({ date, reason: reason || "スタジオ休業日" });
+      }
+
+      localStorage.setItem("sks_closed_days", JSON.stringify(list));
+      closeClosedDayModal();
+      document.getElementById("closed-day-form").reset();
+      renderClosedDaysTable();
+      renderMonthCalendar();
+      showToast(`${date} を休業日に設定しました（Webサイト連動済）`);
+    }
+
+    function deleteClosedDay(dateStr) {
+      let list = getClosedDays();
+      list = list.filter(item => (typeof item === 'object' ? item.date !== dateStr : item !== dateStr));
+      localStorage.setItem("sks_closed_days", JSON.stringify(list));
+      renderClosedDaysTable();
+      renderMonthCalendar();
+      showToast(`${dateStr} の休業日設定を解除しました`);
+    }
+
+    // ================= 運営からのご報告・お知らせ管理 =================
+    const defaultAnnouncementsMgmt = [
+      {
+        id: "ann_1",
+        date: "2026-09-20",
+        category: "設備保守",
+        categoryColor: "blue",
+        title: "大型スチームコンベクションオーブン・真空包装機の定期点検が完了いたしました",
+        content: "秋の仕込みシーズンに向けて、大型スチームコンベクションオーブンおよび業務用真空包装機の定期メンテナンスを実施いたしました。全台万全の状態で稼働しております。週末・月曜日の製造枠のご予約はお早めにお願いいたします。",
+        status: "published"
+      },
+      {
+        id: "ann_2",
+        date: "2026-09-10",
+        category: "料金プラン",
+        categoryColor: "emerald",
+        title: "【秋の仕込み応援】Kitchen 8時間以上パック上限16,500円（税込）適用中",
+        content: "菓子製造・飲食店営業許可完備のKitchenプランでは、1日に8時間以上ご利用いただく場合、何時間使っても一律16,500円（税込）となるお得な上限パックをご利用いただけます。仕込み量が多い製菓事業者様や定期ポップアップ出店者様を応援しております。",
+        status: "published"
+      }
+    ];
+
+    function getAnnouncements() {
+      try {
+        const raw = localStorage.getItem("sks_announcements");
+        if (raw) {
+          const list = JSON.parse(raw);
+          if (Array.isArray(list) && list.length > 0) return list;
+        }
+      } catch (e) {}
+      return defaultAnnouncementsMgmt;
+    }
+
+    function renderAnnouncementsTable() {
+      const tbody = document.getElementById("announcements-table-body");
+      const badge = document.getElementById("announcements-count-badge");
+      if (!tbody) return;
+
+      const list = getAnnouncements();
+      const publishedCount = list.filter(a => a.status === 'published').length;
+      if (badge) badge.innerText = `${publishedCount}件公開中`;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-neutral-400">現在、お知らせはありません。「＋新しいご報告を投稿」から作成できます。</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(a => {
+        const isPub = (a.status === 'published');
+        return `
+          <tr class="hover:bg-neutral-50 transition">
+            <td class="p-2.5 font-mono text-neutral-600">${a.date}</td>
+            <td class="p-2.5">
+              <span class="text-[10px] font-bold bg-[#f0f7fc] text-[#2892d8] border border-[#bce0f6] px-1.5 py-0.5 rounded">
+                ${a.category || 'お知らせ'}
+              </span>
+            </td>
+            <td class="p-2.5 font-bold text-neutral-900 max-w-[260px] truncate" title="${escapeHtml(a.title)}">
+              ${escapeHtml(a.title)}
+            </td>
+            <td class="p-2.5">
+              <span class="text-[10px] font-bold ${isPub ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-neutral-100 text-neutral-600 border border-neutral-300'} px-2 py-0.5 rounded">
+                ${isPub ? '公開中' : '非公開'}
+              </span>
+            </td>
+            <td class="p-2.5 text-right space-x-1.5">
+              <button onclick="toggleAnnouncementStatus('${a.id}')" class="px-2 py-1 text-xs border border-neutral-300 rounded hover:bg-neutral-100 transition">
+                ${isPub ? '非公開にする' : '公開する'}
+              </button>
+              <button onclick="deleteAnnouncement('${a.id}')" class="px-2 py-1 text-xs text-rose-600 border border-rose-200 rounded hover:bg-rose-50 transition">
+                削除
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openAnnouncementModal() {
+      const modal = document.getElementById("announcement-modal");
+      const dateInput = document.getElementById("ann-date-input");
+      if (dateInput) {
+        dateInput.value = new Date().toISOString().slice(0, 10);
+      }
+      if (modal) {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+      }
+    }
+
+    function closeAnnouncementModal() {
+      const modal = document.getElementById("announcement-modal");
+      if (modal) {
+        modal.classList.remove("flex");
+        modal.classList.add("hidden");
+      }
+    }
+
+    function handleAnnouncementSubmit(e) {
+      e.preventDefault();
+      const date = document.getElementById("ann-date-input").value;
+      const category = document.getElementById("ann-category-input").value;
+      const title = document.getElementById("ann-title-input").value.trim();
+      const content = document.getElementById("ann-content-input").value.trim();
+
+      const newAnn = {
+        id: "ann_" + Date.now(),
+        date,
+        category,
+        categoryColor: category === '料金プラン' || category === 'キャンペーン' ? 'emerald' : category === '重要' ? 'rose' : 'blue',
+        title,
+        content,
+        status: "published"
+      };
+
+      const list = getAnnouncements();
+      list.unshift(newAnn);
+      localStorage.setItem("sks_announcements", JSON.stringify(list));
+
+      closeAnnouncementModal();
+      document.getElementById("announcement-form").reset();
+      renderAnnouncementsTable();
+      showToast("新しいご報告をWebサイトに公開しました！");
+    }
+
+    function toggleAnnouncementStatus(id) {
+      const list = getAnnouncements();
+      const target = list.find(a => a.id === id);
+      if (target) {
+        target.status = (target.status === 'published' ? 'draft' : 'published');
+        localStorage.setItem("sks_announcements", JSON.stringify(list));
+        renderAnnouncementsTable();
+        showToast(`お知らせのステータスを「${target.status === 'published' ? '公開' : '非公開'}」に更新しました`);
+      }
+    }
+
+    function deleteAnnouncement(id) {
+      if (!confirm("このお知らせを削除しますか？")) return;
+      let list = getAnnouncements();
+      list = list.filter(a => a.id !== id);
+      localStorage.setItem("sks_announcements", JSON.stringify(list));
+      renderAnnouncementsTable();
+      showToast("お知らせを削除しました");
+    }
+
+    // ================= レビュー・口コミ審査管理（承認制） =================
+    const defaultReviewsMgmt = [
+      {
+        id: "rev_1",
+        name: "製菓ブランド・ポップアップ出店者様",
+        role: "菓子製造・ポップアップ出店",
+        rating: 5,
+        date: "2026年9月利用",
+        content: "プリンの量産仕込みで利用させていただきました。スチームオーブンや真空パック機が揃っており、作業効率が格段に良かったです。自然光が入るのでSNS用の仕込み写真も綺麗に撮れました。",
+        status: "approved",
+        created_at: "2026-09-20T10:00:00.000Z"
+      },
+      {
+        id: "rev_2",
+        name: "料理教室講師様",
+        role: "レッスン開催",
+        rating: 5,
+        date: "2026年8月利用",
+        content: "生徒さん8名をお招きしてのレッスンでした。テーブルが広く、テラスの緑が見えて生徒さんからも大好評でした。湘南台駅から近くて分かりやすいのも安心です。",
+        status: "approved",
+        created_at: "2026-08-25T14:30:00.000Z"
+      }
+    ];
+
+    function getReviews() {
+      try {
+        const raw = localStorage.getItem("sks_reviews");
+        if (raw) {
+          const list = JSON.parse(raw);
+          if (Array.isArray(list) && list.length > 0) return list;
+        }
+      } catch (e) {}
+      return defaultReviewsMgmt;
+    }
+
+    function renderReviewsTable() {
+      const tbody = document.getElementById("reviews-table-body");
+      const badge = document.getElementById("reviews-pending-badge");
+      if (!tbody) return;
+
+      const list = getReviews();
+      const pendingCount = list.filter(r => r.status === 'pending').length;
+      if (badge) {
+        badge.innerText = `未承認 ${pendingCount}件`;
+        badge.className = pendingCount > 0 
+          ? "text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 px-2 py-0.5 rounded animate-pulse" 
+          : "text-[10px] font-bold bg-neutral-100 text-neutral-600 border border-neutral-200 px-2 py-0.5 rounded";
+      }
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-neutral-400">現在、投稿されたレビューはありません。</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(r => {
+        const stars = "★".repeat(Number(r.rating || 5));
+        const isApproved = (r.status === 'approved');
+        const isPending = (r.status === 'pending');
+
+        const statusBadge = isApproved 
+          ? `<span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded">公開中 (承認済)</span>` 
+          : isPending 
+            ? `<span class="text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-300 px-2 py-0.5 rounded">承認待ち (未審査)</span>` 
+            : `<span class="text-[10px] font-bold bg-neutral-100 text-neutral-600 border border-neutral-300 px-2 py-0.5 rounded">非公開 / 却下</span>`;
+
+        return `
+          <tr class="hover:bg-neutral-50 transition">
+            <td class="p-2.5">
+              <div class="font-bold text-neutral-900">${escapeHtml(r.name)}</div>
+              ${r.role ? `<div class="text-[10px] text-neutral-500">${escapeHtml(r.role)}</div>` : ''}
+              ${r.email ? `<div class="text-[10px] text-neutral-400 font-mono">${escapeHtml(r.email)}</div>` : ''}
+            </td>
+            <td class="p-2.5 text-amber-500 font-bold font-mono">${stars} (${r.rating || 5}.0)</td>
+            <td class="p-2.5 text-neutral-600 font-mono text-[11px]">${r.date || ''}</td>
+            <td class="p-2.5 text-neutral-700 max-w-[280px] text-[11px] leading-relaxed">
+              ${escapeHtml(r.content || '')}
+            </td>
+            <td class="p-2.5">${statusBadge}</td>
+            <td class="p-2.5 text-right space-x-1">
+              ${!isApproved ? `
+                <button onclick="updateReviewStatus('${r.id}', 'approved')" class="px-2.5 py-1 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded shadow-sm transition">
+                  掲載を許可
+                </button>
+              ` : `
+                <button onclick="updateReviewStatus('${r.id}', 'rejected')" class="px-2 py-1 text-xs text-neutral-600 border border-neutral-300 hover:bg-neutral-100 rounded transition">
+                  非公開にする
+                </button>
+              `}
+              <button onclick="deleteReview('${r.id}')" class="px-2 py-1 text-xs text-rose-600 border border-rose-200 hover:bg-rose-50 rounded transition">
+                削除
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updateReviewStatus(id, newStatus) {
+      const list = getReviews();
+      const target = list.find(r => r.id === id);
+      if (target) {
+        target.status = newStatus;
+        localStorage.setItem("sks_reviews", JSON.stringify(list));
+        renderReviewsTable();
+        showToast(newStatus === 'approved' ? "レビューの掲載を許可しました（Webサイトに即時公開）" : "レビューを非公開に設定しました");
+      }
+    }
+
+    function deleteReview(id) {
+      if (!confirm("このレビューを完全に削除しますか？")) return;
+      let list = getReviews();
+      list = list.filter(r => r.id !== id);
+      localStorage.setItem("sks_reviews", JSON.stringify(list));
+      renderReviewsTable();
+      showToast("レビューを削除しました");
+    }
+
     function initDashboard() {
       initTimeline();
       loadData();
@@ -2378,6 +2988,9 @@ ${signature}`;
       renderMonthCalendar();
       renderTimeline();
       handleFilterChange();
+      renderClosedDaysTable();
+      renderAnnouncementsTable();
+      renderReviewsTable();
     }
 
     window.addEventListener("DOMContentLoaded", () => {
