@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ご予約内容の確認 ＆ 利用規約同意｜湘南台キッチンスタジオ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- HEADER -->
+  <header class="bg-white border-b border-neutral-200 sticky top-0 z-30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded bg-[#2892d8] text-white font-black text-sm sm:text-base flex items-center justify-center shadow-xs">S</div>
+        <span class="font-bold text-sm sm:text-base text-neutral-900 tracking-tight">Shonandai Kitchen Studio</span>
+      </div>
+      <a href="index.html" class="text-xs text-neutral-500 hover:text-[#2892d8] font-medium transition">公式Webサイト ↗</a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-2xl mx-auto px-4 py-8 w-full flex-1">
+
+    <!-- LOADING STATE -->
+    <div id="loading-state" class="bg-white rounded-lg p-8 border border-neutral-200 text-center shadow-sm">
+      <div class="inline-block animate-spin text-2xl text-[#2892d8] mb-3">⌛</div>
+      <p class="text-xs text-neutral-600 font-medium">ご予約内容を読み込んでおります...</p>
+    </div>
+
+    <!-- ERROR STATE -->
+    <div id="error-state" class="hidden bg-white rounded-lg p-8 border border-rose-200 text-center shadow-sm">
+      <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="alert-circle" class="w-6 h-6"></i>
+      </div>
+      <h2 class="text-base font-bold text-neutral-900 mb-1">ご予約情報が見つかりません</h2>
+      <p class="text-xs text-neutral-500 mb-4">URLが正しいかご確認ください。ご不明な点がございましたらスタジオ運営までお問い合わせください。</p>
+      <a href="index.html" class="inline-flex items-center gap-1 text-xs font-bold text-[#2892d8] hover:underline">
+        <span>Webサイトトップへ戻る</span>
+      </a>
+    </div>
+
+    <!-- MAIN FORM STATE -->
+    <div id="main-state" class="hidden space-y-6">
+
+      <!-- 予約内容カード -->
+      <div class="bg-white rounded-lg border border-neutral-200 p-6 shadow-sm">
+        <div class="border-b border-neutral-100 pb-3 mb-4 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">RESERVATION CONFIRMATION</span>
+            <h1 class="text-base sm:text-lg font-bold text-neutral-900">ご予約内容の確認</h1>
+          </div>
+          <span id="badge-agreed-status" class="hidden text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200 flex items-center gap-1">
+            <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> 規約同意完了済
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div class="p-3 bg-neutral-50 rounded border border-neutral-100">
+            <span class="text-neutral-500 block mb-0.5">ご予約者名</span>
+            <strong id="display-name" class="text-sm font-bold text-neutral-900">--</strong>
+          </div>
+          <div class="p-3 bg-neutral-50 rounded border border-neutral-100">
+            <span class="text-neutral-500 block mb-0.5">ご利用プラン</span>
+            <strong id="display-plan" class="text-sm font-bold text-neutral-900">--</strong>
+          </div>
+          <div class="p-3 bg-neutral-50 rounded border border-neutral-100">
+            <span class="text-neutral-500 block mb-0.5">ご利用日時</span>
+            <strong id="display-datetime" class="text-sm font-bold text-neutral-900">--</strong>
+          </div>
+          <div class="p-3 bg-[#f0f7fc] rounded border border-[#bce0f6]">
+            <span class="text-neutral-500 block mb-0.5">ご利用料金（確定金額・税込）</span>
+            <strong id="display-price" class="text-base font-black text-[#2892d8]">--</strong>
+          </div>
+        </div>
+
+        <!-- 施設情報 -->
+        <div class="mt-4 pt-3 border-t border-neutral-100 text-[11px] text-neutral-500 flex items-center gap-2">
+          <i data-lucide="map-pin" class="w-3.5 h-3.5 text-neutral-400 shrink-0"></i>
+          <span>湘南台キッチンスタジオ（神奈川県藤沢市湘南台4-15-5 / 湘南台駅徒歩5分）</span>
+        </div>
+      </div>
+
+      <!-- すでに同意済みの場合の案内 -->
+      <div id="already-agreed-card" class="hidden bg-emerald-50 border border-emerald-200 rounded-lg p-6 text-center text-xs text-emerald-800 space-y-2">
+        <i data-lucide="check-circle-2" class="w-8 h-8 text-emerald-600 mx-auto mb-1"></i>
+        <h2 class="text-sm font-bold text-emerald-900">利用規約への事前同意が完了しております</h2>
+        <p class="text-[11px] text-emerald-700">同意日時: <span id="display-agreed-at" class="font-mono font-bold">--</span></p>
+        <p class="text-neutral-600 pt-2 text-[11px]">当日のご利用を心よりお待ちしております。ご不明点や変更がございましたら運営担当までご連絡ください。</p>
+      </div>
+
+      <!-- 未同意の場合の規約確認 ＆ 同意フォーム -->
+      <div id="agreement-form-card" class="bg-white rounded-lg border border-neutral-200 p-6 shadow-sm space-y-5">
+        <div>
+          <h2 class="text-sm font-bold text-neutral-900 mb-1 flex items-center gap-1.5">
+            <i data-lucide="file-text" class="w-4 h-4 text-[#2892d8]"></i>
+            湘南台キッチンスタジオ 利用規約（全25条）
+          </h2>
+          <p class="text-xs text-neutral-500">安全・衛生管理および円滑な施設運営のため、利用規約をご確認いただきご同意をお願い申し上げます。</p>
+        </div>
+
+        <!-- 規約スクロール枠 -->
+        <div class="h-60 overflow-y-auto p-4 bg-neutral-50 border border-neutral-200 rounded text-xs text-neutral-700 space-y-3 leading-relaxed">
+          <p class="font-bold text-neutral-900">Shonandai Kitchen Studio利用規約兼申込書</p>
+          <p>株式会社APRECIO（以下「甲」という。）の運営するShonandai Kitchen Studio（以下「当施設」という。）について、貸スタジオとして撮影・料理教室・ワークショップ・イベント・シェアキッチン・オンライン講座・セミナーなどを目的としたご利用を原則と致します。飲食店営業及び菓子製造業の営業許可を取得していますので、営業許可の範囲内でのご利用も可能です。</p>
+          
+          <div class="space-y-2 pt-1 border-t border-neutral-200">
+            <p><strong>1. 【ご利用基本情報】</strong> ご利用時間：午前9時〜午後9時。設備：システムキッチン、スチームオーブン1台、冷蔵庫1台、テーブル3台、イス10脚、照明、食器・グラス一式。施設面積36.52㎡。</p>
+            <p><strong>2. 【食品衛生管理】</strong> 飲食店営業・菓子製造業等の食品製造・調理提供を行う場合は、食品衛生責任者資格を取得している方が1名以上常駐することを条件とします。</p>
+            <p><strong>3. 【事前確認】</strong> 初回ご利用時は事前の内見・相談をお勧めしております。</p>
+            <p><strong>4. 【キャンセルポリシー】</strong> 利用2週間前まで: 20% / 1週間前まで: 50% / 3日前〜当日: 100% のキャンセル料が発生いたします。</p>
+            <p><strong>5. 【利用時間厳守】</strong> 入室・準備〜片付け・引渡確認までをご予約時間内で行ってください。</p>
+            <p><strong>6. 【入退室】</strong> 開始15分前より入室可能です。30分以上前の入室は延長対象となります。</p>
+            <p><strong>7. 【延長】</strong> 当日の状況により延長対応可能な場合は30分単位で承ります。</p>
+            <p><strong>8. 【お支払い】</strong> 期日までに指定口座への振込、または事前決済をお願いいたします。</p>
+            <p><strong>9. 【禁止事項】</strong> 無許可の物品販売、営業行為、公序良俗に反する利用はお断りいたします。</p>
+            <p><strong>10. 【申込み内容相違】</strong> 申込み時と異なる用途の場合、当日でも利用をお断りする場合があります。</p>
+            <p><strong>11. 【近隣配慮】</strong> 大声・騒音・勧誘など近隣へ迷惑を及ぼす行為はご遠慮ください。</p>
+            <p><strong>12. 【完全禁煙】</strong> 施設内・敷地内・周辺道路は全面禁煙です。</p>
+            <p><strong>13. 【貴重品管理】</strong> 荷物・貴重品はお客様自身の責任で管理をお願いいたします。</p>
+            <p><strong>14. 【原状回復】</strong> ご利用後は器具の洗浄・清掃・ゴミの持ち帰り・原状復帰をお願いいたします。</p>
+            <p><strong>15. 【破損・汚損】</strong> 設備・備品の汚損・破損・紛失時は実費を請求させていただきます。</p>
+            <p><strong>16. 【釘・テープ禁止】</strong> 床・壁・天井への釘や強力テープの使用はできません。</p>
+            <p><strong>17. 【消耗品】</strong> 食材・調味料・消耗品は利用者様側でご準備ください。</p>
+            <p><strong>18. 【荷物預かり】</strong> 食材・道具の事前預かりは原則承れません。</p>
+            <p><strong>19. 【免責事項】</strong> 施設内での事故・ケガ等について当施設は一切の責任を負いかねます。</p>
+            <p><strong>20. 【賠償責任】</strong> 利用中の人的・物的損害の賠償責任は利用者側負担となります。</p>
+            <p><strong>21. 【衛生安全】</strong> 食中毒などの衛生面、参加者・お子様の安全にご注意ください。</p>
+            <p><strong>22. 【避難誘導】</strong> 災害時の安全確保・避難誘導は利用責任者様にて行ってください。</p>
+            <p><strong>23. 【残材・ゴミ】</strong> 発生した残材・生ゴミ等はすべてお持ち帰りください。</p>
+            <p><strong>24. 【残置物処分】</strong> 残置された食材・調味料は全て処分いたします。</p>
+            <p><strong>25. 【規約順守】</strong> 規約を遵守いただけない場合、次回以降のご利用をお断りいたします。</p>
+          </div>
+        </div>
+
+        <!-- 同意チェックボックス -->
+        <div class="bg-neutral-50 p-4 rounded border border-neutral-200">
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" id="agree-checkbox" onchange="toggleAgreeButton()" class="mt-0.5 w-4 h-4 text-[#2892d8] rounded border-neutral-300 focus:ring-0">
+            <span class="text-xs font-semibold text-neutral-900 leading-snug">
+              上記のご予約内容（ご利用料金・日時）および利用規約（全25条）を確認し、内容に同意します。
+            </span>
+          </label>
+        </div>
+
+        <!-- 同意実行ボタン -->
+        <button id="btn-submit-agree" onclick="submitAgreement()" disabled class="w-full py-3 px-4 bg-neutral-300 text-neutral-500 font-bold text-xs sm:text-sm rounded transition flex items-center justify-center gap-1.5 cursor-not-allowed shadow-xs">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span>利用規約に同意して予約を確定する</span>
+        </button>
+
+        <p class="text-[10px] text-neutral-400 text-center">
+          ※ボタンを押すことで、利用規約への電子的同意が完了し予約確定となります。
+        </p>
+      </div>
+
+      <!-- 同意完了直後のメッセージ（JSで表示） -->
+      <div id="success-card" class="hidden bg-emerald-50 border border-emerald-200 rounded-lg p-8 text-center space-y-3">
+        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+          <i data-lucide="check" class="w-6 h-6"></i>
+        </div>
+        <h2 class="text-base font-bold text-emerald-900">ご予約と規約同意が完了いたしました</h2>
+        <p class="text-xs text-neutral-600">ご予約内容と利用規約への同意が正常に記録されました。<br>当日のご利用をスタッフ一同心よりお待ちしております。</p>
+        <div class="pt-2">
+          <a href="index.html" class="inline-flex items-center gap-1 text-xs font-bold text-[#2892d8] hover:underline">
+            Webサイトトップへ戻る ↗
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-neutral-200 py-6 text-center text-xs text-neutral-500">
+    <div class="max-w-2xl mx-auto px-4">
+      <p class="font-medium text-neutral-700 mb-1">湘南台キッチンスタジオ（運営：株式会社APRECIO）</p>
+      <p class="text-[11px] text-neutral-400">〒252-0804 神奈川県藤沢市湘南台4-15-5</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    lucide.createIcons();
+
+    const SUPABASE_URL = "https://ocgurkujxkxdmzebvdcv.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9jZ3Vya3VqeGt4ZG16ZWJ2ZGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMTgxNjEsImV4cCI6MjEwNTc5NDE2MX0.NaGmnB8UCJkzgKoSiM-0eEy4wtn3Y-jz-RIn9HIRL8A";
+    
+    let supabaseClient = null;
+    if (window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    let currentBookingData = null;
+
+    async function initPage() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const bookingId = urlParams.get("id");
+
+      if (!bookingId) {
+        showError();
+        return;
+      }
+
+      try {
+        let booking = null;
+        if (supabaseClient) {
+          const { data, error } = await supabaseClient
+            .from('bookings')
+            .select('*')
+            .eq('id', bookingId)
+            .maybeSingle();
+          if (!error && data) booking = data;
+        }
+
+        // localStorage fallback
+        if (!booking) {
+          const localRequests = JSON.parse(localStorage.getItem("shonandai_requests") || "[]");
+          booking = localRequests.find(r => r.id === bookingId);
+        }
+
+        if (!booking) {
+          showError();
+          return;
+        }
+
+        currentBookingData = booking;
+        renderBooking(booking);
+      } catch (err) {
+        console.error("Fetch booking error:", err);
+        showError();
+      }
+    }
+
+    function renderBooking(b) {
+      document.getElementById("loading-state").classList.add("hidden");
+      document.getElementById("main-state").classList.remove("hidden");
+
+      document.getElementById("display-name").innerText = (b.customer_name || b.name || "お客様") + " 様";
+      document.getElementById("display-plan").innerText = b.plan_type || b.plan || "Kitchen & Lounge（全体貸切）";
+      
+      const sDate = b.booking_date || b.date || "";
+      const sTime = b.start_time ? String(b.start_time).slice(0, 5) : "";
+      const eTime = b.end_time ? String(b.end_time).slice(0, 5) : "";
+      const timeStr = (sTime && eTime) ? `${sTime} 〜 ${eTime}` : "";
+      document.getElementById("display-datetime").innerText = `${sDate} ${timeStr}`;
+
+      const priceVal = b.estimated_price !== undefined ? b.estimated_price : b.price;
+      const formattedPrice = (priceVal !== undefined && priceVal !== null && !isNaN(priceVal)) 
+        ? `¥${Number(priceVal).toLocaleString()}` 
+        : "お見積り中";
+      document.getElementById("display-price").innerText = formattedPrice;
+
+      // 同意状況チェック
+      const isAgreed = b.agreed_at || (b.memo && b.memo.includes("【規約同意済】"));
+      if (isAgreed) {
+        document.getElementById("badge-agreed-status").classList.remove("hidden");
+        document.getElementById("already-agreed-card").classList.remove("hidden");
+        document.getElementById("agreement-form-card").classList.add("hidden");
+        const agreedDate = b.agreed_at ? new Date(b.agreed_at).toLocaleString('ja-JP') : "同意確認済み";
+        document.getElementById("display-agreed-at").innerText = agreedDate;
+      }
+
+      lucide.createIcons();
+    }
+
+    function showError() {
+      document.getElementById("loading-state").classList.add("hidden");
+      document.getElementById("error-state").classList.remove("hidden");
+      lucide.createIcons();
+    }
+
+    function toggleAgreeButton() {
+      const checkbox = document.getElementById("agree-checkbox");
+      const btn = document.getElementById("btn-submit-agree");
+      if (checkbox.checked) {
+        btn.disabled = false;
+        btn.className = "w-full py-3 px-4 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs sm:text-sm rounded transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm";
+      } else {
+        btn.disabled = true;
+        btn.className = "w-full py-3 px-4 bg-neutral-300 text-neutral-500 font-bold text-xs sm:text-sm rounded transition flex items-center justify-center gap-1.5 cursor-not-allowed shadow-xs";
+      }
+    }
+
+    async function submitAgreement() {
+      if (!currentBookingData) return;
+      const btn = document.getElementById("btn-submit-agree");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="inline-block animate-spin mr-1">⌛</span> 送信中...`;
+
+      const nowIso = new Date().toISOString();
+      const updatedMemo = (currentBookingData.memo || "") + `\n【規約同意済】${new Date().toLocaleString('ja-JP')} Web同意`;
+
+      try {
+        // 1. Supabase 更新
+        if (supabaseClient && currentBookingData.id) {
+          await supabaseClient
+            .from('bookings')
+            .update({
+              status: 'CONFIRMED',
+              agreed_at: nowIso,
+              memo: updatedMemo
+            })
+            .eq('id', currentBookingData.id);
+        }
+
+        // 2. localStorage 更新
+        try {
+          const localRequests = JSON.parse(localStorage.getItem("shonandai_requests") || "[]");
+          const idx = localRequests.findIndex(r => r.id === currentBookingData.id);
+          if (idx !== -1) {
+            localRequests[idx].status = "承認済み";
+            localRequests[idx].agreed_at = nowIso;
+            localRequests[idx].memo = updatedMemo;
+            localStorage.setItem("shonandai_requests", JSON.stringify(localRequests));
+          }
+        } catch(e) {}
+
+        // 画面切り替え
+        document.getElementById("agreement-form-card").classList.add("hidden");
+        document.getElementById("success-card").classList.remove("hidden");
+        document.getElementById("badge-agreed-status").classList.remove("hidden");
+        lucide.createIcons();
+      } catch (err) {
+        console.error("Agreement submit error:", err);
+        alert("送信に失敗しました。もう一度お試しいただくか、運営までお問い合わせください。");
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> <span>利用規約に同意して予約を確定する</span>`;
+        lucide.createIcons();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", initPage);
+  </script>
+</body>
+</html>

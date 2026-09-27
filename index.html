@@ -240,14 +240,14 @@
                 <div class="text-[11px] text-neutral-500 font-medium">スペース運営・管理</div>
                 <h2 class="text-base font-bold text-neutral-900">株式会社APRECIO</h2>
                 <div class="flex items-center gap-3 mt-0.5 text-xs text-neutral-600">
-                  <span class="flex items-center gap-1 font-semibold text-neutral-900">
-                    <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400 text-amber-400"></i> 5.0 (24)
-                  </span>
-                  <span class="flex items-center gap-1 text-[#2892d8]">
-                    <i data-lucide="check" class="w-3.5 h-3.5"></i> 承認率 100%
+                  <span class="flex items-center gap-1 font-semibold text-neutral-900 cursor-pointer" onclick="document.getElementById('reviews-section').scrollIntoView({behavior: 'smooth'})">
+                    <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400 text-amber-400"></i>
+                    <span id="host-rating-val">5.0</span>
+                    <span class="text-neutral-500 font-normal underline ml-0.5" id="host-review-count">2件のレビュー</span>
                   </span>
                   <span class="flex items-center gap-1 text-neutral-500">
-                    <i data-lucide="clock" class="w-3.5 h-3.5"></i> 即時回答
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-neutral-400"></i>
+                    <span>藤沢市湘南台</span>
                   </span>
                 </div>
               </div>
@@ -477,11 +477,11 @@
             <!-- Plan 3 (Recommended / Default Selected) -->
             <div id="plan-card-kitchen_lounge" onclick="selectPlan('kitchen_lounge')" class="rounded border-2 border-[#2892d8] p-4 bg-[#f0f7fc]/40 transition-all flex flex-col justify-between relative shadow-sm cursor-pointer select-none group">
               <div class="absolute -top-2.5 right-3 bg-[#2892d8] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">
-                全体完全貸切
+                全体貸切
               </div>
               <div>
                 <div class="flex items-center justify-between mb-2">
-                  <div class="badge-primary-solid">一番人気</div>
+                  <div class="badge-primary-solid">フルスペース</div>
                   <span id="plan-check-kitchen_lounge" class="text-[10px] font-bold text-[#2892d8] bg-white px-1.5 py-0.5 rounded border border-[#bce0f6]">選択中</span>
                 </div>
                 <h3 class="font-bold text-neutral-900 text-sm">Kitchen & Lounge</h3>
@@ -833,7 +833,7 @@
                   <p>① ご利用料金<br>Shonandai Kitchen Studio 料金表のとおり</p>
                   <p>② ご利用時間<br>午前9時から午後9時まで</p>
                   <p>③ 設備<br>システムキッチン、スチームオーブン1台、冷蔵庫1台<br>テーブル3つ（80cm×100cm 2つ、80cm×200cm 1つ）・イス10脚・照明・食器・グラスなど<br>当施設面積 36.52㎡（1階のキッチン部分 17.12㎡、ダイニング部分 19.40㎡、トイレ）<br>※駐車場のご利用については、ご相談ください。</p>
-                  <p>④ お問合せ先<br>当利用規約をご確認の上、info@shonandai-kitchen-studio.jp 宛にご希望の日時・用途をお問い合わせください。</p>
+                  <p>④ お問合せ先<br>当利用規約をご確認の上、当サイトのWeb予約・お問い合わせフォームよりご希望の日時・用途をお問い合わせください。</p>
                 </div>
               </div>
 
@@ -1002,7 +1002,7 @@
             <div id="sidebar-selection-info" class="hidden mt-2 p-2 bg-[#f0f7fc] border border-[#bce0f6] rounded text-xs text-[#207cb9] flex flex-col gap-1">
               <div class="flex items-center justify-between">
                 <span id="sidebar-selection-text" class="font-medium text-[11px]">選択枠連動中</span>
-                <span id="sidebar-discount-badge" class="hidden text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-300">通常より ¥0 OFF</span>
+                <span id="sidebar-discount-badge" class="hidden text-[10px] font-bold text-[#207cb9] bg-white px-2 py-0.5 rounded border border-[#bce0f6]">パック料金適用</span>
               </div>
             </div>
 
@@ -2234,7 +2234,7 @@
         if (selectionText) selectionText.innerText = `${rangeStr}（${hours}時間 / ${planConfig.shortName}）`;
         if (discountBadge) {
           if (discountAmount > 0) {
-            discountBadge.innerText = `通常より ¥${discountAmount.toLocaleString()} OFF`;
+            discountBadge.innerText = `パック料金適用 (-¥${discountAmount.toLocaleString()})`;
             discountBadge.classList.remove("hidden");
           } else {
             discountBadge.classList.add("hidden");
@@ -2835,11 +2835,16 @@
       if (avgBadge) avgBadge.innerText = count > 0 ? `${avg} / 5.0` : "- / 5.0";
       if (countBadge) countBadge.innerText = `(${count}件)`;
 
-      // 2. メインヘッダー下の表示更新（完全同期）
+      // 2. メインヘッダー下およびホスト情報欄の表示更新（完全同期）
       const headerRating = document.getElementById("header-rating-val");
       const headerCount = document.getElementById("header-review-count");
       if (headerRating) headerRating.innerText = count > 0 ? avg : "-";
       if (headerCount) headerCount.innerText = `${count}件のレビュー`;
+
+      const hostRating = document.getElementById("host-rating-val");
+      const hostCount = document.getElementById("host-review-count");
+      if (hostRating) hostRating.innerText = count > 0 ? avg : "-";
+      if (hostCount) hostCount.innerText = `${count}件のレビュー`;
 
       if (approvedList.length === 0) {
         container.innerHTML = "<div class='text-xs text-neutral-400 py-3 text-center'>現在、承認済みのレビューはございません。</div>";

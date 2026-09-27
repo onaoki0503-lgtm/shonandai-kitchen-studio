@@ -142,15 +142,15 @@
         
         <!-- 左側: サマリーカード 2枚（4 cols） -->
         <div class="lg:col-span-4 flex flex-col justify-between gap-4">
-          <!-- 未対応リクエスト（最重要・アクセント強調） -->
+          <!-- 未対応リクエスト -->
           <div class="bg-white p-5 rounded-lg border-2 border-[#2892d8] shadow-sm flex flex-col justify-between relative bg-[#f0f7fc]/20">
             <div class="flex items-center justify-between text-neutral-600">
               <span class="text-xs font-bold text-neutral-900">未対応リクエスト</span>
-              <span class="bg-[#2892d8] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">最優先</span>
+              <span class="bg-[#2892d8] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">未対応</span>
             </div>
             <div class="my-2 flex items-baseline gap-2">
               <span class="text-3xl font-black text-[#2892d8]" id="kpi-pending-count">2</span>
-              <span class="text-xs text-neutral-500">件が即時対応待ち</span>
+              <span class="text-xs text-neutral-500">件</span>
             </div>
             <!-- スパークライン -->
             <div class="mt-1">
@@ -165,12 +165,11 @@
           <!-- 今月売上 ＆ 予約総数 -->
           <div class="bg-white p-5 rounded-lg border border-neutral-200 shadow-sm flex flex-col justify-between">
             <div class="flex items-center justify-between text-neutral-500">
-              <span class="text-xs font-semibold text-neutral-700">今月確定稼働売上 (概算)</span>
+              <span class="text-xs font-semibold text-neutral-700">今月確定売上</span>
               <span class="text-xs text-neutral-500">全 <span id="kpi-total-count" class="font-bold text-neutral-900">4</span> 件</span>
             </div>
             <div class="my-2 flex items-baseline gap-2">
               <span class="text-2xl font-black text-neutral-900" id="kpi-revenue">¥96,800</span>
-              <span class="text-[11px] text-neutral-500">（目標比 64.5%達成）</span>
             </div>
             <!-- スパークライン -->
             <div class="mt-1">
@@ -567,7 +566,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div>
             <label class="block font-semibold text-neutral-800 mb-1">利用プラン <span class="text-[#2892d8] font-bold">*</span></label>
-            <select id="manual-plan" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
+            <select id="manual-plan" onchange="calculateManualPrice()" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]">
               <option value="Kitchen & Lounge（全体貸切）">Kitchen & Lounge（全体貸切）</option>
               <option value="Kitchen（製造・仕込み特化）" selected>Kitchen（製造・仕込み特化）</option>
               <option value="Lounge（ワーク・教室）">Lounge（ワーク・教室）</option>
@@ -577,7 +576,7 @@
           <div>
             <label class="block font-semibold text-neutral-800 mb-1">利用時間帯（開始〜終了） <span class="text-[#2892d8] font-bold">*</span></label>
             <div class="grid grid-cols-2 gap-1.5">
-              <select id="manual-start-time" class="border border-neutral-300 rounded p-2 text-xs text-neutral-900 font-mono focus:outline-none focus:border-[#2892d8]">
+              <select id="manual-start-time" onchange="calculateManualPrice()" class="border border-neutral-300 rounded p-2 text-xs text-neutral-900 font-mono focus:outline-none focus:border-[#2892d8]">
                 <option value="06:00">06:00</option>
                 <option value="07:00">07:00</option>
                 <option value="08:00">08:00</option>
@@ -596,7 +595,7 @@
                 <option value="21:00">21:00</option>
                 <option value="22:00">22:00</option>
               </select>
-              <select id="manual-end-time" class="border border-neutral-300 rounded p-2 text-xs text-neutral-900 font-mono focus:outline-none focus:border-[#2892d8]">
+              <select id="manual-end-time" onchange="calculateManualPrice()" class="border border-neutral-300 rounded p-2 text-xs text-neutral-900 font-mono focus:outline-none focus:border-[#2892d8]">
                 <option value="08:00">08:00</option>
                 <option value="09:00">09:00</option>
                 <option value="10:00">10:00</option>
@@ -644,6 +643,27 @@
           </div>
         </div>
 
+        <!-- ご利用料金（確定金額） -->
+        <div class="bg-neutral-50 p-3 rounded border border-neutral-200 grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+          <div>
+            <label class="block font-semibold text-neutral-800 mb-1 flex items-center justify-between">
+              <span>ご利用料金（税込・確定金額）</span>
+              <span class="text-[10px] text-neutral-400 font-normal">※手入力で変更可能</span>
+            </label>
+            <div class="relative">
+              <span class="absolute left-2.5 top-2 text-neutral-500 font-bold text-xs">¥</span>
+              <input type="number" id="manual-price" oninput="this.dataset.manuallyEdited='true'" required placeholder="例: 15000" class="w-full border border-neutral-300 rounded py-1.5 pl-6 pr-2 text-xs font-mono font-bold text-neutral-900 bg-white focus:outline-none focus:border-[#2892d8]">
+            </div>
+          </div>
+          <div>
+            <label class="block font-semibold text-neutral-800 mb-1">規約同意状況</label>
+            <select id="manual-agree-status" class="w-full border border-neutral-300 rounded p-1.5 text-xs text-neutral-900 bg-white focus:outline-none focus:border-[#2892d8]">
+              <option value="pending" selected>未同意（後から同意リンクを送付）</option>
+              <option value="agreed">同意済み（口頭・書面等で確認済）</option>
+            </select>
+          </div>
+        </div>
+
         <div>
           <label class="block font-semibold text-neutral-800 mb-1">特記事項・社内メモ</label>
           <textarea id="manual-memo" rows="2" placeholder="電話受付時の要望や使用機器の確認事項などを記入してください。" class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-900 focus:outline-none focus:border-[#2892d8]"></textarea>
@@ -680,6 +700,23 @@
           <div><span class="text-neutral-400 block text-[10px]">電話番号</span><a id="detail-tel" href="#" class="text-neutral-900 underline font-mono"></a></div>
         </div>
 
+        <!-- 確定ご利用料金 ＆ 規約同意状況 -->
+        <div class="bg-neutral-50 p-3 rounded border border-neutral-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-neutral-900 text-xs">ご利用料金（確定金額・税込）</span>
+            <div id="detail-agree-badge" class="text-[10px] font-bold px-2 py-0.5 rounded border">--</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="relative flex-1">
+              <span class="absolute left-2.5 top-2 text-neutral-500 font-bold">¥</span>
+              <input type="number" id="detail-price-input" class="w-full border border-neutral-300 rounded py-1.5 pl-6 pr-2 text-xs font-mono font-bold text-neutral-900 bg-white focus:outline-none focus:border-[#2892d8]" placeholder="料金を入力">
+            </div>
+            <button type="button" onclick="saveDetailPrice()" class="px-3 py-1.5 bg-neutral-800 hover:bg-black text-white font-bold rounded text-xs transition shadow-xs whitespace-nowrap">
+              料金を更新
+            </button>
+          </div>
+        </div>
+
         <div>
           <span class="text-neutral-500 font-semibold block mb-1">ご利用用途:</span>
           <div id="detail-usage" class="bg-neutral-50 p-2 rounded border border-neutral-200 text-neutral-900 font-medium"></div>
@@ -687,10 +724,10 @@
 
         <div>
           <span class="text-neutral-500 font-semibold block mb-1">お問い合わせ・ご要望内容:</span>
-          <div id="detail-message" class="bg-neutral-50 p-3 rounded border border-neutral-200 text-neutral-800 whitespace-pre-wrap leading-relaxed max-h-40 overflow-y-auto"></div>
+          <div id="detail-message" class="bg-neutral-50 p-3 rounded border border-neutral-200 text-neutral-800 whitespace-pre-wrap leading-relaxed max-h-36 overflow-y-auto"></div>
         </div>
 
-        <div class="pt-3 border-t border-neutral-100 flex items-center justify-between">
+        <div class="pt-3 border-t border-neutral-100 flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-1.5">
             <span class="text-neutral-500">ステータス:</span>
             <select id="modal-status-select" onchange="updateSelectedStatus()" class="text-xs bg-white border border-neutral-300 rounded px-2 py-1 text-neutral-900 font-semibold focus:outline-none focus:border-[#2892d8]">
@@ -700,8 +737,67 @@
               <option value="キャンセル">キャンセル</option>
             </select>
           </div>
-          <button onclick="openEmailComposeModal(currentDetailItem.id)" class="px-3.5 py-1.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold rounded text-xs transition inline-flex items-center gap-1 shadow-sm">
-            <i data-lucide="mail" class="w-3.5 h-3.5"></i> 返信メール作成
+          <div class="flex items-center gap-2">
+            <!-- 規約同意リンク発行ボタン -->
+            <button onclick="openAgreeLinkModal(currentDetailItem.id)" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded text-xs transition inline-flex items-center gap-1 shadow-sm cursor-pointer" title="お客様専用の規約同意用リンクを発行">
+              <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i> 規約同意リンク発行
+            </button>
+            <!-- 返信メール作成ボタン -->
+            <button onclick="openEmailComposeModal(currentDetailItem.id)" class="px-3 py-1.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold rounded text-xs transition inline-flex items-center gap-1 shadow-sm cursor-pointer">
+              <i data-lucide="mail" class="w-3.5 h-3.5"></i> 返信メール作成
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- ================= AGREE LINK MODAL (規約同意用URL発行) ================= -->
+  <div id="agree-link-modal" class="fixed inset-0 z-50 bg-black/60 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-lg w-full p-6 shadow-2xl border border-neutral-300 relative">
+      <button onclick="closeAgreeLinkModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black p-1 rounded hover:bg-neutral-100 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-4 pb-3 border-b border-neutral-100">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded bg-emerald-600 text-white flex items-center justify-center text-xs">
+            <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i>
+          </span>
+          <h3 class="text-base font-bold text-neutral-900">ご予約内容確認・利用規約同意用リンク発行</h3>
+        </div>
+        <p class="text-xs text-neutral-500 mt-1">
+          相手の方にこのリンクを送付いただくことで、メールの往復ラリーなしでスマホから1分で規約同意と予約確定が完了します。
+        </p>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <!-- 専用リンク表示 & コピー -->
+        <div>
+          <label class="block font-semibold text-neutral-800 mb-1">お客様専用 同意URL</label>
+          <div class="flex gap-2">
+            <input type="text" id="agree-url-input" readonly class="w-full border border-neutral-300 rounded p-2 text-xs text-neutral-800 font-mono bg-neutral-50 select-all focus:outline-none">
+            <button type="button" onclick="copyAgreeUrl()" class="px-3.5 py-1.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold rounded text-xs transition whitespace-nowrap shadow-xs flex items-center gap-1 cursor-pointer">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> コピー
+            </button>
+          </div>
+        </div>
+
+        <!-- LINE・メール用 案内メッセージ -->
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="font-semibold text-neutral-800">ご案内メッセージ（LINE・メール用）</label>
+            <button type="button" onclick="copyAgreeMessage()" class="text-[#2892d8] hover:underline font-semibold flex items-center gap-1 cursor-pointer">
+              <i data-lucide="copy" class="w-3 h-3"></i> 文面をコピー
+            </button>
+          </div>
+          <textarea id="agree-message-textarea" rows="7" readonly class="w-full border border-neutral-300 rounded p-2.5 text-xs text-neutral-800 font-mono leading-relaxed bg-neutral-50 select-all focus:outline-none"></textarea>
+        </div>
+
+        <div class="pt-2 border-t border-neutral-100 flex items-center justify-between">
+          <a id="agree-preview-link" href="#" target="_blank" class="text-xs text-neutral-500 hover:text-[#2892d8] inline-flex items-center gap-1">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> 同意画面をプレビュー
+          </a>
+          <button type="button" onclick="closeAgreeLinkModal()" class="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-semibold rounded text-xs transition">
+            閉じる
           </button>
         </div>
       </div>
@@ -2058,6 +2154,31 @@
     }
 
     // 6. 手動予約登録モーダル操作
+    function calculateManualPrice() {
+      const plan = document.getElementById("manual-plan")?.value || "";
+      const sTime = document.getElementById("manual-start-time")?.value || "10:00";
+      const eTime = document.getElementById("manual-end-time")?.value || "18:00";
+      const startH = timeStringToHours(sTime);
+      const endH = timeStringToHours(eTime);
+      const dur = Math.max(1, endH - startH);
+
+      let price = 0;
+      if (plan.includes("Kitchen & Lounge")) {
+        price = dur >= 8 ? 22000 : dur * 2750;
+      } else if (plan.includes("Kitchen")) {
+        price = dur >= 8 ? 16500 : dur * 2200;
+      } else if (plan.includes("Lounge")) {
+        price = dur >= 8 ? 13200 : dur * 1650;
+      } else {
+        price = dur * 2750;
+      }
+
+      const priceInput = document.getElementById("manual-price");
+      if (priceInput && !priceInput.dataset.manuallyEdited) {
+        priceInput.value = price;
+      }
+    }
+
     function openManualBookingModal(defaultDate = "") {
       const modal = document.getElementById("manual-booking-modal");
       const dateInput = document.getElementById("manual-date");
@@ -2066,6 +2187,10 @@
       } else {
         dateInput.value = selectedCalendarDate || new Date().toISOString().slice(0, 10);
       }
+      const priceInput = document.getElementById("manual-price");
+      if (priceInput) delete priceInput.dataset.manuallyEdited;
+      calculateManualPrice();
+
       modal.classList.remove("hidden");
       modal.classList.add("flex");
     }
@@ -2075,6 +2200,8 @@
       modal.classList.remove("flex");
       modal.classList.add("hidden");
       document.getElementById("manual-booking-form").reset();
+      const priceInput = document.getElementById("manual-price");
+      if (priceInput) delete priceInput.dataset.manuallyEdited;
     }
 
     function handleManualBookingSubmit(e) {
@@ -2084,6 +2211,12 @@
       const startH = timeStringToHours(sTime);
       const endH = timeStringToHours(eTime);
       const dur = Math.max(1, endH - startH);
+
+      const confirmedPrice = parseInt(document.getElementById("manual-price").value, 10) || (dur * 2750);
+      const agreeStatus = document.getElementById("manual-agree-status").value;
+      const isAgreed = (agreeStatus === "agreed");
+      const rawMemo = document.getElementById("manual-memo").value || "直接受付";
+      const finalMemo = isAgreed ? `${rawMemo}\n【規約同意済】手動登録時確認` : rawMemo;
 
       const newBooking = {
         id: "DIR-" + Date.now().toString().slice(-6),
@@ -2097,9 +2230,11 @@
         usage: document.getElementById("manual-usage").value || "一般利用",
         tel: document.getElementById("manual-tel").value || "-",
         email: document.getElementById("manual-email").value || "-",
-        message: document.getElementById("manual-memo").value || "電話・直接受付",
-        estimatedAmount: dur * 3850,
+        message: finalMemo,
+        estimatedAmount: confirmedPrice,
+        price: confirmedPrice,
         durationHours: dur,
+        agreed_at: isAgreed ? new Date().toISOString() : null,
         createdAt: new Date().toLocaleString("ja-JP", { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
         status: document.getElementById("manual-status").value
       };
@@ -2111,6 +2246,7 @@
       // カレンダーとテーブル更新
       if (calendarMode === 'month') renderMonthCalendar();
       else renderYearCalendar();
+      updateKpis();
 
       // 該当日の予約を表示 & タイムライン更新
       handleCalendarDateClick(newBooking.date, true);
@@ -2132,14 +2268,20 @@
             start_time: sTime + ':00',
             end_time: eTime + ':00',
             duration_hours: dur,
-            unit_price: 3850,
-            estimated_amount: dur * 3850,
+            unit_price: Math.round(confirmedPrice / dur),
+            estimated_amount: confirmedPrice,
             status: dbStatus,
-            message: newBooking.message
+            message: finalMemo,
+            agreed_at: newBooking.agreed_at
           }])
           .then(({ error }) => {
             if (error) console.error("Supabase insert error:", error);
           });
+      }
+
+      // 未同意の場合は直ちに規約同意リンク発行モーダルを開く
+      if (!isAgreed) {
+        openAgreeLinkModal(newBooking.id);
       }
     }
 
@@ -2163,9 +2305,109 @@
       telEl.innerText = item.tel;
       telEl.href = "tel:" + item.tel;
 
+      // 金額表示 & 入力欄
+      const priceVal = item.estimatedAmount !== undefined ? item.estimatedAmount : (item.price || 0);
+      document.getElementById("detail-price-input").value = priceVal;
+
+      // 規約同意状況バッジ
+      const agreeBadge = document.getElementById("detail-agree-badge");
+      const isAgreed = item.agreed_at || (item.message && item.message.includes("【規約同意済】"));
+      if (isAgreed) {
+        agreeBadge.innerText = "✓ 規約同意完了済";
+        agreeBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-300 text-emerald-700 bg-emerald-50";
+      } else {
+        agreeBadge.innerText = "未同意（要リンク送付）";
+        agreeBadge.className = "text-[10px] font-bold px-2 py-0.5 rounded border border-amber-300 text-amber-700 bg-amber-50";
+      }
+
       document.getElementById("detail-usage").innerText = item.usage;
       document.getElementById("detail-message").innerText = item.message;
       document.getElementById("modal-status-select").value = item.status;
+
+      document.getElementById("detail-modal").classList.remove("hidden");
+      document.getElementById("detail-modal").classList.add("flex");
+      lucide.createIcons();
+    }
+
+    function closeDetailModal() {
+      document.getElementById("detail-modal").classList.remove("flex");
+      document.getElementById("detail-modal").classList.add("hidden");
+    }
+
+    async function saveDetailPrice() {
+      if (!currentDetailItem) return;
+      const newPrice = parseInt(document.getElementById("detail-price-input").value, 10);
+      if (isNaN(newPrice) || newPrice < 0) {
+        alert("有効な金額を入力してください。");
+        return;
+      }
+
+      currentDetailItem.estimatedAmount = newPrice;
+      currentDetailItem.price = newPrice;
+      saveData();
+      updateKpis();
+      renderTable();
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient
+            .from('bookings')
+            .update({ estimated_amount: newPrice })
+            .eq('id', currentDetailItem.id);
+        } catch(e) {
+          console.error("Failed to update price in supabase:", e);
+        }
+      }
+
+      showToast(`ご利用料金を ¥${newPrice.toLocaleString()} に更新しました`);
+    }
+
+    // ==========================================
+    // 7.2. 規約同意用リンク発行モーダル
+    // ==========================================
+    function openAgreeLinkModal(id) {
+      const item = requestsData.find(r => r.id === id);
+      if (!item) return;
+
+      const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+      const agreeUrl = `${baseUrl}/agree.html?id=${encodeURIComponent(item.id)}`;
+
+      document.getElementById("agree-url-input").value = agreeUrl;
+      document.getElementById("agree-preview-link").href = agreeUrl;
+
+      const priceVal = (item.estimatedAmount !== undefined ? item.estimatedAmount : item.price) || 0;
+      const formattedPrice = `¥${Number(priceVal).toLocaleString()}`;
+      const timeStr = item.time || (item.startTime && item.endTime ? `${item.startTime}〜${item.endTime}` : "");
+
+      const msg = `${item.name} 様\n\n湘南台キッチンスタジオのご予約内容を登録いたしました。\n誠にお手数ではございますが、安全・衛生管理および施設保全の観点より、以下の専用リンクより【ご予約内容・ご利用料金の確認】および【利用規約（全25条）への同意手続き】をお願い申し上げます。\n\n▼ ご予約内容確認・利用規約同意ページ\n${agreeUrl}\n\n【ご予約内容】\n・ご利用日: ${item.date} ${timeStr}\n・ご利用プラン: ${item.plan}\n・ご利用料金: ${formattedPrice}（税込）\n\n※上記リンクを開き、規約をご確認の上「同意して予約を確定する」ボタンを押していただくことで手続きが完了いたします。\n何卒よろしくお願い申し上げます。\n\n------------------------------\n湘南台キッチンスタジオ\n神奈川県藤沢市湘南台4-15-5\n------------------------------`;
+
+      document.getElementById("agree-message-textarea").value = msg;
+
+      const modal = document.getElementById("agree-link-modal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      lucide.createIcons();
+    }
+
+    function closeAgreeLinkModal() {
+      const modal = document.getElementById("agree-link-modal");
+      modal.classList.remove("flex");
+      modal.classList.add("hidden");
+    }
+
+    function copyAgreeUrl() {
+      const input = document.getElementById("agree-url-input");
+      input.select();
+      navigator.clipboard.writeText(input.value);
+      showToast("同意URLをクリップボードにコピーしました");
+    }
+
+    function copyAgreeMessage() {
+      const textarea = document.getElementById("agree-message-textarea");
+      textarea.select();
+      navigator.clipboard.writeText(textarea.value);
+      showToast("ご案内メッセージをクリップボードにコピーしました");
+    }
 
       const mailBtn = document.getElementById("detail-mail-btn");
       const sub = encodeURIComponent(`【湘南台キッチンスタジオ】お問い合わせ・ご予約について (${item.name}様)`);
