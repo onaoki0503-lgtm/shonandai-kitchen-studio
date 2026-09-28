@@ -80,21 +80,21 @@
       </form>
       <div class="mt-4 pt-3 border-t border-neutral-100 text-[10px] text-neutral-500 text-left space-y-1.5">
         <div class="font-bold text-neutral-700 flex items-center justify-between">
-          <span>管理者アカウント（クリックで自動入力）:</span>
+          <span>管理者アカウント（クリックで即ログイン）:</span>
         </div>
-        <div class="flex items-center justify-between p-1 rounded hover:bg-neutral-50 cursor-pointer border border-transparent hover:border-neutral-200 transition" onclick="quickFillLogin('o.naoki0503@intakingresources.com')">
-          <span>・岡本代表: <code class="bg-neutral-100 px-1 py-0.5 rounded text-neutral-800 font-mono">o.naoki0503@intakingresources.com</code></span>
-          <span class="text-[#2892d8] text-[9px] font-bold">選択</span>
+        <div class="flex items-center justify-between p-1.5 rounded bg-neutral-50 hover:bg-neutral-100 cursor-pointer border border-neutral-200 hover:border-[#2892d8] transition" onclick="quickFillAndLogin('o.naoki0503@intakingresources.com')">
+          <span>・岡本代表: <code class="bg-white px-1 py-0.5 rounded text-neutral-800 font-mono text-[10px]">o.naoki0503@intakingresources.com</code></span>
+          <span class="bg-[#2892d8] text-white text-[9px] font-bold px-2 py-0.5 rounded">即入室</span>
         </div>
-        <div class="flex items-center justify-between p-1 rounded hover:bg-neutral-50 cursor-pointer border border-transparent hover:border-neutral-200 transition" onclick="quickFillLogin('apreci2020@gmail.com')">
-          <span>・板倉社長（APRECIO）: <code class="bg-neutral-100 px-1 py-0.5 rounded text-neutral-800 font-mono">apreci2020@gmail.com</code></span>
-          <span class="text-[#2892d8] text-[9px] font-bold">選択</span>
+        <div class="flex items-center justify-between p-1.5 rounded bg-neutral-50 hover:bg-neutral-100 cursor-pointer border border-neutral-200 hover:border-[#2892d8] transition" onclick="quickFillAndLogin('apreci2020@gmail.com')">
+          <span>・板倉社長（APRECIO）: <code class="bg-white px-1 py-0.5 rounded text-neutral-800 font-mono text-[10px]">apreci2020@gmail.com</code></span>
+          <span class="bg-[#2892d8] text-white text-[9px] font-bold px-2 py-0.5 rounded">即入室</span>
         </div>
-        <div class="flex items-center justify-between p-1 rounded hover:bg-neutral-50 cursor-pointer border border-transparent hover:border-neutral-200 transition" onclick="quickFillLogin('kakoi.masaaki@aprecio-life.co.jp')">
-          <span>・栫役員（APRECIO）: <code class="bg-neutral-100 px-1 py-0.5 rounded text-neutral-800 font-mono">kakoi.masaaki@aprecio-life.co.jp</code></span>
-          <span class="text-[#2892d8] text-[9px] font-bold">選択</span>
+        <div class="flex items-center justify-between p-1.5 rounded bg-neutral-50 hover:bg-neutral-100 cursor-pointer border border-neutral-200 hover:border-[#2892d8] transition" onclick="quickFillAndLogin('kakoi.masaaki@aprecio-life.co.jp')">
+          <span>・栫役員（APRECIO）: <code class="bg-white px-1 py-0.5 rounded text-neutral-800 font-mono text-[10px]">kakoi.masaaki@aprecio-life.co.jp</code></span>
+          <span class="bg-[#2892d8] text-white text-[9px] font-bold px-2 py-0.5 rounded">即入室</span>
         </div>
-        <div class="text-neutral-400 pt-1">（パスワード: <code class="font-mono text-neutral-600 font-bold">shonandai2026</code>）</div>
+        <div class="text-neutral-400 pt-1">（初期パスワード: <code class="font-mono text-neutral-600 font-bold">shonandai2026</code>）</div>
       </div>
     </div>
   </div>
@@ -1159,11 +1159,24 @@
       document.getElementById("auth-error").classList.add("hidden");
     }
 
+    // ワンタップ即時ログインヘルパー
+    function quickFillAndLogin(email) {
+      quickFillLogin(email);
+      executeLoginWithCredentials(email, "shonandai2026");
+    }
+
     // ログイン処理
     async function handleLogin(e) {
-      e.preventDefault();
+      if (e) e.preventDefault();
       const email = document.getElementById("auth-email").value.trim().toLowerCase();
-      const password = document.getElementById("auth-password").value;
+      let password = document.getElementById("auth-password").value || "";
+      // 全角英数字記号を半角に正規化＆トリム
+      password = password.trim().replace(/[！-～]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0));
+      await executeLoginWithCredentials(email, password);
+    }
+
+    // 認証実行コア関数
+    async function executeLoginWithCredentials(email, password) {
       const errorEl = document.getElementById("auth-error");
       const btn = document.getElementById("auth-submit-btn");
 
