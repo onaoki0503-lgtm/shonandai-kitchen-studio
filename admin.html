@@ -44,6 +44,7 @@
     ::-webkit-scrollbar-track { background: #f8fafc; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     .sparkline-svg { width: 100%; height: 32px; overflow: visible; }
+    .grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); }
     .grid-24 { display: grid; grid-template-columns: repeat(24, minmax(0, 1fr)); }
     .timeline-conflict-pattern {
       background-image: repeating-linear-gradient(45deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.15) 8px, transparent 8px, transparent 16px);
@@ -302,14 +303,14 @@
             <div class="flex items-center gap-2">
               <h3 class="font-bold text-neutral-900 text-sm sm:text-base flex items-center gap-2">
                 <i data-lucide="clock" class="w-4 h-4 text-[#2892d8]"></i>
-                <span id="timeline-date-label" class="font-mono text-neutral-900 font-bold">2026年09月25日</span> の24時間稼働タイムライン
+                <span id="timeline-date-label" class="font-mono text-neutral-900 font-bold">2026年09月25日</span> の稼働タイムライン（9:00〜21:00）
               </h3>
               <span id="timeline-conflict-badge" class="hidden text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded shadow-sm animate-pulse flex items-center gap-1">
                 <i data-lucide="alert-triangle" class="w-3 h-3"></i> 重複予約を検知
               </span>
             </div>
             <p class="text-xs text-neutral-500 mt-0.5" id="timeline-summary-text">
-              1時間区切りの稼働状況です。空いている枠をクリックすると、その時間帯で予約を手動追加できます。
+              営業時間（9:00〜21:00）の1時間区切りの稼働状況です。空いている枠をクリックすると、その時間帯で予約を手動追加できます。
             </p>
           </div>
 
@@ -332,15 +333,15 @@
 
         <!-- タイムライン本体（横スクロール対応） -->
         <div class="overflow-x-auto pb-2">
-          <div class="min-w-[800px]">
-            <!-- 時間目盛り 0:00 〜 24:00 -->
-            <div id="timeline-hours-header" class="grid-24 text-[10px] text-neutral-400 font-mono pb-1 border-b border-neutral-200 select-none text-center">
+          <div class="min-w-[700px]">
+            <!-- 時間目盛り 9:00 〜 21:00 -->
+            <div id="timeline-hours-header" class="grid-12 text-[10px] text-neutral-400 font-mono pb-1 border-b border-neutral-200 select-none text-center">
             </div>
 
             <!-- ガントチャートトラック -->
             <div id="timeline-track-wrapper" class="relative mt-2 min-h-[88px] bg-neutral-50 rounded border border-neutral-200 select-none overflow-hidden cursor-pointer" onclick="handleTimelineTrackClick(event)">
-              <!-- 24時間グリッド背景線 -->
-              <div id="timeline-grid-bg" class="absolute inset-0 grid-24 pointer-events-none">
+              <!-- 9:00〜21:00 グリッド背景線 -->
+              <div id="timeline-grid-bg" class="absolute inset-0 grid-12 pointer-events-none">
               </div>
               
               <!-- 予約ブロック配置コンテナ -->
@@ -1473,8 +1474,12 @@
     }
 
     // ==========================================
-    // 2.5. 24時間タイムライン（ダブルブッキング検知・ガントチャート）
+    // 2.5. 営業時間タイムライン（9:00〜21:00 ダブルブッキング検知・ガントチャート）
     // ==========================================
+    const TIMELINE_START_HOUR = 9;
+    const TIMELINE_END_HOUR = 21;
+    const TIMELINE_TOTAL_HOURS = 12; // 21 - 9
+
     function initTimeline() {
       const header = document.getElementById("timeline-hours-header");
       const gridBg = document.getElementById("timeline-grid-bg");
@@ -1483,14 +1488,14 @@
       header.innerHTML = "";
       gridBg.innerHTML = "";
 
-      for (let h = 0; h < 24; h++) {
+      for (let h = TIMELINE_START_HOUR; h < TIMELINE_END_HOUR; h++) {
         const hourLabel = document.createElement("div");
         hourLabel.className = "text-center";
         hourLabel.innerText = `${h}:00`;
         header.appendChild(hourLabel);
 
         const colBorder = document.createElement("div");
-        colBorder.className = `border-r ${h === 23 ? 'border-transparent' : 'border-neutral-200/70'} h-full`;
+        colBorder.className = `border-r ${h === (TIMELINE_END_HOUR - 1) ? 'border-transparent' : 'border-neutral-200/70'} h-full`;
         gridBg.appendChild(colBorder);
       }
     }
@@ -1550,11 +1555,11 @@
           <div class="h-14 rounded border-2 border-dashed border-neutral-300/80 bg-white/60 hover:bg-[#f0f7fc]/50 transition flex items-center justify-center text-xs text-neutral-500 font-medium">
             <span class="inline-flex items-center gap-1.5 text-neutral-600">
               <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-              ◯ 終日 空室（00:00〜24:00 予約可能） — クリックしてこの日に予約を追加
+              ◯ 終日 空室（09:00〜21:00 予約可能） — クリックしてこの日に予約を追加
             </span>
           </div>
         `;
-        if (statEl) statEl.innerText = "予約: 0.0h / 空き: 24.0h";
+        if (statEl) statEl.innerText = `予約: 0.0h / 空き: ${TIMELINE_TOTAL_HOURS.toFixed(1)}h`;
         return;
       }
 
@@ -1564,11 +1569,22 @@
         const r = item.booking;
         const startH = item.start;
         const endH = item.end;
-        const duration = endH - startH;
-        totalBookedHours += duration;
 
-        const leftPercent = (startH / 24) * 100;
-        const widthPercent = (duration / 24) * 100;
+        // 9:00〜21:00 の範囲に収まる部分を計算
+        const visibleStart = Math.max(TIMELINE_START_HOUR, Math.min(TIMELINE_END_HOUR, startH));
+        const visibleEnd = Math.max(TIMELINE_START_HOUR, Math.min(TIMELINE_END_HOUR, endH));
+        const visibleDuration = visibleEnd - visibleStart;
+
+        const actualDuration = Math.max(0, endH - startH);
+        totalBookedHours += actualDuration;
+
+        // 完全に営業時間外の場合はスキップ
+        if (visibleDuration <= 0 && (endH <= TIMELINE_START_HOUR || startH >= TIMELINE_END_HOUR)) {
+          return;
+        }
+
+        const leftPercent = ((visibleStart - TIMELINE_START_HOUR) / TIMELINE_TOTAL_HOURS) * 100;
+        const widthPercent = (Math.max(visibleDuration, 0.5) / TIMELINE_TOTAL_HOURS) * 100;
 
         const isUrgent = (r.status === "新規受付");
         const isConflict = item.conflict;
@@ -1613,9 +1629,9 @@
         container.appendChild(bar);
       });
 
-      const freeHours = Math.max(0, 24 - totalBookedHours);
+      const freeHours = Math.max(0, TIMELINE_TOTAL_HOURS - totalBookedHours);
       if (statEl) {
-        statEl.innerText = `予約: ${totalBookedHours.toFixed(1)}h / 空き: ${freeHours.toFixed(1)}h`;
+        statEl.innerText = `予約: ${totalBookedHours.toFixed(1)}h / 営業時間内空き: ${freeHours.toFixed(1)}h`;
       }
     }
 
@@ -1644,9 +1660,9 @@
       const rect = e.currentTarget.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const ratio = Math.max(0, Math.min(1, clickX / rect.width));
-      const clickedHour = Math.floor(ratio * 24);
+      const clickedHour = Math.floor(TIMELINE_START_HOUR + (ratio * TIMELINE_TOTAL_HOURS));
       const startStr = String(clickedHour).padStart(2, '0') + ":00";
-      const endStr = String(Math.min(24, clickedHour + 4)).padStart(2, '0') + ":00";
+      const endStr = String(Math.min(TIMELINE_END_HOUR, clickedHour + 3)).padStart(2, '0') + ":00";
 
       openManualBookingModal(selectedTimelineDate);
       const startEl = document.getElementById("manual-start-time");
