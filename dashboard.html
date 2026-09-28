@@ -2472,6 +2472,34 @@
       showToast("ご案内メッセージをクリップボードにコピーしました");
     }
 
+    // 6. 詳細モーダル
+    function openDetailModal(id) {
+      const item = requestsData.find(r => r.id === id);
+      if (!item) return;
+      currentDetailItem = item;
+
+      document.getElementById("detail-id").innerText = item.id;
+      document.getElementById("detail-name").innerText = item.name + (item.company ? ` (${item.company})` : '');
+      document.getElementById("detail-time").innerText = "受信日時: " + item.createdAt;
+      document.getElementById("detail-plan").innerText = item.plan;
+      document.getElementById("detail-date").innerText = item.date;
+
+      const emailEl = document.getElementById("detail-email");
+      emailEl.innerText = item.email;
+      emailEl.href = "mailto:" + item.email;
+
+      const telEl = document.getElementById("detail-tel");
+      telEl.innerText = item.tel;
+      telEl.href = "tel:" + item.tel;
+
+      document.getElementById("detail-usage").innerText = item.usage;
+      document.getElementById("detail-message").innerText = item.message;
+      document.getElementById("modal-status-select").value = item.status;
+
+      const priceVal = (item.estimatedAmount !== undefined ? item.estimatedAmount : item.price) || 0;
+      const priceInput = document.getElementById("detail-price-input");
+      if (priceInput) priceInput.value = priceVal;
+
       const mailBtn = document.getElementById("detail-mail-btn");
       const sub = encodeURIComponent(`【湘南台キッチンスタジオ】お問い合わせ・ご予約について (${item.name}様)`);
       const body = encodeURIComponent(`${item.name} 様\n\nShonandai Kitchen Studio 管理担当でございます。\nこの度はお問い合わせいただき誠にありがとうございます。\n\nご希望内容：\nプラン：${item.plan}\n利用希望日：${item.date}\n\n以下のとおりご案内申し上げます。\n`);
