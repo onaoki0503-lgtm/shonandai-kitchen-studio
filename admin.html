@@ -242,10 +242,10 @@
           </div>
 
           <div class="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
-            <!-- ＋手動予約登録ボタン（青ベタ塗り） -->
-            <button onclick="openManualBookingModal()" class="px-3.5 py-1.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow-sm flex items-center gap-1">
+            <!-- 手動予約登録ボタン（青ベタ塗り） -->
+            <button onclick="openManualBookingModal()" class="px-3.5 py-1.5 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow-sm flex items-center gap-1 cursor-pointer">
               <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-              <span>＋新規予約を手動登録</span>
+              <span>新規予約を手動登録</span>
             </button>
 
             <!-- 月間 / 年間 切り替えタブUI -->
@@ -462,7 +462,7 @@
               </p>
               <button onclick="openAnnouncementModal()" class="px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow-sm flex items-center gap-1.5 self-start sm:self-auto cursor-pointer">
                 <i data-lucide="plus" class="w-4 h-4"></i>
-                <span>＋新しいご報告を投稿</span>
+                <span>新しいご報告を投稿</span>
               </button>
             </div>
 
@@ -554,7 +554,7 @@
 
       <div class="mb-4 pb-3 border-b border-neutral-100">
         <span class="text-[10px] font-bold text-[#2892d8] uppercase tracking-wider block">DIRECT BOOKING REGISTRATION</span>
-        <h3 class="text-base font-bold text-neutral-900">＋ 新規予約を手動で登録する</h3>
+        <h3 class="text-base font-bold text-neutral-900">新規予約を手動で登録する</h3>
         <p class="text-xs text-neutral-500 mt-0.5">電話・口頭・対面・LINE等で直接受けた予約を台帳とカレンダーに即時反映します。</p>
       </div>
 
@@ -1018,7 +1018,7 @@
         <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider block">STUDIO CLOSED SETTING</span>
         <h3 class="text-base font-bold text-neutral-900 flex items-center gap-1.5">
           <i data-lucide="calendar-x" class="w-4 h-4 text-rose-600"></i>
-          ＋ 休業日の設定・登録
+          休業日の設定・登録
         </h3>
         <p class="text-xs text-neutral-500 mt-0.5">指定した日はWebサイトのカレンダーで「休」となり、一般予約の受付が停止されます。</p>
       </div>
@@ -1055,7 +1055,7 @@
         <span class="text-[10px] font-bold text-[#2892d8] uppercase tracking-wider block">ANNOUNCEMENT PUBLISHER</span>
         <h3 class="text-base font-bold text-neutral-900 flex items-center gap-1.5">
           <i data-lucide="megaphone" class="w-4 h-4 text-[#2892d8]"></i>
-          ＋ 運営からのご報告・お知らせ投稿
+          運営からのご報告・お知らせ投稿
         </h3>
         <p class="text-xs text-neutral-500 mt-0.5">Webサイトのトップに公式アナウンスとして即時掲載されます。</p>
       </div>
@@ -2059,7 +2059,7 @@
                 <div class="flex flex-wrap items-center justify-center gap-2">
                   <button onclick="openManualBookingModal('${selectedCalendarDate}')" class="whitespace-nowrap px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                    <span>＋ この日に手動で予約を追加する</span>
+                    <span>この日に手動で予約を追加する</span>
                   </button>
                   <button onclick="deleteClosedDay('${selectedCalendarDate}')" class="whitespace-nowrap px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
                     <i data-lucide="x" class="w-3.5 h-3.5"></i>
@@ -2082,11 +2082,11 @@
                 <div class="flex flex-wrap items-center justify-center gap-2">
                   <button onclick="openManualBookingModal('${selectedCalendarDate}')" class="whitespace-nowrap px-4 py-2 bg-[#2892d8] hover:bg-[#207cb9] text-white font-bold text-xs rounded transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                    <span>＋ この日に手動で予約を追加する</span>
+                    <span>この日に手動で予約を追加する</span>
                   </button>
                   <button onclick="openClosedDayModal('${selectedCalendarDate}')" class="whitespace-nowrap px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
                     <i data-lucide="calendar-x" class="w-3.5 h-3.5"></i>
-                    <span>＋ 休業日を追加する</span>
+                    <span>休業日を追加する</span>
                   </button>
                 </div>
               </div>
@@ -2111,7 +2111,7 @@
           if (closedInfo) {
             document.getElementById("ledger-subtext").innerHTML = `<strong class="text-rose-600 font-mono">${selectedCalendarDate}</strong> は休業日設定中ですが、既存の予約が（${total}件）あります。<button onclick="deleteClosedDay('${selectedCalendarDate}')" class="ml-2 text-[11px] text-rose-600 hover:underline font-bold">休業設定を解除</button>`;
           } else {
-            document.getElementById("ledger-subtext").innerHTML = `<strong class="text-[#2892d8] font-mono">${selectedCalendarDate}</strong> の予約（${total}件）を表示しています。<button onclick="openClosedDayModal('${selectedCalendarDate}')" class="ml-2 text-[11px] text-rose-600 hover:underline font-semibold">＋この日を休業日に設定する</button>`;
+            document.getElementById("ledger-subtext").innerHTML = `<strong class="text-[#2892d8] font-mono">${selectedCalendarDate}</strong> の予約（${total}件）を表示しています。<button onclick="openClosedDayModal('${selectedCalendarDate}')" class="ml-2 text-[11px] text-rose-600 hover:underline font-semibold">この日を休業日に設定する</button>`;
           }
         } else {
           document.getElementById("ledger-subtext").innerText = "ステータスはその場で直接変更できます。即時反映・自動保存されます。";
@@ -3061,7 +3061,7 @@ ${signature}`;
       if (badge) badge.innerText = `${list.length}件設定中`;
 
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-neutral-400">現在、設定された休業日はありません。「＋休業日を登録する」から追加できます。</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-neutral-400">現在、設定された休業日はありません。カレンダーの日付を選択して「休業日を追加する」から登録できます。</td></tr>`;
         return;
       }
 
@@ -3187,7 +3187,7 @@ ${signature}`;
       if (badge) badge.innerText = `${publishedCount}件公開中`;
 
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-neutral-400">現在、お知らせはありません。「＋新しいご報告を投稿」から作成できます。</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-neutral-400">現在、お知らせはありません。「新しいご報告を投稿」から作成できます。</td></tr>`;
         return;
       }
 
